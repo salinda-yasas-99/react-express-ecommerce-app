@@ -1,0 +1,122 @@
+.new {
+    width: 100%;
+    display: flex;
+  }
+  
+  .newContainer {
+    flex: 6;
+  }
+  
+  .newContainer .top {
+    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+    padding: 10px;
+    margin: 20px;
+  }
+  
+  
+  
+  .newContainer .bottom {
+    display: flex;
+  }
+  
+   .bottom .left {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .newContainer .bottom .left img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+   .bottom .right {
+    flex: 2;
+  }
+  
+  .bottom .right  {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .bottom  .formInput{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+   .bottom  .formInput .file {
+    display: flex;
+    /* width: 40%; */
+    align-items: center;
+    margin-top: 5px;
+  }
+  
+  
+  .newContainer .bottom .left  .formInput label .icon {
+    cursor: pointer;
+  }
+  
+  
+
+  .addproduct-itemfield {
+    width: 100%;
+    padding: 5px;
+   
+  }
+
+  .addproduct-itemfield input{
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid gray;
+    padding: 10px 5px;
+    outline: none;
+    margin-bottom: 5px;
+  }
+  
+  .newContainer .bottom .right  button {
+    width: 150px;
+    padding: 10px;
+    border: none;
+    background-color: teal;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .error-msg{
+    font-size: 12px;
+    color: red;
+  }
+
+  .shoe-sizes{
+    width: 100%;
+    display: grid;
+    align-items: center;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr 1fr;
+    max-width: 500px;
+    margin-right: auto;
+    
+  }
+
+.shoe-sizes label{
+  display: flex;
+  gap: 6px;
+}
+
+  .itemfield-prices{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
