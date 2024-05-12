@@ -5,18 +5,18 @@ import Shop from "./Pages/Shop";
 import LoginSignup from "./Pages/LoginSignup";
 import LoginSignIn from "./Pages/LoginSignIn";
 import Footer from "./Components/Footer/Footer";
-import Men_Banner from '../src/assets/Men_Banner.png';
-import Banner_women from '../src/assets/Banner_women.png';
-import Banner_kid from '../src/assets/Banner_kid.png';
+import Men_Banner from "../src/assets/Men_Banner.png";
+import Banner_women from "../src/assets/banner_women.png";
+import Banner_kid from "../src/assets/Banner_kid.png";
 import ShopCategory from "./Pages/ShopCategory";
 import AdminHome from "./Pages/Admin/Home/AdminHome";
 import List from "./Pages/Admin/list/List";
 import New from "./Pages/Admin/new/New";
-import {  userInputs } from "./fromSource";
+import { userInputs } from "./fromSource";
 import Product from "./Pages/Product";
 import Cart from "./Pages/Cart";
 import NewProduct from "./Pages/Admin/newproduct/NewProduct";
-import ProductList from './Pages/Admin/list/productlist/ProductList'
+import ProductList from "./Pages/Admin/list/productlist/ProductList";
 
 const App = () => {
   const isDashboardRoute = window.location.pathname.startsWith("/dashboard");
@@ -40,8 +40,8 @@ const App = () => {
             path="/kids"
             element={<ShopCategory banner={Banner_kid} category="kid" />}
           />
-          <Route path="/product/:productId" element={<Product/>} />
-          <Route path="/cart" element={<Cart/>}/>
+          <Route path="/product/:productId" element={<Product />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/register" element={<LoginSignup />} />
           <Route path="/login" element={<LoginSignIn />} />
           <Route path="/dashboard">
@@ -59,7 +59,7 @@ const App = () => {
                 path="new"
                 element={
                   // <New inputs={productInputs} title="Add New Products" />
-                  <NewProduct  title="Add New Products"/>
+                  <NewProduct title="Add New Products" />
                 }
               />
             </Route>
