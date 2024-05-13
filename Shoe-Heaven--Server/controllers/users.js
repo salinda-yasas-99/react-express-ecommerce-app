@@ -2,7 +2,6 @@ const path = require("path");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("@prisma/client");
-const { use } = require("../routes/users");
 const prisma = new PrismaClient();
 
 //register newuser
@@ -10,8 +9,9 @@ exports.addNewUser = async (req, res, next) => {
   try {
     const username = req.body.username;
     const email = req.body.email;
-    //const role = req.body.role;
+    const Address = req.body.Address;
     const password = req.body.password;
+    const contactNumber = req.body.contactNumber;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -21,6 +21,8 @@ exports.addNewUser = async (req, res, next) => {
         username,
         role: "user",
         password: hashedPassword,
+        contactNumber,
+        Address,
       },
     });
     //const uid =newUser.uid
@@ -50,8 +52,9 @@ exports.addNewAdmin = async (req, res, next) => {
   try {
     const username = req.body.username;
     const email = req.body.email;
-    //const role = req.body.role;
+    const Address = req.body.Address;
     const password = req.body.password;
+    const contactNumber = req.body.contactNumber;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -61,6 +64,8 @@ exports.addNewAdmin = async (req, res, next) => {
         username,
         role: "admin",
         password: hashedPassword,
+        contactNumber,
+        Address,
       },
     });
 

@@ -11,14 +11,16 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const multer = require("multer");
+
+//routes
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
+const productRoutes = require("./routes/products");
 
 const app = express();
 const PORT = 7000;
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const { PrismaClient } = require("@prisma/client");
 
 app.use(cors());
 app.use(express.json());
@@ -29,6 +31,7 @@ app.use(express.static(path.join(__dirname, "public")));
 //app.use("/api/auth", authRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/products", productRoutes);
 
 //app.use("/api/product", productRoutes);
 

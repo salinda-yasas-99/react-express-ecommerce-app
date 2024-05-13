@@ -15,5 +15,19 @@ model User {
   email   String   @unique
   username    String
   role    String
+  contactNumber String
+  Address String
   password String
+}
+
+model Product {
+  prodId String @id
+  name String
+  imageUrl String
+  catergory String
+  new_price Int
+  old_price Int
+  sizes Json
+  description String
+  
 }

@@ -7,6 +7,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const jwtDecode = require("jwt-decode");
 
 // Login function user
 exports.loginUser = async (req, res, next) => {
@@ -67,7 +68,8 @@ exports.accessAuthorizeUser = async (req, res, next) => {
   }
 
   try {
-    const decodedToken = await admin.auth().verifyIdToken(jwtToken);
+    const decodedToken = jwt.verify(jwtToken, process.env.JWT_SECRET);
+    //const decodedToken = jwtDecode(jwtToken);
     const uid = decodedToken.uid;
     const userSnapshot = await prisma.user.findUnique({
       where: {
