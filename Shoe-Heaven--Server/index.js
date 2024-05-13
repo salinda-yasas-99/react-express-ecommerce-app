@@ -9,12 +9,11 @@
 
 const path = require("path");
 const express = require("express");
-//const router = express.Router();
 const bodyParser = require("body-parser");
 const multer = require("multer");
-//const productRoutes = require("./routes/products.js");
-const userRoutes = require("./routes/users.js");
-//const authRoutes = require("./routes/auth.js");
+const userRoutes = require("./routes/users");
+const authRoutes = require("./routes/auth");
+
 const app = express();
 const PORT = 7000;
 const cookieParser = require("cookie-parser");
@@ -28,7 +27,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 //app.use("/api/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+
 //app.use("/api/product", productRoutes);
 
 // Image Storage Engine
