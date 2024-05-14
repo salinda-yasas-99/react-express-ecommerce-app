@@ -7,9 +7,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-//const jwtDecode = require("jwt-decode");
 
-// Login function user
+// Login function user or admin
 exports.loginUser = async (req, res, next) => {
   try {
     //const { email, password } = req.body;
@@ -68,10 +67,7 @@ exports.accessAuthorizeUser = async (req, res, next) => {
   }
 
   try {
-    const decodedToken = jwt.verify(
-      jwtToken,
-      process.env.JWT_SECRET.toString()
-    );
+    const decodedToken = jwt.verify(jwtToken, process.env.JWT_SECRET);
     console.log(`Token decoded successfully: ${JSON.stringify(decodedToken)}`);
     const uid = decodedToken.userId;
     console.log(`Decoded UID from token: ${uid}`);
@@ -84,7 +80,7 @@ exports.accessAuthorizeUser = async (req, res, next) => {
 
     if (user) {
       console.log(`User found: ${user}`);
-      if (user.role === "user") {
+      if (user.role === "user" || user.role === "admin") {
         return next();
       } else {
         console.error("You are unauthorized to perform this action");
@@ -105,37 +101,42 @@ exports.accessAuthorizeUser = async (req, res, next) => {
 //admin authorize
 exports.accessAuthorizeAdmin = async (req, res, next) => {
   let jwtToken;
+
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer ")
   ) {
-    var idTok = req.headers.authorization.split("Bearer ")[1];
-    jwtToken = idTok;
+    jwtToken = req.headers.authorization.split("Bearer ")[1];
   } else {
     console.error("No token found");
     return res.status(403).json({ error: "Unauthorized" });
   }
 
   try {
-    const decodedToken = await admin.auth().verifyIdToken(jwtToken);
-    const uid = decodedToken.uid;
-    const userSnapshot = await prisma.user.findUnique({
+    const decodedToken = jwt.verify(jwtToken, process.env.JWT_SECRET);
+    console.log(`Token decoded successfully: ${JSON.stringify(decodedToken)}`);
+    const uid = decodedToken.userId;
+    console.log(`Decoded UID from token: ${uid}`);
+
+    const user = await prisma.user.findUnique({
       where: {
         uid: parseInt(uid),
       },
     });
-    if (userSnapshot) {
-      if (userData.role === "admin") {
+
+    if (user) {
+      console.log(`User found: ${user}`);
+      if (user.role === "admin") {
         return next();
       } else {
-        console.error({ error: "you are unauthorised to perform this action" });
+        console.error("You are unauthorized to perform this action");
         return res
           .status(403)
-          .json(`you are unauthorised to perform this action`);
+          .json({ error: "You are unauthorized to perform this action" });
       }
     } else {
       console.error("User not found");
-      return res.status(403).json({ error: "user not found" });
+      return res.status(403).json({ error: "User not found" });
     }
   } catch (err) {
     console.error("Error while verifying token", err);
@@ -143,84 +144,48 @@ exports.accessAuthorizeAdmin = async (req, res, next) => {
   }
 };
 
-// export const register = (req,res)=>{
-//         // res.json("from controller")
-//         if (!req.body.username || !req.body.address || !req.body.email || !req.body.contact_number || !req.body.password) {
-//             return res.status(400).json("Please fill out all the fields");
-//         }
+//order-manager authorize
+exports.accessAuthorizeAdmin = async (req, res, next) => {
+  let jwtToken;
 
-//         if (!/^\d+$/.test(req.body.contact_number)) {
-//             return res.status(400).json("Contact number must contain only numeric characters");
-//         }
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer ")
+  ) {
+    jwtToken = req.headers.authorization.split("Bearer ")[1];
+  } else {
+    console.error("No token found");
+    return res.status(403).json({ error: "Unauthorized" });
+  }
 
-//         if (!/^\d{10}$/.test(req.body.contact_number)) {
-//             return res.status(400).json("Contact number must be exactly 10 digits");
-//         }
-//         const q= "SELECT * FROM users WHERE email=? OR  username = ?"
+  try {
+    const decodedToken = jwt.verify(jwtToken, process.env.JWT_SECRET);
+    console.log(`Token decoded successfully: ${JSON.stringify(decodedToken)}`);
+    const uid = decodedToken.userId;
+    console.log(`Decoded UID from token: ${uid}`);
 
-//         db.query(q,[req.body.email,req.body.username],(err,data)=>{
-//                 if(err) return res.json(err)
-//                 if(data.length) return  res.status(409).json("User already Exists")
+    const user = await prisma.user.findUnique({
+      where: {
+        uid: parseInt(uid),
+      },
+    });
 
-//                 // hash the password
-//                     const salt = bcrypt.genSaltSync(10);
-//                     const hash = bcrypt.hashSync(req.body.password,salt);
-
-//                    const q = "INSERT INTO users (`username`, `address`, `email`,`contact_number`,`password`) VALUES (?)" ;
-
-//                     const values =[
-//                         req.body.username,
-//                         req.body.address,
-//                         req.body.email,
-//                         req.body.contact_number,
-//                         hash
-//                     ]
-
-//                     db.query(q,[values],(err,data)=>{
-//                         if(err) return res.json(err)
-//                         return res.status(200).json("User has been created");
-//                     })
-//             })
-// }
-
-// // export const login = (req,res)=>{
-// //     // check the availability of user
-// //     const q = "SELECT * FROM users WHERE username =?"
-
-// //     db.query(q,[req.body.username],(err,data)=>{
-// //         if(err) return res.json(err);
-// //         if(data.length ===0) return res.status(404).json("User not Found");
-
-// //         // check password
-// //         const isPasswordCorrect =  bcrypt.compareSync(req.body.password,data[0].password)
-// //         if(!isPasswordCorrect) return  res.status(400).json("Wrong username or Password");
-
-// //         // return res.status(200).json("Login Succeed");
-// //         const token = jwt.sign({id:data[0].id},"jwtkey")
-// //         const {password,...other} = data[0];
-// //         res.cookie("access_token",token,{
-// //             httpOnly:true
-// //         }).status(200).json(other);
-// //     })
-
-// // }
-
-// export const login = (req, res) => {
-//     const q = "SELECT * FROM users WHERE username = ?";
-//     db.query(q, [req.body.username], (err, data) => {
-//         if (err) return res.json(err);
-//         if (data.length === 0) return res.status(404).json("User not found");
-
-//         const isPasswordCorrect = bcrypt.compareSync(req.body.password, data[0].password);
-//         if (!isPasswordCorrect) return res.status(400).json("Wrong username or password");
-
-//         const token = jwt.sign({ id: data[0].id }, "jwtkey");
-//         const { password, ...other } = data[0];
-//         res.status(200).json({ ...other, token }); // Send token in the response body
-
-//     });
-// };
-
-// export const logout = (req,res)=>{
-
-// }
+    if (user) {
+      console.log(`User found: ${user}`);
+      if (user.role === "order-manger") {
+        return next();
+      } else {
+        console.error("You are unauthorized to perform this action");
+        return res
+          .status(403)
+          .json({ error: "You are unauthorized to perform this action" });
+      }
+    } else {
+      console.error("User not found");
+      return res.status(403).json({ error: "User not found" });
+    }
+  } catch (err) {
+    console.error("Error while verifying token", err);
+    return res.status(403).json({ error: "Error while verifying token" });
+  }
+};
