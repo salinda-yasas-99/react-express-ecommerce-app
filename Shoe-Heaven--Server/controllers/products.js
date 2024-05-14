@@ -6,7 +6,7 @@ exports.AddNewProduct = async (req, res, next) => {
     const prodId = req.body.prodId;
     const name = req.body.name;
     const imageUrl = req.body.imageUrl;
-    const catergory = req.body.catergory;
+    const category = req.body.category;
     const new_price = req.body.new_price;
     const old_price = req.body.old_price;
     const sizes = req.body.sizes;
@@ -17,7 +17,7 @@ exports.AddNewProduct = async (req, res, next) => {
         prodId,
         name,
         imageUrl,
-        catergory,
+        category,
         new_price,
         old_price,
         sizes,
@@ -49,13 +49,11 @@ exports.getAllProducts = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
   let productId;
   try {
-    // Extract userId from the request parameters
     productId = req.params.Id;
 
-    // Delete the user
-    const deleteProduct = await prisma.product.delete({
+    const deleteProd = await prisma.product.delete({
       where: {
-        prodId: productId, // Assuming 'id' is the unique identifier for users in your database
+        prodId: productId,
       },
     });
 
@@ -63,53 +61,67 @@ exports.deleteUser = async (req, res, next) => {
   } catch (error) {
     console.error(error);
 
-    res.status(500).send("Error deleting user");
+    res.status(500).send("Error deleting product");
   }
 };
 
-// import { db } from "../db.js";
+exports.updateProductById = async (req, res, next) => {
+  let productId;
+  try {
+    productId = req.params.Id;
 
-// export const createProduct = (req, res) => {
-//     const { id, name, image, category, new_price, old_price,sizes,description } = req.body;
-//     console.log(sizes);
+    const name = req.body.name;
+    const imageUrl = req.body.imageUrl;
+    const category = req.body.category;
+    const new_price = req.body.new_price;
+    const old_price = req.body.old_price;
+    const sizes = req.body.sizes;
+    const description = req.body.description;
 
-//     const sql = `INSERT INTO product (id, name, image, category, new_price, old_price,sizes,description)
-//                  VALUES (?, ?, ?, ?, ?, ?,?,?)`;
+    // Update the product
+    const updatedProduct = await prisma.product.update({
+      where: {
+        prodId: productId,
+      },
+      data: {
+        name,
+        imageUrl,
+        category,
+        new_price,
+        old_price,
+        sizes,
+        description,
+      },
+    });
 
-//     db.query(sql, [id, name, image, category, new_price, old_price,JSON.stringify(sizes),description],  (err, result) => {
-//         if (err) {
-//             res.status(500).send("Error adding product to database: " + err.message);
-//             console.error(err);
-//             return;
-//         }
-//         res.status(201).send(`Product added with ID: ${id}`);
-//     });
-// };
+    // Respond with the updated product
+    res.status(200).json(updatedProduct);
+  } catch (error) {
+    console.error(error);
 
-// export const deleteProduct = (req,res)=>{
-//     const { id } = req.params;
-//     const sql = 'DELETE FROM product WHERE id = ?';
-//     db.query(sql, [id], (err, result) => {
-//         if (err) {
-//             res.status(500).send('Error deleting product from database');
-//             console.error(err);
-//             return;
-//         }
-//         if (result.affectedRows === 0) {
-//             res.status(404).send('No product found with the given ID');
-//         } else {
-//             res.status(200).send(`Product with ID: ${id} deleted successfully`);
-//         }
-//     });
-// }
+    res.status(500).send("Error updating product");
+  }
+};
 
-// export const getAllProducts = (req,res) =>{
-
-//     db.query("SELECT * FROM product", (err, results) => {
-//         if (err) throw err;
-//         res.json(results);
-//       });
-// }
+exports.checkProductId = async (req, res, next) => {
+  let productId;
+  try {
+    productId = req.params.Id;
+    const exisitingProd = await prisma.product.findUnique({
+      where: {
+        prodId: productId,
+      },
+    });
+    if (exisitingProd) {
+      return res.status(200).json({ isUnique: true });
+    } else {
+      return res.status(200).json({ isUnique: false });
+    }
+  } catch (err) {
+    console.error(error);
+    res.status(500).send(err.message);
+  }
+};
 
 // export const checkProductId = async (req,res)=>{
 //      const {id} =req.query;
@@ -127,26 +139,6 @@ exports.deleteUser = async (req, res, next) => {
 //             res.send({ isUnique: false });
 //         } else {
 //             res.send({ isUnique: true });
-//         }
-//     });
-// }
-
-// export const updateProduct = (req,res)=>{
-//     const {id} = req.params;
-//     const { name, image, category, new_price, old_price, sizes,description } = req.body;
-
-//     const sql = `UPDATE product SET name = ?, image = ?, category = ?, new_price = ?, old_price = ?, sizes = ? , description = ? WHERE id = ?`;
-
-//     db.query(sql, [name, imageUrl, category, new_price, old_price, JSON.stringify(sizes), description,id], (err, result) => {
-//         if (err) {
-//             res.status(500).send("Error updating product in database: " + err.message);
-//             console.error(err);
-//             return;
-//         }
-//         if (result.affectedRows === 0) {
-//             res.status(404).send("Product not found");
-//         } else {
-//             res.status(200).send(`Product with ID: ${id} updated successfully`);
 //         }
 //     });
 // }

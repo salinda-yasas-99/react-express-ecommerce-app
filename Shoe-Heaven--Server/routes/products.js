@@ -11,6 +11,8 @@ router.get(
   authController.accessAuthorizeUser,
   productController.getAllProducts
 );
+router.get("/IsIdAvailable/:Id", productController.checkProductId);
 router.delete("/delete/:Id", productController.deleteUser);
+router.put("/update/:Id", productController.updateProductById);
 
 module.exports = router;

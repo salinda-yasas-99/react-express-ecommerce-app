@@ -24,7 +24,7 @@ model Product {
   prodId String @id
   name String
   imageUrl String
-  catergory String
+  category String
   new_price Int
   old_price Int
   sizes Json

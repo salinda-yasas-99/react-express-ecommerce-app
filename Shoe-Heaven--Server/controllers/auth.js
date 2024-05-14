@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const jwtDecode = require("jwt-decode");
+//const jwtDecode = require("jwt-decode");
 
 // Login function user
 exports.loginUser = async (req, res, next) => {
@@ -56,38 +56,45 @@ exports.loginUser = async (req, res, next) => {
 //user authorize
 exports.accessAuthorizeUser = async (req, res, next) => {
   let jwtToken;
+
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer ")
   ) {
-    var idTok = req.headers.authorization.split("Bearer ")[1];
-    jwtToken = idTok;
+    jwtToken = req.headers.authorization.split("Bearer ")[1];
   } else {
     console.error("No token found");
     return res.status(403).json({ error: "Unauthorized" });
   }
 
   try {
-    const decodedToken = jwt.verify(jwtToken, process.env.JWT_SECRET);
-    //const decodedToken = jwtDecode(jwtToken);
-    const uid = decodedToken.uid;
-    const userSnapshot = await prisma.user.findUnique({
+    const decodedToken = jwt.verify(
+      jwtToken,
+      process.env.JWT_SECRET.toString()
+    );
+    console.log(`Token decoded successfully: ${JSON.stringify(decodedToken)}`);
+    const uid = decodedToken.userId;
+    console.log(`Decoded UID from token: ${uid}`);
+
+    const user = await prisma.user.findUnique({
       where: {
         uid: parseInt(uid),
       },
     });
-    if (userSnapshot) {
-      if (userData.role === "user") {
+
+    if (user) {
+      console.log(`User found: ${user}`);
+      if (user.role === "user") {
         return next();
       } else {
-        console.error({ error: "you are unauthorised to perform this action" });
+        console.error("You are unauthorized to perform this action");
         return res
           .status(403)
-          .json(`you are unauthorised to perform this action`);
+          .json({ error: "You are unauthorized to perform this action" });
       }
     } else {
       console.error("User not found");
-      return res.status(403).json({ error: "user not found" });
+      return res.status(403).json({ error: "User not found" });
     }
   } catch (err) {
     console.error("Error while verifying token", err);
