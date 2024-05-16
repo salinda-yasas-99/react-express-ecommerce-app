@@ -42,7 +42,7 @@ const ProductDataTable = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:7000/api/product");
+        const response = await axios.get("http://localhost:7000/api/products/getAllProducts");
         console.log("Fetched products:", response.data); 
         const updatedProductData = response.data.map(product => ({
           ...product,

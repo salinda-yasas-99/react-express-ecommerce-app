@@ -84,7 +84,7 @@ const Datatable = (props) => {
           <TableBody>
             {usersArray.map((user) => (
               <TableRow
-                key={user.id} // Assuming each user has a unique 'name' property
+                key={user.uid} // Assuming each user has a unique 'name' property
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">

@@ -24,12 +24,12 @@ const LoginSignIn = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    if (!inputs.username.trim() || !inputs.password.trim()) {
-      setError("Please provide both username and password.");
+    if (!inputs.email.trim() || !inputs.password.trim()) {
+      setError("Please provide both Email and password.");
       return; // Prevent the form from being submitted
   }
     try {
-        const response = await axios.post("http://localhost:7000/api/auth/login", inputs);
+        const response = await axios.post("http://localhost:7000/api/auth/login/user", inputs);
         console.log("Response data:", response.data);
 
         if (response.data.token) {
@@ -51,7 +51,7 @@ const LoginSignIn = () => {
         <h1>Login</h1>
         {successMessage && <Alert severity="success">{successMessage}</Alert>}
         <form className="loginsignin-fields">
-          <input type="text" placeholder="Username" name="username" onChange={handleChange} required/>
+          <input type="email" placeholder="email" name="email" onChange={handleChange} required/>
           <input type="password" placeholder="Password" name="password" onChange={handleChange} required/>
         </form>
         <div className="login-footer">

@@ -9,9 +9,9 @@ import axios from "axios";
 
 const NewProduct = ({ title }) => {
   const initialProductData = {
-    id: "",
+    prodId: "",
     category: "women",
-    image: "",
+    imageUrl: "",
     name: "",
     old_price: "",
     new_price: "",
@@ -26,12 +26,12 @@ const NewProduct = ({ title }) => {
   const [successMessage, setSuccessMessage] = useState("");
   const [imageError, setImageError] = useState("");
 
-  const validateProductId = async (id) => {
+  const validateProductId = async (prodId) => {
     try {
       const response = await axios.get(
-        `http://localhost:7000/api/product/check-product-id?id=${id}`
+        `http://localhost:7000/api/products/IsIdAvailable/${prodId}`
       );
-      if (!response.data.isUnique) {
+      if (response.data.isUnique) {
         setIdError("This product ID is already in use. Please choose another.");
         return false;
       } else {
@@ -50,9 +50,12 @@ const NewProduct = ({ title }) => {
     setProductData((prev) => ({
       ...prev,
       [name]: value,
+      
     }));
 
-    if (name === "id") {
+    console.log(name,value);
+
+    if (name === "prodId") {
       await validateProductId(value);
     }
   };
@@ -73,7 +76,7 @@ const NewProduct = ({ title }) => {
   const allFieldsFilled = () => {
     // New function to check if all fields are filled
     return (
-      productData.id &&
+      productData.prodId &&
       productData.category &&
       productData.name &&
       productData.old_price &&
@@ -113,12 +116,12 @@ const NewProduct = ({ title }) => {
         // Update image path in productData before sending to your product API
         const productWithImage = {
           ...productData,
-          image: responseData.image_url,
+          imageUrl: responseData.image_url,
         };
 
         // Post to your products API endpoint
         const productResponse = await axios.post(
-          "http://localhost:7000/api/product",
+          "http://localhost:7000/api/products/addProduct",
           productWithImage
         );
         console.log(productResponse.data);
@@ -176,10 +179,10 @@ const NewProduct = ({ title }) => {
               {formError && <Alert severity="error">{formError}</Alert>}
               <p>Product ID</p>
               <input
-                value={productData.id}
+                value={productData.prodId}
                 onChange={handleInputChange}
                 type="text"
-                name="id"
+                name="prodId"
                 placeholder="MEN001/WOMEN001/KID001"
                 required
               />

@@ -71,7 +71,7 @@ const ShopContextProvider = (props) => {
     const [cartItems, setCartItems] = useState({});
 
     useEffect(() => {
-        axios.get('http://localhost:7000/api/product')
+        axios.get('http://localhost:7000/api/products/getAllProducts')
             .then(response => {
                 console.log(response.data);
                 setProducts(response.data);

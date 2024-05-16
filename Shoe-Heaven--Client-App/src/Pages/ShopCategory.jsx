@@ -42,7 +42,7 @@ const ShopCategory = (props) => {
   const [displayCount, setDisplayCount] = useState(6); // Start by showing 6 products
 
   useEffect(() => {
-    axios.get("http://localhost:7000/api/product")
+    axios.get("http://localhost:7000/api/products/getAllProducts")
       .then(response => {
         setProducts(response.data);
       })

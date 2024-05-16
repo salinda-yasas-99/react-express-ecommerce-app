@@ -8,7 +8,7 @@ export default API;
 
 export const getAllUsers = async () => {
   try {
-    const response = await API.get("/users");
+    const response = await API.get("/users/getAllUsers");
     //console.log(response);
     return response.data;
   } catch (err) {
