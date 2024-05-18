@@ -72,15 +72,15 @@ exports.accessAuthorizeUser = async (req, res, next) => {
     const uid = decodedToken.userId;
     console.log(`Decoded UID from token: ${uid}`);
 
-    const user = await prisma.user.findUnique({
+    const userDb = await prisma.user.findUnique({
       where: {
         uid: parseInt(uid),
       },
     });
 
-    if (user) {
-      console.log(`User found: ${user}`);
-      if (user.role === "user" || user.role === "admin") {
+    if (userDb) {
+      console.log(`User found: ${JSON.stringify(userDb)}`);
+      if (userDb.role === "user" || userDb.role === "admin") {
         return next();
       } else {
         console.error("You are unauthorized to perform this action");
@@ -118,15 +118,15 @@ exports.accessAuthorizeAdmin = async (req, res, next) => {
     const uid = decodedToken.userId;
     console.log(`Decoded UID from token: ${uid}`);
 
-    const user = await prisma.user.findUnique({
+    const adminDb = await prisma.user.findUnique({
       where: {
         uid: parseInt(uid),
       },
     });
 
-    if (user) {
-      console.log(`User found: ${user}`);
-      if (user.role === "admin") {
+    if (adminDb) {
+      console.log(`User found: ${JSON.stringify(adminDb)}`);
+      if (adminDb.role === "admin") {
         return next();
       } else {
         console.error("You are unauthorized to perform this action");
@@ -145,7 +145,7 @@ exports.accessAuthorizeAdmin = async (req, res, next) => {
 };
 
 //order-manager authorize
-exports.accessAuthorizeAdmin = async (req, res, next) => {
+exports.accessAuthorizeOrder = async (req, res, next) => {
   let jwtToken;
 
   if (
