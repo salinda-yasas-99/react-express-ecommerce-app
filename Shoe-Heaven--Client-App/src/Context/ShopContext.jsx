@@ -68,10 +68,10 @@ export const ShopContext = createContext(null);
 
 const ShopContextProvider = (props) => {
     const [products, setProducts] = useState([]);
-    const [cartItems, setCartItems] = useState({});
+    const [cartItems, setCartItems] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:7000/api/product')
+        axios.get('http://localhost:7000/api/products/getAllProducts')
             .then(response => {
                 console.log(response.data);
                 setProducts(response.data);
@@ -83,13 +83,30 @@ const ShopContextProvider = (props) => {
     const initializeCart = (products) => {
         let newCart = {};
         products.forEach(product => {
-            newCart[product.id] = 0;
+            newCart[product.prodId] = 0;
         });
         setCartItems(newCart);
+        console.log(`this is cart ${newCart}`);
+        
     };
 
-    const addToCart = (itemId) => {
-        setCartItems(prev => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+    const addToCart = (itemId,sizeId) => {
+        // setCartItems(prev => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+        setCartItems((cartItems) => {
+            const existingItemIndex = cartItems.findIndex(
+              (item) => item.itemId === itemId && item.sizeId === sizeId
+            );
+      
+            if (existingItemIndex !== -1) {
+              // Item exists, increment the quantity
+              const updatedCartItems = [...cartItems];
+              updatedCartItems[existingItemIndex].qty += 1;
+              return updatedCartItems;
+            } else {
+              // Item does not exist, add as new item
+              return [...cartItems, { itemId, sizeId, qty: 1 }];
+            }
+          });
     };
 
     const removeFromCart = (itemId,removeAll = false) => {

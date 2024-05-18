@@ -28,7 +28,7 @@ const LoginSignup = () => {
     e.preventDefault()
     try{
       console.log("work");
-      const res = await axios.post("http://localhost:7000/api/auth/register",inputs)
+      const res = await axios.post("http://localhost:7000/api/users/register/user",inputs)
       console.log(res);
       setSuccessMessage("Registration successful!");
       setTimeout(() => navigate("/login"), 2000);
@@ -46,9 +46,9 @@ const LoginSignup = () => {
         {successMessage && <Alert severity="success">{successMessage}</Alert>}
         <form className="loginsignup-fields">
           <input type="text" placeholder="Your Name" name="username"onChange={handleChange} required/>
-          <input type="text" placeholder="Address" name="address"  onChange={handleChange}  required/>
+          <input type="text" placeholder="Address" name="Address"  onChange={handleChange}  required/>
           <input type="email" placeholder="Email" name="email"  onChange={handleChange} required/>
-          <input type="text" placeholder="contact number"  name="contact_number"   onChange={handleChange} required/>
+          <input type="text" placeholder="contact number"  name="contactNumber"   onChange={handleChange} required/>
           <input type="text" placeholder="Password" name="password"  onChange={handleChange} required />
         </form>
 

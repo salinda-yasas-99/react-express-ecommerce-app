@@ -28,7 +28,7 @@ const Product = () => {
   const[products,setProducts] =useState([]);
 
 useEffect(()=>{
-    axios.get("http://localhost:7000/api/product")
+    axios.get("http://localhost:7000/api/products/getAllProducts")
     .then(response => {
         setProducts(response.data);
        
@@ -37,7 +37,7 @@ useEffect(()=>{
 },[])
   // const {all_product} = useContext(ShopContext);
   const {productId} = useParams();
-  const  product =  products.find((e) => e.id === productId);
+  const  product =  products.find((e) => e.prodId === productId);
   console.log(products);
 
   return (

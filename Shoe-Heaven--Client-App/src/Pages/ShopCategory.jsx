@@ -42,7 +42,7 @@ const ShopCategory = (props) => {
   const [displayCount, setDisplayCount] = useState(6); // Start by showing 6 products
 
   useEffect(() => {
-    axios.get("http://localhost:7000/api/product")
+    axios.get("http://localhost:7000/api/products/getAllProducts")
       .then(response => {
         setProducts(response.data);
       })
@@ -73,7 +73,7 @@ const ShopCategory = (props) => {
       </div>
       <div className="shopcategory-products">
         {categoryProducts.slice(0, displayCount).map((item, i) => (
-          <Item key={item.id} {...item} />
+          <Item key={item.prodId} {...item} />
         ))}
       </div>
       {categoryProducts.length > 6 && ( // Conditional rendering based on the number of category products

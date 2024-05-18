@@ -3,6 +3,7 @@ import { Link ,useNavigate} from "react-router-dom";
 import "./CSS/LoginSignIn.css";
 import axios from 'axios'
 import Alert from '@mui/material/Alert';
+import { jwtDecode } from 'jwt-decode';
 
 
 const LoginSignIn = () => {
@@ -24,16 +25,20 @@ const LoginSignIn = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    if (!inputs.username.trim() || !inputs.password.trim()) {
-      setError("Please provide both username and password.");
+    if (!inputs.email.trim() || !inputs.password.trim()) {
+      setError("Please provide both Email and password.");
       return; // Prevent the form from being submitted
   }
     try {
-        const response = await axios.post("http://localhost:7000/api/auth/login", inputs);
+        const response = await axios.post("http://localhost:7000/api/auth/login/user", inputs);
         console.log("Response data:", response.data);
-
-        if (response.data.token) {
-            localStorage.setItem('access_token', response.data.token);
+        const  {token} = response.data;
+        if (token) {
+          const decodedToken =jwtDecode(token);
+            localStorage.setItem('access_token', token);
+            localStorage.setItem('uid', decodedToken.userId);
+            localStorage.setItem('username', decodedToken.username);
+            console.log(decodedToken);
             setSuccessMessage("Login successful!");
             setTimeout(() => navigate("/"), 2000); 
         } else {
@@ -51,7 +56,7 @@ const LoginSignIn = () => {
         <h1>Login</h1>
         {successMessage && <Alert severity="success">{successMessage}</Alert>}
         <form className="loginsignin-fields">
-          <input type="text" placeholder="Username" name="username" onChange={handleChange} required/>
+          <input type="email" placeholder="email" name="email" onChange={handleChange} required/>
           <input type="password" placeholder="Password" name="password" onChange={handleChange} required/>
         </form>
         <div className="login-footer">

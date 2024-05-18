@@ -7,14 +7,14 @@ const path = require("path");
 
 router.post(
   "/addProduct",
-  authController.accessAuthorizeAdmin,
+  // authController.accessAuthorizeAdmin,
   productController.AddNewProduct
 );
 router.get("/getAllProducts", productController.getAllProducts);
 router.get("/getProduct/:Id", productController.getProductById);
 router.get(
   "/IsIdAvailable/:Id",
-  authController.accessAuthorizeAdmin,
+  // authController.accessAuthorizeAdmin,
   productController.checkProductId
 );
 router.delete(

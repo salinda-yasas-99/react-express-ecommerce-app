@@ -13,6 +13,8 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('access_token'); 
+    localStorage.removeItem('uid'); 
+    localStorage.removeItem('username'); 
     setTimeout(() => {
       navigate('/'); 
   }, 100);

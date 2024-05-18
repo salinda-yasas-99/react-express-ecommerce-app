@@ -4,6 +4,7 @@
   
   .home .homeContainer {
     flex: 6;
+    padding-left: 200px;
   }
   
   .home .homeContainer .widgets,

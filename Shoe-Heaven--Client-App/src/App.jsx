@@ -17,6 +17,7 @@ import Product from "./Pages/Product";
 import Cart from "./Pages/Cart";
 import NewProduct from "./Pages/Admin/newproduct/NewProduct";
 import ProductList from "./Pages/Admin/list/productlist/ProductList";
+import AdminLogin from "./Pages/Admin/Admin-Login/AdminLogin";
 
 const App = () => {
   const isDashboardRoute = window.location.pathname.startsWith("/dashboard");
@@ -44,6 +45,7 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/register" element={<LoginSignup />} />
           <Route path="/login" element={<LoginSignIn />} />
+          <Route path="/dashboard/adminLogin" element={<AdminLogin />} />
           <Route path="/dashboard">
             <Route index element={<AdminHome />}></Route>
             <Route path="users">
