@@ -18,6 +18,8 @@ model User {
   contactNumber String
   Address String
   password String
+  cart  Cart?  
+ 
 }
 
 model Product {
@@ -27,7 +29,41 @@ model Product {
   category String
   new_price Int
   old_price Int
-  sizes Json
+
   description String
-  
+  cartItems  CartItem[]
+  sizeItems ProductSizes[]
+
+ // @@index([name, imageUrl, category, new_price, old_price, description], name: "unique_product")
+}
+
+model ProductSizes{
+  sizeId Int @id @default(autoincrement())
+  sizeName String
+  quantity Int
+  product Product @relation(fields: [fk_prodId], references: [prodId], onDelete: Cascade)
+  fk_prodId String 
+}
+
+
+model Cart {
+  cartId       Int        @id @default(autoincrement())
+ 
+  subtotal     Int
+  shippingFee  Int
+  total        Int
+  user        User       @relation(fields: [fk_userId], references: [uid])
+  fk_userId    Int        @unique
+  cartItems    CartItem[]
+}
+
+model CartItem {
+  cartItemId   Int        @id @default(autoincrement())
+  size         String
+  quantity     Int
+  total        Int
+  cart         Cart       @relation(fields: [fk_cartId], references: [cartId])
+  fk_cartId    Int
+  product      Product    @relation(fields: [fk_productId], references: [prodId])
+  fk_productId  String
 }

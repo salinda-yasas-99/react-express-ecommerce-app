@@ -20,10 +20,25 @@ exports.AddNewProduct = async (req, res, next) => {
         category,
         new_price,
         old_price,
-        sizes,
         description,
       },
     });
+
+    const sizePromises = sizes.map((size) => {
+      return prisma.productSizes.create({
+        data: {
+          sizeName: size.size,
+          quantity: size.quantity,
+          product: {
+            connect: {
+              prodId: prodId,
+            },
+          },
+        },
+      });
+    });
+
+    await Promise.all(sizePromises);
 
     res.status(201).json("Product created successfully");
   } catch (error) {
@@ -36,7 +51,30 @@ exports.AddNewProduct = async (req, res, next) => {
 exports.getAllProducts = async (req, res, next) => {
   try {
     // Fetch all users
-    const products = await prisma.product.findMany();
+    // const products = await prisma.product.findMany({
+    //   include: {
+    //     sizeItems: true,
+    //   },
+    // });
+    const products = await prisma.product.findMany({
+      select: {
+        prodId: true,
+        name: true,
+        imageUrl: true,
+        category: true,
+        new_price: true,
+        old_price: true,
+        description: true,
+        sizeItems: {
+          select: {
+            sizeId: true,
+            sizeName: true,
+            quantity: true,
+            // Exclude fk_prodId
+          },
+        },
+      },
+    });
 
     res.status(200).json(products);
   } catch (error) {
