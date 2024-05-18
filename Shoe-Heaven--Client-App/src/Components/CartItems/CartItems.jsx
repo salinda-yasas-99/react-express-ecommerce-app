@@ -8,12 +8,18 @@ import { RiAddFill, RiSubtractFill } from "react-icons/ri";
 const CartItems = () => {
   const { getTotalCartAmount, products, cartItems, removeFromCart,addToCart} =
     useContext(ShopContext);
+
+
   const formatCurrency = (value) => {
     return new Intl.NumberFormat("en-US", {
       style: "decimal",
       maximumFractionDigits: 2,
     }).format(value);
   };
+
+  useEffect(() => {
+    console.log("cartItems:", cartItems);
+  }, [cartItems]);
 
   return (
     <div className="cartitems">
@@ -27,8 +33,9 @@ const CartItems = () => {
       </div>
       <hr />
       {products.map((e) => {
-        if (cartItems[e.prodId] > 0) {
-          console.log(` sheo sizes ${e.sizes[0]}`);
+        if (cartItems[e.prodId] ) {
+
+          
           return (
             <div key={e.prodId}>
               <div className="cartitems-format cartitems-format-main">

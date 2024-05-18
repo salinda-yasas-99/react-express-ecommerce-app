@@ -6,49 +6,23 @@ import star_dull_icon from "../../assets/star_dull_icon.png";
 import { ShopContext } from "../../Context/ShopContext";
 
 const ProductDisplay = (props) => {
-  console.log(props.product);
   const { product } = props;
   const { addToCart } = useContext(ShopContext);
-  const[sizeActive,setSizeActive] = useState(false);
-  console.log("Sizes:", product?.sizes, "Type:", typeof product?.sizes);
-  let sizes = [];
-    try {
-        // Parse the sizes from the product data and sort them
-        // sizes = product?.sizes ? (product.sizes).sort((a, b) => a - b) : [];
-        sizes = product?.sizes ? (product.sizes).sort((a, b) => a.size - b.size) : [];
+  const [sizeActive, setSizeActive] = useState(null); // Initialize with null or an empty string
 
-    } catch (e) {
-        console.error('Error parsing sizes:', e);
-    }
+  let sizeItems = [];
+  try {
+    sizeItems = product?.sizeItems ? product.sizeItems.sort((a, b) => a.sizeId - b.sizeId) : [];
+  } catch (e) {
+    console.error('Error parsing sizeItems:', e);
+  }
 
-    const sizeHandleClick = (prodId) => {
-      setSizeActive(() => ({
-        
-        [prodId]: true
-      }));
-    };
+  const sizeHandleClick = (sizeId) => {
+    setSizeActive(sizeId);
+    console.log(`this is size ${sizeActive}`);
+  };
 
-  // const parseSizes = (sizes) => {
-  //   try {
-  //     // First parse the JSON to convert string to actual JSON, if double-encoded
-  //     const parsedOnce = JSON.parse(sizes);
-  //     // Check if further parsing is needed
-  //     const parsedTwice = typeof parsedOnce === 'string' ? JSON.parse(parsedOnce) : parsedOnce;
-  //     return Array.isArray(parsedTwice) ? parsedTwice.sort((a, b) => a - b) : [];
-  //   } catch (error) {
-  //     console.error('Error parsing sizes:', error);
-  //     return []; // Return an empty array if there is an error
-  //   }
-  // };
-
-  // let sizes = parseSizes(product?.sizes);
-
-  // const sizeHandleClick = (size) => {
-  //   setSizeActive((prevSizes) => ({
-  //     ...prevSizes,
-  //     [size]: !prevSizes[size] // Toggle active state for the size
-  //   }));
-  // };
+  
 
   return (
     <div className="productdisplay">
@@ -85,28 +59,28 @@ const ProductDisplay = (props) => {
           </div>
         </div>
         <div className="productdisplay-right-description">
-          {product?.description}.
+          {product?.description}
         </div>
         <div className="productdisplay-right-size">
           <h1>Select Size</h1>
-          <div className={`productdisplay-right-sizes  sizeActive`}>
-            
-          {sizes.map((sizeObj, index) => (
-    <button
-      style={{
-        border: sizeActive[sizeObj.size] ? "2px solid black" : "2px solid #ebebeb"
-      }}
-      onClick={() => sizeHandleClick(sizeObj.size)}
-      key={index}
-    >
-      {sizeObj.size}
-    </button>
-  ))}
+          <div className={`productdisplay-right-sizes ${sizeActive ? 'sizeActive' : ''}`}>
+            {sizeItems.map((sizeObj, index) => (
+              <button
+                style={{
+                  border: sizeActive === sizeObj.sizeId ? "2px solid black" : "2px solid #ebebeb"
+                }}
+                onClick={() => sizeHandleClick(sizeObj.sizeId)}
+                key={index}
+              >
+                {sizeObj.sizeName}
+              </button>
+            ))}
           </div>
         </div>
-        <button className="add-to-cart"
+        <button
+          className="add-to-cart"
           onClick={() => {
-            addToCart(product?.prodId);
+            addToCart(product?.prodId,sizeActive);
           }}
         >
           ADD TO CART

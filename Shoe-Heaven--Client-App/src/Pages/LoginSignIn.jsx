@@ -3,6 +3,7 @@ import { Link ,useNavigate} from "react-router-dom";
 import "./CSS/LoginSignIn.css";
 import axios from 'axios'
 import Alert from '@mui/material/Alert';
+import { jwtDecode } from 'jwt-decode';
 
 
 const LoginSignIn = () => {
@@ -31,9 +32,13 @@ const LoginSignIn = () => {
     try {
         const response = await axios.post("http://localhost:7000/api/auth/login/user", inputs);
         console.log("Response data:", response.data);
-
-        if (response.data.token) {
-            localStorage.setItem('access_token', response.data.token);
+        const  {token} = response.data;
+        if (token) {
+          const decodedToken =jwtDecode(token);
+            localStorage.setItem('access_token', token);
+            localStorage.setItem('uid', decodedToken.userId);
+            localStorage.setItem('username', decodedToken.username);
+            console.log(decodedToken);
             setSuccessMessage("Login successful!");
             setTimeout(() => navigate("/"), 2000); 
         } else {

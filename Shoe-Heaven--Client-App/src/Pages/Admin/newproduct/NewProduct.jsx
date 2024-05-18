@@ -18,20 +18,17 @@ const NewProduct = ({ title }) => {
     sizes: [],
     description: "",
   };
-  const availableSizes = [3, 4, 5, 6, 7, 8, 9, 10];
+  const availableSizes = ["size 3", "size 4", "size 5", "size 6", "size 7", "size 8", "size 9", "size 10"];
   const [productData, setProductData] = useState(initialProductData);
   const [file, setFile] = useState(null);
   const [idError, setIdError] = useState("");
   const [formError, setFormError] = useState(""); // State to handle form validation messages
   const [successMessage, setSuccessMessage] = useState("");
   const [imageError, setImageError] = useState("");
-  
 
   const validateProductId = async (prodId) => {
     try {
-      const response = await axios.get(
-        `http://localhost:7000/api/products/IsIdAvailable/${prodId}`
-      );
+      const response = await axios.get(`http://localhost:7000/api/products/IsIdAvailable/${prodId}`);
       if (response.data.isUnique) {
         setIdError("This product ID is already in use. Please choose another.");
         return false;
@@ -53,24 +50,30 @@ const NewProduct = ({ title }) => {
       [name]: value,
     }));
 
-    console.log(name, value);
-
     if (name === "prodId") {
       await validateProductId(value);
     }
   };
 
-  const handleSizeChange = (size) => {
-    setProductData((prev) => ({
-      ...prev,
-      sizes: prev.sizes.includes(size)
-        ? prev.sizes.filter((s) => s !== size)
-        : [...prev.sizes, size],
-    }));
-  };
-  
+  const handleSizeChange = (size, quantity) => {
+    setProductData((prev) => {
+      const sizes = [...prev.sizes];
+      const sizeIndex = sizes.findIndex((s) => s.size === size);
 
-  
+      if (sizeIndex !== -1) {
+        if (quantity > 0) {
+          sizes[sizeIndex].quantity = quantity;
+        } else {
+          sizes.splice(sizeIndex, 1);
+        }
+      } else if (quantity > 0) {
+        sizes.push({ size, quantity });
+      }
+
+      return { ...prev, sizes };
+    });
+  };
+
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
@@ -121,17 +124,13 @@ const NewProduct = ({ title }) => {
           imageUrl: responseData.image_url,
           old_price: parseInt(productData.old_price), // Convert old_price to integer
           new_price: parseInt(productData.new_price),
-         
-                 };
+        };
         console.log(productWithImage);
         // Post to your products API endpoint
         const productResponse = await axios.post(
           "http://localhost:7000/api/products/addProduct",
           productWithImage
         );
-
-        // console.log(productResponse.data);
-        console.log("Final response:", productResponse.data);
 
         setSuccessMessage("Product has been added successfully!"); // Set success message
         setTimeout(() => setSuccessMessage(""), 8000); // clear success message after 8 seconds
@@ -157,23 +156,14 @@ const NewProduct = ({ title }) => {
         <div className="bottom">
           <div className="left">
             <img
-              src={
-                file
-                  ? URL.createObjectURL(file)
-                  : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-              }
+              src={file ? URL.createObjectURL(file) : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"}
               alt="Product Preview"
             />
 
             <div className="formInput">
               <label htmlFor="file" className="file">
                 Image:
-                <input
-                  type="file"
-                  id="file"
-                  onChange={handleFileChange}
-                  style={{ display: "none" }}
-                />
+                <input type="file" id="file" onChange={handleFileChange} style={{ display: "none" }} />
                 <DriveFolderUploadOutlinedIcon className="icon" />
               </label>
 
@@ -262,53 +252,29 @@ const NewProduct = ({ title }) => {
 
             <div className="shoe-sizes">
               {availableSizes.map((size) => (
-                <div className="size-with-quantity">
-                <label key={size}>
-                  <input
-                    type="checkbox"
-                    checked={productData.sizes.includes(size)}
-                    onChange={() => handleSizeChange(size)}
-                  />{" "}
-                  Size {size}
-                  
-                </label>
-                <label htmlFor="qty" className="qty-label">
-                  
-                  <input type="number" id ="qty"  className="quantity"/>
-                  <span>Qty</span>
-                </label>
-                </div>
-                
-              ))}
-              
-            </div>
-            {/* <div className="shoe-sizes">
-              {availableSizes.map((size) => (
-                <div className="size-with-quantity">
-                  <label key={size}>
+                <div className="size-with-quantity" key={size}>
+                  <label>
                     <input
                       type="checkbox"
-                      checked={productData.sizes.includes(size)}
-                      onChange={() => handleSizeChange(size)}
+                      checked={!!productData.sizes.find((s) => s.size === size && s.quantity > 0)}
+                      onChange={(e) => handleSizeChange(size, e.target.checked ? 1 : 0)}
                     />{" "}
-                    Size {size}
+                    {size}
                   </label>
-                  {selectedSizes[size] && (
-                    <label htmlFor="qty" className="qty-label">
-                      <input
-                        type="number"
-                        value={selectedSizes[size]}
-                        onChange={(e) =>
-                          handleQuantityChange(size, e.target.value)
-                        }
-                        className="quantity"
-                      />
-                      <span>Qty</span>
-                    </label>
-                  )}
+                  <label htmlFor="qty" className="qty-label">
+                    <input
+                      type="number"
+                      id="qty"
+                      className="quantity"
+                      value={productData.sizes.find((s) => s.size === size)?.quantity || 0}
+                      onChange={(e) => handleSizeChange(size, parseInt(e.target.value))}
+                      min="0"
+                    />
+                    <span>Qty</span>
+                  </label>
                 </div>
               ))}
-            </div> */}
+            </div>
 
             <button onClick={Add_Product} className="btn">
               ADD

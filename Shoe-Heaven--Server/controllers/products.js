@@ -70,6 +70,8 @@ exports.getProductById = async (req, res, next) => {
             sizeId: true,
             sizeName: true,
             quantity: true,
+            fk_prodId: true,
+
           },
         },
       },
@@ -103,6 +105,7 @@ exports.getAllProducts = async (req, res, next) => {
             sizeId: true,
             sizeName: true,
             quantity: true,
+            fk_prodId: true,
           },
         },
       },
