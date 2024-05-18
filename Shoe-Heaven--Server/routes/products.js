@@ -11,6 +11,7 @@ router.post(
   productController.AddNewProduct
 );
 router.get("/getAllProducts", productController.getAllProducts);
+router.get("/getProduct/:Id", productController.getProductById);
 router.get(
   "/IsIdAvailable/:Id",
   authController.accessAuthorizeAdmin,

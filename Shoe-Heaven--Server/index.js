@@ -16,6 +16,7 @@ const multer = require("multer");
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/products");
+const cartRoutes = require("./routes/cartRoutes");
 
 const app = express();
 const PORT = 7000;
@@ -32,6 +33,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
 
 //app.use("/api/product", productRoutes);
 

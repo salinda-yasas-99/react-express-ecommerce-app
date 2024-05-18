@@ -47,15 +47,48 @@ exports.AddNewProduct = async (req, res, next) => {
   }
 };
 
+//get product by id
+exports.getProductById = async (req, res, next) => {
+  const productId = req.params.Id; // Assuming the product ID is passed as a URL parameter
+
+  try {
+    // Fetch the product by its ID, including the associated sizes
+    const product = await prisma.product.findUnique({
+      where: {
+        prodId: productId,
+      },
+      select: {
+        prodId: true,
+        name: true,
+        imageUrl: true,
+        category: true,
+        new_price: true,
+        old_price: true,
+        description: true,
+        sizeItems: {
+          select: {
+            sizeId: true,
+            sizeName: true,
+            quantity: true,
+          },
+        },
+      },
+    });
+
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    res.status(200).json(product);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error fetching product");
+  }
+};
+
 //get all products
 exports.getAllProducts = async (req, res, next) => {
   try {
-    // Fetch all users
-    // const products = await prisma.product.findMany({
-    //   include: {
-    //     sizeItems: true,
-    //   },
-    // });
     const products = await prisma.product.findMany({
       select: {
         prodId: true,
@@ -70,7 +103,6 @@ exports.getAllProducts = async (req, res, next) => {
             sizeId: true,
             sizeName: true,
             quantity: true,
-            // Exclude fk_prodId
           },
         },
       },
@@ -113,7 +145,7 @@ exports.updateProductById = async (req, res, next) => {
     const category = req.body.category;
     const new_price = req.body.new_price;
     const old_price = req.body.old_price;
-    const sizes = req.body.sizes;
+    const sizeItems = req.body.sizeItems;
     const description = req.body.description;
 
     // Update the product
@@ -127,13 +159,24 @@ exports.updateProductById = async (req, res, next) => {
         category,
         new_price,
         old_price,
-        sizes,
         description,
       },
     });
 
+    for (const size of sizeItems) {
+      await prisma.ProductSizes.update({
+        where: { sizeId: size.sizeId },
+        data: {
+          sizeName: size.sizeName,
+          quantity: size.quantity,
+        },
+      });
+    }
+
+    const changedProduct = { ...updatedProduct, sizeItems };
+
     // Respond with the updated product
-    res.status(200).json(updatedProduct);
+    res.status(200).json(changedProduct);
   } catch (error) {
     console.error(error);
 

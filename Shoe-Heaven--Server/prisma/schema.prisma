@@ -34,7 +34,6 @@ model Product {
   cartItems  CartItem[]
   sizeItems ProductSizes[]
 
- // @@index([name, imageUrl, category, new_price, old_price, description], name: "unique_product")
 }
 
 model ProductSizes{
@@ -43,6 +42,7 @@ model ProductSizes{
   quantity Int
   product Product @relation(fields: [fk_prodId], references: [prodId], onDelete: Cascade)
   fk_prodId String 
+  cartItems CartItem[]
 }
 
 
@@ -52,18 +52,22 @@ model Cart {
   subtotal     Int
   shippingFee  Int
   total        Int
-  user        User       @relation(fields: [fk_userId], references: [uid])
+  user        User       @relation(fields: [fk_userId], references: [uid], onDelete: NoAction)
   fk_userId    Int        @unique
   cartItems    CartItem[]
 }
 
 model CartItem {
   cartItemId   Int        @id @default(autoincrement())
-  size         String
-  quantity     Int
-  total        Int
+  itemName     String
+  price        Int
+  itemQuantity     Int
+  itemTotal        Int
   cart         Cart       @relation(fields: [fk_cartId], references: [cartId])
   fk_cartId    Int
   product      Product    @relation(fields: [fk_productId], references: [prodId])
   fk_productId  String
+  productSize ProductSizes @relation(fields: [fk_sizeId], references: [sizeId])
+  fk_sizeId  Int 
+  
 }
