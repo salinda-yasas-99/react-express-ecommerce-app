@@ -14,16 +14,19 @@ const ProductDisplay = (props) => {
   let sizes = [];
     try {
         // Parse the sizes from the product data and sort them
-        sizes = product?.sizes ? JSON.parse(product.sizes).sort((a, b) => a - b) : [];
+        // sizes = product?.sizes ? (product.sizes).sort((a, b) => a - b) : [];
+        sizes = product?.sizes ? (product.sizes).sort((a, b) => a.size - b.size) : [];
+
     } catch (e) {
         console.error('Error parsing sizes:', e);
     }
 
-    const sizeHandleClick  = (id) =>{
+    const sizeHandleClick = (prodId) => {
       setSizeActive(() => ({
-        [id]: true
-      }))
-    }
+        
+        [prodId]: true
+      }));
+    };
 
   // const parseSizes = (sizes) => {
   //   try {
@@ -51,14 +54,14 @@ const ProductDisplay = (props) => {
     <div className="productdisplay">
       <div className="productdisplay-left">
         <div className="productdisplay-img-list">
-          <img src={product?.image} alt="" />
-          <img src={product?.image} alt="" />
-          <img src={product?.image} alt="" />
+          <img src={product?.imageUrl} alt="" />
+          <img src={product?.imageUrl} alt="" />
+          <img src={product?.imageUrl} alt="" />
         </div>
         <div className="productdisplay-img">
           <img
             className="productdisplay-main-img"
-            src={product?.image}
+            src={product?.imageUrl}
             alt=""
           />
         </div>
@@ -88,14 +91,22 @@ const ProductDisplay = (props) => {
           <h1>Select Size</h1>
           <div className={`productdisplay-right-sizes  sizeActive`}>
             
-            {sizes.map((size) => (
-              <button style={{border:sizeActive[`${size}`]? "2px solid black":"2px solid #ebebeb"}} onClick={()=>sizeHandleClick(size)} key={size}>{size}</button>
-            ))}
+          {sizes.map((sizeObj, index) => (
+    <button
+      style={{
+        border: sizeActive[sizeObj.size] ? "2px solid black" : "2px solid #ebebeb"
+      }}
+      onClick={() => sizeHandleClick(sizeObj.size)}
+      key={index}
+    >
+      {sizeObj.size}
+    </button>
+  ))}
           </div>
         </div>
         <button className="add-to-cart"
           onClick={() => {
-            addToCart(product?.id);
+            addToCart(product?.prodId);
           }}
         >
           ADD TO CART

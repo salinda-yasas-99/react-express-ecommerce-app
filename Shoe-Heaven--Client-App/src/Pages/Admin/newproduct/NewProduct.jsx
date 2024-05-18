@@ -16,7 +16,7 @@ const NewProduct = ({ title }) => {
     old_price: "",
     new_price: "",
     sizes: [],
-    description:"",
+    description: "",
   };
   const availableSizes = [3, 4, 5, 6, 7, 8, 9, 10];
   const [productData, setProductData] = useState(initialProductData);
@@ -25,6 +25,7 @@ const NewProduct = ({ title }) => {
   const [formError, setFormError] = useState(""); // State to handle form validation messages
   const [successMessage, setSuccessMessage] = useState("");
   const [imageError, setImageError] = useState("");
+  
 
   const validateProductId = async (prodId) => {
     try {
@@ -50,10 +51,9 @@ const NewProduct = ({ title }) => {
     setProductData((prev) => ({
       ...prev,
       [name]: value,
-      
     }));
 
-    console.log(name,value);
+    console.log(name, value);
 
     if (name === "prodId") {
       await validateProductId(value);
@@ -68,7 +68,9 @@ const NewProduct = ({ title }) => {
         : [...prev.sizes, size],
     }));
   };
+  
 
+  
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
@@ -117,14 +119,20 @@ const NewProduct = ({ title }) => {
         const productWithImage = {
           ...productData,
           imageUrl: responseData.image_url,
-        };
-
+          old_price: parseInt(productData.old_price), // Convert old_price to integer
+          new_price: parseInt(productData.new_price),
+         
+                 };
+        console.log(productWithImage);
         // Post to your products API endpoint
         const productResponse = await axios.post(
           "http://localhost:7000/api/products/addProduct",
           productWithImage
         );
-        console.log(productResponse.data);
+
+        // console.log(productResponse.data);
+        console.log("Final response:", productResponse.data);
+
         setSuccessMessage("Product has been added successfully!"); // Set success message
         setTimeout(() => setSuccessMessage(""), 8000); // clear success message after 8 seconds
         setProductData(initialProductData);
@@ -159,18 +167,17 @@ const NewProduct = ({ title }) => {
 
             <div className="formInput">
               <label htmlFor="file" className="file">
-                Image: 
+                Image:
                 <input
-                type="file"
-                id="file"
-                onChange={handleFileChange}
-                style={{ display: "none" }}
-              />
-              <DriveFolderUploadOutlinedIcon className="icon" />
+                  type="file"
+                  id="file"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <DriveFolderUploadOutlinedIcon className="icon" />
               </label>
-              
+
               {imageError && <Alert severity="error">{imageError}</Alert>}
-             
             </div>
           </div>
 
@@ -255,6 +262,7 @@ const NewProduct = ({ title }) => {
 
             <div className="shoe-sizes">
               {availableSizes.map((size) => (
+                <div className="size-with-quantity">
                 <label key={size}>
                   <input
                     type="checkbox"
@@ -262,9 +270,45 @@ const NewProduct = ({ title }) => {
                     onChange={() => handleSizeChange(size)}
                   />{" "}
                   Size {size}
+                  
                 </label>
+                <label htmlFor="qty" className="qty-label">
+                  
+                  <input type="number" id ="qty"  className="quantity"/>
+                  <span>Qty</span>
+                </label>
+                </div>
+                
               ))}
+              
             </div>
+            {/* <div className="shoe-sizes">
+              {availableSizes.map((size) => (
+                <div className="size-with-quantity">
+                  <label key={size}>
+                    <input
+                      type="checkbox"
+                      checked={productData.sizes.includes(size)}
+                      onChange={() => handleSizeChange(size)}
+                    />{" "}
+                    Size {size}
+                  </label>
+                  {selectedSizes[size] && (
+                    <label htmlFor="qty" className="qty-label">
+                      <input
+                        type="number"
+                        value={selectedSizes[size]}
+                        onChange={(e) =>
+                          handleQuantityChange(size, e.target.value)
+                        }
+                        className="quantity"
+                      />
+                      <span>Qty</span>
+                    </label>
+                  )}
+                </div>
+              ))}
+            </div> */}
 
             <button onClick={Add_Product} className="btn">
               ADD

@@ -83,7 +83,7 @@ const ShopContextProvider = (props) => {
     const initializeCart = (products) => {
         let newCart = {};
         products.forEach(product => {
-            newCart[product.id] = 0;
+            newCart[product.prodId] = 0;
         });
         setCartItems(newCart);
     };

@@ -1,8 +1,14 @@
+.sidebar::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+}
 .sidebar {
     flex: 1;
     border-right: 0.5px solid rgb(230, 227, 227);
     min-height: 100vh;
     background-color: white;
+    position: fixed;
+    overflow-y: scroll;
   }
   
   .sidebar .top {

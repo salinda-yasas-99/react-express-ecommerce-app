@@ -5,6 +5,7 @@
   
   .newContainer {
     flex: 6;
+    padding-left: 200px;
   }
   
   .newContainer .top {
@@ -80,8 +81,8 @@
     margin-bottom: 5px;
   }
   
-  .newContainer .bottom .right  button {
-    width: 150px;
+  .newContainer .bottom .right  .btn {
+    width: 250px;
     padding: 10px;
     border: none;
     background-color: teal;
@@ -102,15 +103,16 @@
     align-items: center;
     gap: 10px;
     grid-template-columns: 1fr 1fr 1fr;
-    max-width: 500px;
     margin-right: auto;
     
   }
 
-.shoe-sizes label{
-  display: flex;
-  gap: 6px;
-}
+  .shoe-sizes label{
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    min-width: 70px
+  }
 
   .itemfield-prices{
     width: 100%;
@@ -118,5 +120,26 @@
     align-items: center;
     justify-content: space-between;
     gap: 20px;
+  }
+
+  .size-with-quantity{
+    display: flex;
+    width: 100%;
+    gap: 10px;
+
+  }
+
+  .quantity{
+    max-width: 40px;
+    border: 1px solid rgb(221, 219, 219);
+    outline: none;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 14px;
+  }
+
+  .qty-label{
+    display: flex;
+    font-size: 14px;
   }
   

@@ -73,7 +73,7 @@ const ShopCategory = (props) => {
       </div>
       <div className="shopcategory-products">
         {categoryProducts.slice(0, displayCount).map((item, i) => (
-          <Item key={item.id} {...item} />
+          <Item key={item.prodId} {...item} />
         ))}
       </div>
       {categoryProducts.length > 6 && ( // Conditional rendering based on the number of category products

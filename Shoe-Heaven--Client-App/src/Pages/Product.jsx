@@ -37,7 +37,7 @@ useEffect(()=>{
 },[])
   // const {all_product} = useContext(ShopContext);
   const {productId} = useParams();
-  const  product =  products.find((e) => e.id === productId);
+  const  product =  products.find((e) => e.prodId === productId);
   console.log(products);
 
   return (

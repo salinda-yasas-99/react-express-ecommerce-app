@@ -27,28 +27,29 @@ const CartItems = () => {
       </div>
       <hr />
       {products.map((e) => {
-        if (cartItems[e.id] > 0) {
+        if (cartItems[e.prodId] > 0) {
+          console.log(` sheo sizes ${e.sizes[0]}`);
           return (
-            <div key={e.id}>
+            <div key={e.prodId}>
               <div className="cartitems-format cartitems-format-main">
-                <img src={e.image} alt="" className="carticon-product-icon" />
+                <img src={e.imageUrl} alt="" className="carticon-product-icon" />
                 <p>{e.name}</p>
                 <p>Rs.{e.new_price}</p>
                 <div className="cartitems-quantity">
-                  <button className="layout qty-btn" onClick={()=>removeFromCart(e.id)}>
+                  <button className="layout qty-btn" onClick={()=>removeFromCart(e.prodId)}>
                     <RiSubtractFill />
                   </button>{" "}
-                  <span>{cartItems[e.id]}</span>{" "}
-                  <button className="layout qty-btn" onClick={()=>addToCart(e.id)}>
+                  <span>{cartItems[e.prodId]}</span>{" "}
+                  <button className="layout qty-btn" onClick={()=>addToCart(e.prodId)}>
                     <RiAddFill />
                   </button>
                 </div>
-                <p>Rs.{e.new_price * cartItems[e.id]}</p>
+                <p>Rs.{e.new_price * cartItems[e.prodId]}</p>
                 <img
                   className="cartitems-remove-icon"
                   src={remove_icon}
                   onClick={() => {
-                    removeFromCart(e.id,true);
+                    removeFromCart(e.prodId,true);
                   }}
                   alt=""
                 />
