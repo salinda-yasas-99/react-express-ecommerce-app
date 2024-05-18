@@ -7,14 +7,14 @@ const path = require("path");
 
 router.get(
   "/getAllUsers",
-  authController.accessAuthorizeAdmin,
+  // authController.accessAuthorizeAdmin,
   userController.getAllUsers
 );
 router.post("/register/user", userController.addNewUser);
 router.post("/register/admin", userController.addNewAdmin);
 router.delete(
   "/delete/:Id",
-  authController.accessAuthorizeAdmin,
+  // authController.accessAuthorizeAdmin,
   userController.deleteUser
 );
 

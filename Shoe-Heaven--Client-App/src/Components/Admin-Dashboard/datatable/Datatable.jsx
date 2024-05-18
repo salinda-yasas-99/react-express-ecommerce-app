@@ -29,7 +29,7 @@ const Datatable = (props) => {
     const fetchUsers = async () => {
       const users = await getAllUsers();
       setUsersArray(users);
-      //console.log("This is users",usersArray);
+      console.log("This is users", usersArray);
 
       console.log(usersArray);
     };
@@ -50,10 +50,11 @@ const Datatable = (props) => {
     if (userIdToDelete) {
       try {
         const response = await axios.delete(
-          `http://localhost:7000/api/users/${userIdToDelete}`
+          `http://localhost:7000/api/users/delete/${userIdToDelete}`
         );
         console.log(response.data);
         setOpen(false);
+        window.location.reload();
       } catch (error) {
         console.error("Failed to delete user:", error);
       }
@@ -128,7 +129,7 @@ const Datatable = (props) => {
                     Update
                   </button>
                   <button
-                    onClick={() => handleClickOpen(user.id)}
+                    onClick={() => handleClickOpen(user.uid)}
                     style={{
                       display: "flex",
                       alignItems: "center",

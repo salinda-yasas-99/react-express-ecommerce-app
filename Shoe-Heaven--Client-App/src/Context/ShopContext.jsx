@@ -1,161 +1,118 @@
-// import React, { createContext, useState,useEffect } from "react";
-// import all_product from "../assets/all_product";
-// import axios from "axios";
-
-
-// export const  ShopContext = createContext(null);
-
-
-    
-
-
-
-// const  getDefaultCart = ()=>{
-//     let cart= {};
-//     for (let index = 0; index < all_product.length+1; index++) {
-//         cart[index]=0;
-        
-//     }
-//     return cart;
-// }
-
-// const initializeCart = (products) => {
-//     let newCart = {};
-//     products.forEach(product => {
-//         newCart[product.id] = 0;
-//     });
-//     setCartItems(newCart);
-// };
-
-// const ShopContextProvider = (props) =>{
-//     const [products, setProducts] = useState([]);
-//     const [cartItems, setCartItems] = useState({});
-//     useEffect(() => {
-//         axios.get('http://localhost:5000/api/product')
-//             .then(response => {
-//                 setProducts(response.data);
-//                 initializeCart(response.data);
-//             })
-//             .catch(error => console.error('Error fetching products:', error));
-//     }, []);
-    
-
-//     const addToCart = (itemId)=>{
-//         setCartItems((prev)=>({...prev,[itemId]:prev[itemId]+1}))
-//         console.log(cartItems);
-//     }
-
-//     const removeFromCart = (itemId)=>{
-//         setCartItems((prev)=>({...prev,[itemId]:prev[itemId]-1}))
-//     }
-
-//     const contextValue = {products,cartItems,addToCart,removeFromCart}
-//     console.log(cartItems);
-
-//     return (
-//         <ShopContext.Provider value={contextValue}>
-//             {props.children}
-//         </ShopContext.Provider>
-//     )
-// }
-
-// export default ShopContextProvider
-
-import React, { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { createContext, useState, useEffect } from "react";
+import axios from "axios";
 
 export const ShopContext = createContext(null);
 
 const ShopContextProvider = (props) => {
-    const [products, setProducts] = useState([]);
-    const [cartItems, setCartItems] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
 
-    useEffect(() => {
-        axios.get('http://localhost:7000/api/products/getAllProducts')
-            .then(response => {
-                console.log(response.data);
-                setProducts(response.data);
-                initializeCart(response.data);
-            })
-            .catch(error => console.error('Error fetching products:', error));
-    }, []);
+  useEffect(() => {
+    axios
+      .get("http://localhost:7000/api/products/getAllProducts")
+      .then((response) => {
+        console.log(response.data);
+        setProducts(response.data);
+        //initializeCart(response.data);
+      })
+      .catch((error) => console.error("Error fetching products:", error));
+  }, []);
 
-    const initializeCart = (products) => {
-        let newCart = {};
-        products.forEach(product => {
-            newCart[product.prodId] = 0;
-        });
-        setCartItems(newCart);
-        console.log(`this is cart ${newCart}`);
-        
-    };
+  // const initializeCart = (products) => {
+  //   let newCart = {};
+  //   products.forEach((product) => {
+  //     newCart[product.prodId] = 0;
+  //   });
+  //   setCartItems(newCart);
+  //   console.log(`this is cart ${newCart}`);
+  // };
 
-    const addToCart = (itemId,sizeId) => {
-        // setCartItems(prev => ({ ...prev, [itemId]: prev[itemId] + 1 }));
-        setCartItems((cartItems) => {
-            const existingItemIndex = cartItems.findIndex(
-              (item) => item.itemId === itemId && item.sizeId === sizeId
-            );
-      
-            if (existingItemIndex !== -1) {
-              // Item exists, increment the quantity
-              const updatedCartItems = [...cartItems];
-              updatedCartItems[existingItemIndex].qty += 1;
-              return updatedCartItems;
-            } else {
-              // Item does not exist, add as new item
-              return [...cartItems, { itemId, sizeId, qty: 1 }];
-            }
-          });
-    };
+  const addToCart = (itemId, sizeId) => {
+    setCartItems((prevCartItems) => {
+      if (!prevCartItems.length) {
+        // If cartItems array is empty, add the product at once
+        return [{ itemId, sizeId, qty: 1 }];
+      }
 
-    const removeFromCart = (itemId,removeAll = false) => {
-        if (removeAll) {
-            // Remove the item completely
-            setCartItems(prev => ({ ...prev, [itemId]: 0 }));
-        } else {
-            // Decrement the count or remove if only one left
-            setCartItems(prev => ({ ...prev, [itemId]: Math.max(prev[itemId] - 1, 0) }));
-        }
-    };
+      const existingItemIndex = prevCartItems.findIndex(
+        (item) => item.itemId === itemId && item.sizeId === sizeId
+      );
 
-    const getTotalCartItems = () =>{
-        let totalItem=0;
-        for(const item in  cartItems){
-            if(cartItems[item]>0){
-                totalItem+=cartItems[item];
-            }
-        }
+      if (existingItemIndex !== -1) {
+        // Item exists, increment the quantity
+        const updatedCartItems = [...prevCartItems];
+        updatedCartItems[existingItemIndex].qty += 1;
+        console.log(`This is cart `, cartItems);
+        return updatedCartItems;
+      } else {
+        console.log(`This is cart `, cartItems);
+        // Item does not exist, add as new item
+        return [...prevCartItems, { itemId, sizeId, qty: 1 }];
+      }
+    });
+  };
 
-        return totalItem;
+  const removeFromCart = (itemId, removeAll = false) => {
+    if (removeAll) {
+      // Remove the item completely
+      setCartItems((prev) => ({ ...prev, [itemId]: 0 }));
+    } else {
+      // Decrement the count or remove if only one left
+      setCartItems((prev) => ({
+        ...prev,
+        [itemId]: Math.max(prev[itemId] - 1, 0),
+      }));
+    }
+  };
+
+  const getTotalCartItems = () => {
+    let totalItem = 0;
+    for (let item in cartItems) {
+      // if (cartItems[item] > 0) {
+      //   totalItem += cartItems[item];
+      // }
+      if (cartItems.length) {
+        totalItem = totalItem++;
+      }
     }
 
-    const getTotalCartAmount = () => {
-        let totalAmount = 0;
-        for (const item in cartItems) {
-            if (cartItems[item] > 0) {
-                const itemInfo = products.find(product => product.id === item);
-                if (itemInfo && itemInfo.new_price) {
-                    totalAmount += itemInfo.new_price * cartItems[item];
-                    // console.log(`Adding ${itemInfo.new_price} * ${cartItems[item]}`);
-                }
-            }
-        }
-        // console.log(`Total Amount: ${totalAmount}`);
-        return totalAmount;
-    };
-    
-    
-    
-    
+    return totalItem;
+  };
 
-    const contextValue = {getTotalCartAmount,getTotalCartItems, products, cartItems, addToCart, removeFromCart };
+  const getTotalCartAmount = () => {
+    let totalAmount = 0;
+    for (const item in cartItems) {
+      // if (cartItems[item] > 0) {
+      //   const itemInfo = products.find((product) => product.id === item);
+      //   if (itemInfo && itemInfo.new_price) {
+      //     totalAmount += itemInfo.new_price * cartItems[item];
+      //     // console.log(`Adding ${itemInfo.new_price} * ${cartItems[item]}`);
+      //   }
+      const itemInfo = products.find((product) => product.id === item.prodId);
+      if (itemInfo && itemInfo.new_price) {
+        totalAmount += itemInfo.new_price * item.qty;
+        console.log(`Total amount ${totalAmount}`);
+      }
+    }
 
-    return (
-        <ShopContext.Provider value={contextValue}>
-            {props.children}
-        </ShopContext.Provider>
-    );
+    // console.log(`Total Amount: ${totalAmount}`);
+    return totalAmount;
+  };
+
+  const contextValue = {
+    getTotalCartAmount,
+    getTotalCartItems,
+    products,
+    cartItems,
+    addToCart,
+    removeFromCart,
+  };
+
+  return (
+    <ShopContext.Provider value={contextValue}>
+      {props.children}
+    </ShopContext.Provider>
+  );
 };
 
 export default ShopContextProvider;

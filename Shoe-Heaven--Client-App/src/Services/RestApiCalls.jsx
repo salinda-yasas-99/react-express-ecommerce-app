@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 const API = axios.create({
   baseURL: "http://localhost:7000/api",
@@ -15,4 +15,3 @@ export const getAllUsers = async () => {
     console.log({ err: `${err}` });
   }
 };
-
