@@ -47,6 +47,18 @@ exports.AddNewProduct = async (req, res, next) => {
   }
 };
 
+exports.getAllsizes = async (req, res, next) => {
+  try {
+    // Fetch all users
+    const productSizes = await prisma.productSizes.findMany();
+
+    res.status(200).json(productSizes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error fetching users");
+  }
+};
+
 //get product by id
 exports.getProductById = async (req, res, next) => {
   const productId = req.params.Id; // Assuming the product ID is passed as a URL parameter
@@ -70,6 +82,7 @@ exports.getProductById = async (req, res, next) => {
             sizeId: true,
             sizeName: true,
             quantity: true,
+            fk_prodId: true,
           },
         },
       },
@@ -103,6 +116,7 @@ exports.getAllProducts = async (req, res, next) => {
             sizeId: true,
             sizeName: true,
             quantity: true,
+            fk_prodId: true,
           },
         },
       },

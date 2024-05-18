@@ -82,6 +82,7 @@ exports.AddToCart = async (req, res, next) => {
                 prodId: item.productId,
               },
             },
+
             productSize: {
               connect: {
                 sizeId: parseInt(item.sizeId),
