@@ -52,28 +52,38 @@ const ShopContextProvider = (props) => {
     });
   };
 
-  const removeFromCart = (itemId, removeAll = false) => {
-    if (removeAll) {
-      // Remove the item completely
-      setCartItems((prev) => ({ ...prev, [itemId]: 0 }));
-    } else {
-      // Decrement the count or remove if only one left
-      setCartItems((prev) => ({
-        ...prev,
-        [itemId]: Math.max(prev[itemId] - 1, 0),
-      }));
-    }
+  const removeFromCart = (itemId, sizeId, removeAll = false) => {
+    setCartItems((prevCartItems) => {
+      const existingItemIndex = prevCartItems.findIndex(
+        (item) => item.itemId === itemId && item.sizeId === sizeId
+      );
+
+      if (existingItemIndex !== -1) {
+        const updatedCartItems = [...prevCartItems];
+
+        if (removeAll || updatedCartItems[existingItemIndex].qty === 1) {
+          // Remove the item completely
+          updatedCartItems.splice(existingItemIndex, 1);
+        } else {
+          // Decrement the quantity
+          updatedCartItems[existingItemIndex].qty -= 1;
+        }
+        return updatedCartItems;
+      }
+
+      return prevCartItems;
+    });
   };
 
   const getTotalCartItems = () => {
     let totalItem = 0;
-    for (let item in cartItems) {
-      // if (cartItems[item] > 0) {
-      //   totalItem += cartItems[item];
+    //for (let item in cartItems) {
+    // if (cartItems[item] > 0) {
+    //   totalItem += cartItems[item];
+    // }
+    if (cartItems.length) {
+      totalItem = totalItem + cartItems.length;
       // }
-      if (cartItems.length) {
-        totalItem = totalItem++;
-      }
     }
 
     return totalItem;
@@ -81,21 +91,15 @@ const ShopContextProvider = (props) => {
 
   const getTotalCartAmount = () => {
     let totalAmount = 0;
-    for (const item in cartItems) {
-      // if (cartItems[item] > 0) {
-      //   const itemInfo = products.find((product) => product.id === item);
-      //   if (itemInfo && itemInfo.new_price) {
-      //     totalAmount += itemInfo.new_price * cartItems[item];
-      //     // console.log(`Adding ${itemInfo.new_price} * ${cartItems[item]}`);
-      //   }
-      const itemInfo = products.find((product) => product.id === item.prodId);
-      if (itemInfo && itemInfo.new_price) {
-        totalAmount += itemInfo.new_price * item.qty;
-        console.log(`Total amount ${totalAmount}`);
+    cartItems.forEach((cartItem) => {
+      const product = products.find(
+        (product) => product.prodId === cartItem.itemId
+      );
+      if (product && product.new_price) {
+        totalAmount += product.new_price * cartItem.qty;
       }
-    }
-
-    // console.log(`Total Amount: ${totalAmount}`);
+    });
+    console.log(`Total amount: ${totalAmount}`);
     return totalAmount;
   };
 

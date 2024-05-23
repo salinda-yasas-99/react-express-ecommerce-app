@@ -6,9 +6,8 @@ import "remixicon/fonts/remixicon.css";
 import { RiAddFill, RiSubtractFill } from "react-icons/ri";
 
 const CartItems = () => {
-  const { getTotalCartAmount, products, cartItems, removeFromCart,addToCart} =
+  const { getTotalCartAmount, products, cartItems, removeFromCart, addToCart } =
     useContext(ShopContext);
-
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat("en-US", {
@@ -26,13 +25,14 @@ const CartItems = () => {
       <div className="cartitems-format-main">
         <p>Product</p>
         <p>Title</p>
+        <p>Size</p>
         <p>Price</p>
         <p>Quantity</p>
         <p>Total</p>
         <p>Remove</p>
       </div>
       <hr />
-      {products.map((e) => {
+      {/* {products.map((e) => {
         if (cartItems[e.prodId] ) {
 
           
@@ -57,6 +57,56 @@ const CartItems = () => {
                   src={remove_icon}
                   onClick={() => {
                     removeFromCart(e.prodId,true);
+                  }}
+                  alt=""
+                />
+              </div>
+              <hr />
+            </div>
+          );
+        }
+        return null;
+      })} */}
+      {cartItems.map((cartItem) => {
+        const product = products.find(
+          (prod) => prod.prodId === cartItem.itemId
+        );
+        const size = product?.sizeItems.find(
+          (size) => size.sizeId === cartItem.sizeId
+        );
+        if (product && size) {
+          return (
+            <div key={`${cartItem.itemId}-${cartItem.sizeId}`}>
+              <div className="cartitems-format cartitems-format-main">
+                <img
+                  src={product.imageUrl}
+                  alt=""
+                  className="carticon-product-icon"
+                />
+                <p>{product.name}</p>
+                <p>{size.sizeName}</p>
+                <p>Rs.{product.new_price}</p>
+                <div className="cartitems-quantity">
+                  <button
+                    className="layout qty-btn"
+                    onClick={() => removeFromCart(product.prodId, size.sizeId)}
+                  >
+                    <RiSubtractFill />
+                  </button>{" "}
+                  <span>{cartItem.qty}</span>{" "}
+                  <button
+                    className="layout qty-btn"
+                    onClick={() => addToCart(product.prodId, size.sizeId)}
+                  >
+                    <RiAddFill />
+                  </button>
+                </div>
+                <p>Rs.{product.new_price * cartItem.qty}</p>
+                <img
+                  className="cartitems-remove-icon"
+                  src={remove_icon}
+                  onClick={() => {
+                    removeFromCart(product.prodId, size.sizeId, true);
                   }}
                   alt=""
                 />
