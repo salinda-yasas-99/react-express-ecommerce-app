@@ -67,7 +67,7 @@ const CartItems = () => {
         }
         return null;
       })} */}
-      {cartItems.map((cartItem) => {
+      {cartItems.itemsCart.map((cartItem) => {
         const product = products.find(
           (prod) => prod.prodId === cartItem.itemId
         );

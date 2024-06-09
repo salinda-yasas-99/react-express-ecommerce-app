@@ -46,13 +46,13 @@ exports.AddToCart = async (req, res, next) => {
 
         const product = await prisma.product.findUnique({
           where: {
-            prodId: item.productId,
+            prodId: item.itemId,
           },
         });
         if (!product) {
           return res
             .status(404)
-            .send(`Product with id ${item.productId} not found`);
+            .send(`Product with id ${item.itemId} not found`);
         }
 
         const productSize = await prisma.productSizes.findUnique({
@@ -68,10 +68,7 @@ exports.AddToCart = async (req, res, next) => {
 
         const newItem = await prisma.cartItem.create({
           data: {
-            price: product.new_price,
-            itemName: item.itemName,
             itemQuantity: item.itemQuantity,
-            itemTotal: item.itemTotal,
             cart: {
               connect: {
                 cartId: cartAvailvable.cartId,
@@ -118,13 +115,13 @@ exports.AddToCart = async (req, res, next) => {
 
         const product = await prisma.product.findUnique({
           where: {
-            prodId: item.productId,
+            prodId: item.itemId,
           },
         });
         if (!product) {
           return res
             .status(404)
-            .send(`Product with id ${item.productId} not found`);
+            .send(`Product with id ${item.itemId} not found`);
         }
 
         const productSize = await prisma.productSizes.findUnique({
@@ -140,10 +137,7 @@ exports.AddToCart = async (req, res, next) => {
 
         const newItem = await prisma.cartItem.create({
           data: {
-            price: product.new_price,
-            itemName: item.itemName,
-            itemQuantity: item.itemQuantity,
-            itemTotal: item.itemTotal,
+            itemQuantity: item.qty,
             cart: {
               connect: {
                 cartId: cartId,
@@ -151,7 +145,7 @@ exports.AddToCart = async (req, res, next) => {
             },
             product: {
               connect: {
-                prodId: item.productId,
+                prodId: item.itemId,
               },
             },
             productSize: {
@@ -162,7 +156,6 @@ exports.AddToCart = async (req, res, next) => {
           },
         });
 
-        // Optionally, log or return the newly created cart item
         console.log(newItem);
       }
 
@@ -193,6 +186,31 @@ exports.GetCartByUserId = async (req, res, next) => {
     }
 
     res.status(200).json(userCart);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving user's cart");
+  }
+};
+
+exports.IsCartAvailable = async (req, res, next) => {
+  const userId = parseInt(req.params.uid);
+  try {
+    const userCart = await prisma.cart.findFirst({
+      where: {
+        user: {
+          uid: Number(userId),
+        },
+      },
+      include: {
+        cartItems: true,
+      },
+    });
+
+    if (!userCart) {
+      return res.status(404).json({ cart: "false" });
+    }
+
+    res.status(200).json({ cart: "false" });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error retrieving user's cart");

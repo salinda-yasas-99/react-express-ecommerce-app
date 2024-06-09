@@ -12,17 +12,17 @@ const ProductDisplay = (props) => {
 
   let sizeItems = [];
   try {
-    sizeItems = product?.sizeItems ? product.sizeItems.sort((a, b) => a.sizeId - b.sizeId) : [];
+    sizeItems = product?.sizeItems
+      ? product.sizeItems.sort((a, b) => a.sizeId - b.sizeId)
+      : [];
   } catch (e) {
-    console.error('Error parsing sizeItems:', e);
+    console.error("Error parsing sizeItems:", e);
   }
 
   const sizeHandleClick = (sizeId) => {
     setSizeActive(sizeId);
     console.log(`this is size ${sizeActive}`);
   };
-
-  
 
   return (
     <div className="productdisplay">
@@ -63,11 +63,18 @@ const ProductDisplay = (props) => {
         </div>
         <div className="productdisplay-right-size">
           <h1>Select Size</h1>
-          <div className={`productdisplay-right-sizes ${sizeActive ? 'sizeActive' : ''}`}>
+          <div
+            className={`productdisplay-right-sizes ${
+              sizeActive ? "sizeActive" : ""
+            }`}
+          >
             {sizeItems.map((sizeObj, index) => (
               <button
                 style={{
-                  border: sizeActive === sizeObj.sizeId ? "2px solid black" : "2px solid #ebebeb"
+                  border:
+                    sizeActive === sizeObj.sizeId
+                      ? "2px solid black"
+                      : "2px solid #ebebeb",
                 }}
                 onClick={() => sizeHandleClick(sizeObj.sizeId)}
                 key={index}
@@ -80,7 +87,7 @@ const ProductDisplay = (props) => {
         <button
           className="add-to-cart"
           onClick={() => {
-            addToCart(product?.prodId,sizeActive);
+            addToCart(product?.prodId, sizeActive);
           }}
         >
           ADD TO CART
