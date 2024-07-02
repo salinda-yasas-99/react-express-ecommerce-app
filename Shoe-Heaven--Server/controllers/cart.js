@@ -337,7 +337,13 @@ exports.GetCartByUserId = async (req, res, next) => {
       return res.status(404).json({ error: "Cart not found" });
     }
 
-    res.status(200).json(userCart);
+    const renamedCart = {
+      ...userCart,
+      itemsCart: userCart.cartItems,
+    };
+    delete renamedCart.cartItems;
+
+    res.status(200).json(renamedCart);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error retrieving user's cart");

@@ -10,7 +10,7 @@ const CartItems = () => {
   const { getTotalCartAmount, products, cartItems, removeFromCart, addToCart } =
     useContext(ShopContext);
 
-  const [cart, setCart] = useState();
+  //const [cart, setCart] = useState();
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat("en-US", {
@@ -23,30 +23,30 @@ const CartItems = () => {
     console.log("cartItems:", cartItems);
   }, [cartItems]);
 
-  const fetchCart = async () => {
-    const Token = localStorage.getItem("token");
-    const userId = 1;
-    // const authAxios = axios.create({
-    //   headers: {
-    //     Authorization: `Bearer ${Token}`,
-    //   },
-    //   withCredentials: true,
-    // });
-    try {
-      const response = await axios.get(
-        `http://localhost:7000/api/cart/cartbyId/${userId}`
-      );
-      console.log("this is cart in cart page ", response.data);
-      setCart(response.data);
-      return response.data;
-    } catch (err) {
-      console.log("This is error", err);
-    }
-  };
+  // const fetchCart = async () => {
+  //   const Token = localStorage.getItem("token");
+  //   const userId = 1;
+  //   // const authAxios = axios.create({
+  //   //   headers: {
+  //   //     Authorization: `Bearer ${Token}`,
+  //   //   },
+  //   //   withCredentials: true,
+  //   // });
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:7000/api/cart/cartbyId/${userId}`
+  //     );
+  //     console.log("this is cart in cart page ", response.data);
+  //     setCart(response.data);
+  //     return response.data;
+  //   } catch (err) {
+  //     console.log("This is error", err);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchCart();
-  }, []);
+  // useEffect(() => {
+  //   fetchCart();
+  // }, []);
 
   return (
     <div className="cartitems">

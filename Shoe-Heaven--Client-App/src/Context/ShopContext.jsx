@@ -24,9 +24,10 @@ const ShopContextProvider = (props) => {
   }, []);
 
   const fetchCart = async () => {
+    const uid = localStorage.getItem("uid");
     try {
       const response = await axios.get(
-        "http://localhost:7000/api/cart/cartbyId/2"
+        `http://localhost:7000/api/cart/cartbyId/${uid}`
       );
       console.log("This is fetched cart", response.data);
       setCartItems(response.data);
