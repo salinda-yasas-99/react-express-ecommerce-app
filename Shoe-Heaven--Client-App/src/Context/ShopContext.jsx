@@ -64,29 +64,33 @@ const ShopContextProvider = (props) => {
         }
       } else {
         const existingItemIndex = updatedCartItems.itemsCart.findIndex(
-          (item) => item.itemId === itemId && item.sizeId === sizeId
+          (item) => item.fk_productId === itemId && item.fk_sizeId === sizeId
         );
 
         if (existingItemIndex !== -1) {
           // Item exists, increment the quantity
-          updatedCartItems.itemsCart[existingItemIndex].qty += 1;
+          updatedCartItems.itemsCart[existingItemIndex].itemQuantity += 1;
           updatedCartItems.total = getTotalCartAmount();
           updatedCartItems.subtotal = getTotalCartAmount();
+          setCartItems(updatedCartItems);
+          return;
         } else {
           // Item does not exist, add as new item
           updatedCartItems.itemsCart.push({ itemId, sizeId, qty: 1 });
           updatedCartItems.total = getTotalCartAmount();
           updatedCartItems.subtotal = getTotalCartAmount();
-        }
-        const userId = localStorage.getItem("uid");
-
-        const response = await axios.post(
-          `http://localhost:7000/api/cart/addToCart/${userId}`,
-          updatedCartItems
-        );
-        if (response.data) {
-          console.log("This is updateed cart", updatedCartItems);
           setCartItems(updatedCartItems);
+          const userId = localStorage.getItem("uid");
+
+          const response = await axios.post(
+            `http://localhost:7000/api/cart/addToCart/${userId}`,
+            updatedCartItems
+          );
+          if (response.data) {
+            console.log("This is updateed cart", updatedCartItems);
+            setCartItems(updatedCartItems);
+          }
+          return;
         }
       }
     } catch (error) {
@@ -98,25 +102,59 @@ const ShopContextProvider = (props) => {
     }
   };
 
+  // const removeFromCart = (itemId, sizeId, removeAll = false) => {
+  //   setCartItems((prevCartItems) => {
+  //     const existingItemIndex = prevCartItems.itemsCart.findIndex(
+  //       (item) => item.fk_productId === itemId && item.fk_sizeId === sizeId
+  //     );
+
+  //     if (existingItemIndex !== -1) {
+  //       const updatedCartItems = { ...prevCartItems };
+  //       if (removeAll || prevCartItems.itemsCart[existingItemIndex].qty === 1) {
+  //         // Remove the item completely
+  //         updatedCartItems.itemsCart.splice(existingItemIndex, 1);
+  //       } else {
+  //         // Decrement the quantity
+  //         updatedCartItems.itemsCart[existingItemIndex].qty -= 1;
+  //       }
+
+  //       updatedCartItems.subtotal = getTotalCartAmount();
+  //       updatedCartItems.shippingFee = 0;
+  //       updatedCartItems.total = getTotalCartAmount();
+
+  //       return updatedCartItems;
+  //     }
+
+  //     return prevCartItems;
+  //   });
+  // };
+
   const removeFromCart = (itemId, sizeId, removeAll = false) => {
     setCartItems((prevCartItems) => {
       const existingItemIndex = prevCartItems.itemsCart.findIndex(
-        (item) => item.itemId === itemId && item.sizeId === sizeId
+        (item) => item.fk_productId === itemId && item.fk_sizeId === sizeId
       );
 
       if (existingItemIndex !== -1) {
         const updatedCartItems = { ...prevCartItems };
-        if (removeAll || prevCartItems.itemsCart[existingItemIndex].qty === 1) {
+        if (removeAll) {
           // Remove the item completely
           updatedCartItems.itemsCart.splice(existingItemIndex, 1);
         } else {
-          // Decrement the quantity
-          updatedCartItems.itemsCart[existingItemIndex].qty -= 1;
+          const currentQuantity =
+            updatedCartItems.itemsCart[existingItemIndex].itemQuantity;
+          if (currentQuantity > 1) {
+            // Decrement the quantity if it's greater than 1
+            updatedCartItems.itemsCart[existingItemIndex].itemQuantity -= 1;
+          }
         }
 
-        updatedCartItems.subtotal = getTotalCartAmount();
+        updatedCartItems.subtotal = getTotalCartAmount(
+          updatedCartItems.itemsCart
+        );
         updatedCartItems.shippingFee = 0;
-        updatedCartItems.total = getTotalCartAmount();
+        updatedCartItems.total =
+          updatedCartItems.subtotal + updatedCartItems.shippingFee;
 
         return updatedCartItems;
       }
@@ -143,10 +181,10 @@ const ShopContextProvider = (props) => {
     let totalAmount = 0;
     cartItems.itemsCart.forEach((cartItem) => {
       const product = products.find(
-        (product) => product.prodId === cartItem.itemId
+        (product) => product.prodId === cartItem.fk_productId
       );
       if (product && product.new_price) {
-        totalAmount += product.new_price * cartItem.qty;
+        totalAmount += product.new_price * cartItem.itemQuantity;
       }
     });
     console.log(`Total amount: ${totalAmount}`);

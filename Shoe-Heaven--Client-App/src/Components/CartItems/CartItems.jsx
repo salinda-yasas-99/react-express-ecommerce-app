@@ -20,7 +20,7 @@ const CartItems = () => {
   };
 
   useEffect(() => {
-    console.log("cartItems:", cartItems);
+    console.log("cartItems in cart page:", cartItems);
   }, [cartItems]);
 
   // const fetchCart = async () => {
@@ -60,51 +60,17 @@ const CartItems = () => {
         <p>Remove</p>
       </div>
       <hr />
-      {/* {products.map((e) => {
-        if (cartItems[e.prodId] ) {
 
-          
-          return (
-            <div key={e.prodId}>
-              <div className="cartitems-format cartitems-format-main">
-                <img src={e.imageUrl} alt="" className="carticon-product-icon" />
-                <p>{e.name}</p>
-                <p>Rs.{e.new_price}</p>
-                <div className="cartitems-quantity">
-                  <button className="layout qty-btn" onClick={()=>removeFromCart(e.prodId)}>
-                    <RiSubtractFill />
-                  </button>{" "}
-                  <span>{cartItems[e.prodId]}</span>{" "}
-                  <button className="layout qty-btn" onClick={()=>addToCart(e.prodId)}>
-                    <RiAddFill />
-                  </button>
-                </div>
-                <p>Rs.{e.new_price * cartItems[e.prodId]}</p>
-                <img
-                  className="cartitems-remove-icon"
-                  src={remove_icon}
-                  onClick={() => {
-                    removeFromCart(e.prodId,true);
-                  }}
-                  alt=""
-                />
-              </div>
-              <hr />
-            </div>
-          );
-        }
-        return null;
-      })} */}
       {cartItems.itemsCart.map((cartItem) => {
         const product = products.find(
-          (prod) => prod.prodId === cartItem.itemId
+          (prod) => prod.prodId === cartItem.fk_productId
         );
         const size = product?.sizeItems.find(
-          (size) => size.sizeId === cartItem.sizeId
+          (size) => size.sizeId === cartItem.fk_sizeId
         );
         if (product && size) {
           return (
-            <div key={`${cartItem.itemId}-${cartItem.sizeId}`}>
+            <div key={`${cartItem.fk_productId}-${cartItem.fk_sizeId}`}>
               <div className="cartitems-format cartitems-format-main">
                 <img
                   src={product.imageUrl}
@@ -121,7 +87,7 @@ const CartItems = () => {
                   >
                     <RiSubtractFill />
                   </button>{" "}
-                  <span>{cartItem.qty}</span>{" "}
+                  <span>{cartItem.itemQuantity}</span>{" "}
                   <button
                     className="layout qty-btn"
                     onClick={() => addToCart(product.prodId, size.sizeId)}
@@ -129,7 +95,7 @@ const CartItems = () => {
                     <RiAddFill />
                   </button>
                 </div>
-                <p>Rs.{product.new_price * cartItem.qty}</p>
+                <p>Rs.{product.new_price * cartItem.itemQuantity}</p>
                 <img
                   className="cartitems-remove-icon"
                   src={remove_icon}
@@ -151,7 +117,7 @@ const CartItems = () => {
           <div>
             <div className="cartitems-total-item">
               <p>Sub Total</p>
-              <p>Rs.{formatCurrency(getTotalCartAmount())}</p>
+              <p>Rs.{getTotalCartAmount()}</p>
             </div>
             <hr />
             <div className="cartitems-total-item">
@@ -161,7 +127,7 @@ const CartItems = () => {
             <hr />
             <div className="cartitems-total-item">
               <h3>Total</h3>
-              <h3>Rs.{formatCurrency(getTotalCartAmount())}</h3>
+              <h3>Rs.{getTotalCartAmount()}</h3>
             </div>
           </div>
           <button>PROCEED TO CHECKOUT</button>
