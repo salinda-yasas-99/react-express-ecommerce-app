@@ -20,5 +20,11 @@ router.get(
   // authController.accessAuthorizeUser,
   cartController.GetAllCartsIncludingCartItems
 );
+// router.delete(
+//   "/cartItem/:id",
+//   // authController.accessAuthorizeUser,
+//   cartController.DeleteCartItem
+// );
+router.delete("/cartItem/:Id", cartController.DeleteCartItem);
 
 module.exports = router;

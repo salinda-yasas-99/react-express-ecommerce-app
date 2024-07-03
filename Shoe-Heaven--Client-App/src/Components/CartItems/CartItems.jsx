@@ -4,13 +4,10 @@ import { ShopContext } from "../../Context/ShopContext";
 import remove_icon from "../../assets/cart_cross_icon.png";
 import "remixicon/fonts/remixicon.css";
 import { RiAddFill, RiSubtractFill } from "react-icons/ri";
-import axios from "axios";
 
 const CartItems = () => {
   const { getTotalCartAmount, products, cartItems, removeFromCart, addToCart } =
     useContext(ShopContext);
-
-  const [cart, setCart] = useState();
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat("en-US", {
@@ -22,31 +19,6 @@ const CartItems = () => {
   useEffect(() => {
     console.log("cartItems:", cartItems);
   }, [cartItems]);
-
-  const fetchCart = async () => {
-    const Token = localStorage.getItem("token");
-    const userId = 1;
-    // const authAxios = axios.create({
-    //   headers: {
-    //     Authorization: `Bearer ${Token}`,
-    //   },
-    //   withCredentials: true,
-    // });
-    try {
-      const response = await axios.get(
-        `http://localhost:7000/api/cart/cartbyId/${userId}`
-      );
-      console.log("this is cart in cart page ", response.data);
-      setCart(response.data);
-      return response.data;
-    } catch (err) {
-      console.log("This is error", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchCart();
-  }, []);
 
   return (
     <div className="cartitems">
@@ -95,7 +67,7 @@ const CartItems = () => {
         }
         return null;
       })} */}
-      {cartItems.itemsCart.map((cartItem) => {
+      {cartItems.map((cartItem) => {
         const product = products.find(
           (prod) => prod.prodId === cartItem.itemId
         );

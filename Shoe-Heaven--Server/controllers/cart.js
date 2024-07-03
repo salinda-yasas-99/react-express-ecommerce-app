@@ -337,7 +337,13 @@ exports.GetCartByUserId = async (req, res, next) => {
       return res.status(404).json({ error: "Cart not found" });
     }
 
-    res.status(200).json(userCart);
+    const renamedCart = {
+      ...userCart,
+      itemsCart: userCart.cartItems,
+    };
+    delete renamedCart.cartItems;
+
+    res.status(200).json(renamedCart);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error retrieving user's cart");
@@ -385,5 +391,43 @@ exports.GetAllCartsIncludingCartItems = async (req, res, next) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Error retrieving all carts");
+  }
+};
+
+// Delete a single product by id
+// exports.DeleteCartItem = async (req, res, next) => {
+//   let cItemId;
+//   try {
+//     cItemId = parseInt(req.params.id);
+
+//     const deleteItem = await prisma.cartItem.delete({
+//       where: {
+//         cartItemId: cItemId,
+//       },
+//     });
+
+//     res.status(200).json({ message: "cart item deleted successfully" });
+//   } catch (error) {
+//     console.error(error);
+
+//     res.status(500).send("Error deleting cart item");
+//   }
+// };
+
+exports.DeleteCartItem = async (req, res, next) => {
+  let cItemId;
+  try {
+    cItemId = parseInt(req.params.Id);
+
+    const deleteItem = await prisma.cartItem.delete({
+      where: {
+        cartItemId: cItemId,
+      },
+    });
+
+    res.status(200).json({ message: "cart item deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error deleting cart item");
   }
 };
