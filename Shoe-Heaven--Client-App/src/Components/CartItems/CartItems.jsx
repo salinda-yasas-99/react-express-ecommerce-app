@@ -4,10 +4,21 @@ import { ShopContext } from "../../Context/ShopContext";
 import remove_icon from "../../assets/cart_cross_icon.png";
 import "remixicon/fonts/remixicon.css";
 import { RiAddFill, RiSubtractFill } from "react-icons/ri";
+import StripeCheckout from "react-stripe-checkout";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CartItems = () => {
   const { getTotalCartAmount, products, cartItems, removeFromCart, addToCart } =
     useContext(ShopContext);
+
+  const KEY =
+    "pk_test_51PZDQYGtHEDchr7LN5VKrI4bTTedKBTYHe1KqSchbR8r8IteKIrjob2qLx71GnsjAQbp27jHd0vu0c2omHSxtE2C00MlvZAAUF";
+
+  const userId = localStorage.getItem("uid");
+
+  const [stripeToken, setStripeToken] = useState(null);
+  const navigate = useNavigate();
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat("en-US", {
@@ -16,9 +27,40 @@ const CartItems = () => {
     }).format(value);
   };
 
+  const onToken = (token) => {
+    console.log("This is stipe token", token);
+    setStripeToken(token);
+  };
+
   useEffect(() => {
     console.log("cartItems:", cartItems);
   }, [cartItems]);
+
+  useEffect(() => {
+    const makeRequest = async () => {
+      try {
+        const order = {
+          tokenId: stripeToken.id,
+          amount: getTotalCartAmount() * 100,
+          items: cartItems,
+          total: getTotalCartAmount(),
+          userId: parseInt(userId),
+        };
+        const res = await axios.post(
+          "http://localhost:7000/api/checkout/payment",
+          order
+        );
+        console.log("order placed", res.data);
+        navigate("/success");
+      } catch (err) {
+        console.log(err);
+        alert(err);
+      }
+    };
+    if (stripeToken) {
+      makeRequest();
+    }
+  }, [stripeToken]);
 
   return (
     <div className="cartitems">
@@ -136,7 +178,21 @@ const CartItems = () => {
               <h3>Rs.{formatCurrency(getTotalCartAmount())}</h3>
             </div>
           </div>
-          <button>PROCEED TO CHECKOUT</button>
+          {stripeToken ? (
+            <span style={{ color: "red" }}>Processing. Please wait....</span>
+          ) : (
+            <StripeCheckout
+              name="Shoe Heaven"
+              shippingAddress
+              description={`Your total is Rs.${getTotalCartAmount()}`}
+              amount={getTotalCartAmount() * 100} // Amount in cents
+              token={onToken}
+              stripeKey={KEY}
+              currency="LKR"
+            >
+              <button>PROCEED TO CHECKOUT</button>
+            </StripeCheckout>
+          )}
         </div>
       </div>
     </div>
