@@ -28,7 +28,7 @@ const CartItems = () => {
   };
 
   const onToken = (token) => {
-    console.log("This is stipe token", token);
+    console.log("This is stripe token", token);
     setStripeToken(token);
   };
 
@@ -62,6 +62,12 @@ const CartItems = () => {
     }
   }, [stripeToken]);
 
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      alert("Cart is empty");
+    }
+  };
+
   return (
     <div className="cartitems">
       <div className="cartitems-format-main">
@@ -74,41 +80,6 @@ const CartItems = () => {
         <p>Remove</p>
       </div>
       <hr />
-      {/* {products.map((e) => {
-        if (cartItems[e.prodId] ) {
-
-          
-          return (
-            <div key={e.prodId}>
-              <div className="cartitems-format cartitems-format-main">
-                <img src={e.imageUrl} alt="" className="carticon-product-icon" />
-                <p>{e.name}</p>
-                <p>Rs.{e.new_price}</p>
-                <div className="cartitems-quantity">
-                  <button className="layout qty-btn" onClick={()=>removeFromCart(e.prodId)}>
-                    <RiSubtractFill />
-                  </button>{" "}
-                  <span>{cartItems[e.prodId]}</span>{" "}
-                  <button className="layout qty-btn" onClick={()=>addToCart(e.prodId)}>
-                    <RiAddFill />
-                  </button>
-                </div>
-                <p>Rs.{e.new_price * cartItems[e.prodId]}</p>
-                <img
-                  className="cartitems-remove-icon"
-                  src={remove_icon}
-                  onClick={() => {
-                    removeFromCart(e.prodId,true);
-                  }}
-                  alt=""
-                />
-              </div>
-              <hr />
-            </div>
-          );
-        }
-        return null;
-      })} */}
       {cartItems.map((cartItem) => {
         const product = products.find(
           (prod) => prod.prodId === cartItem.itemId
@@ -181,17 +152,25 @@ const CartItems = () => {
           {stripeToken ? (
             <span style={{ color: "red" }}>Processing. Please wait....</span>
           ) : (
-            <StripeCheckout
-              name="Shoe Heaven"
-              shippingAddress
-              description={`Your total is Rs.${getTotalCartAmount()}`}
-              amount={getTotalCartAmount() * 100} // Amount in cents
-              token={onToken}
-              stripeKey={KEY}
-              currency="LKR"
-            >
-              <button>PROCEED TO CHECKOUT</button>
-            </StripeCheckout>
+            <div>
+              {cartItems.length === 0 && (
+                <button onClick={handleCheckout}>PROCEED TO CHECKOUT</button>
+              )}
+
+              {cartItems.length > 0 && (
+                <StripeCheckout
+                  name="Shoe Heaven"
+                  shippingAddress
+                  description={`Your total is Rs.${getTotalCartAmount()}`}
+                  amount={getTotalCartAmount() * 100} // Amount in cents
+                  token={onToken}
+                  stripeKey={KEY}
+                  currency="LKR"
+                >
+                  <button>PROCEED TO CHECKOUT</button>
+                </StripeCheckout>
+              )}
+            </div>
           )}
         </div>
       </div>
