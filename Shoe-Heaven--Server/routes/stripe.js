@@ -29,10 +29,18 @@ router.post("/payment", async (req, res) => {
       }
     }
 
+    const now = new Date();
+    // const date = now.toISOString().split("T")[0];
+    const time = now.toTimeString().split(" ")[0];
+
+    const dateTime = now.toDateString();
+
     const newOrder = await prisma.order.create({
       data: {
         Total: parseInt(total),
         orderItems: items,
+        date: dateTime,
+        time: time,
         user: {
           connect: {
             uid: parseInt(userId),

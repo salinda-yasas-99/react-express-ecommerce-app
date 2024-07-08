@@ -19,6 +19,8 @@ const productRoutes = require("./routes/products");
 const cartRoutes = require("./routes/cartRoutes");
 const paymentRoutes = require("./routes/stripe");
 const orderRoutes = require("./routes/orderRoutes");
+const InqRoutes = require("./routes/InquiryRoutes");
+const feedRoutes = require("./routes/feedbackRoutes");
 
 const app = express();
 const PORT = 7000;
@@ -38,6 +40,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/checkout", paymentRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/inqueries", InqRoutes);
+app.use("/api/feedbacks", feedRoutes);
 
 //app.use("/api/product", productRoutes);
 
