@@ -18,7 +18,7 @@ model User {
   contactNumber String
   Address String
   password String
-  cart  Cart?  
+  orders Order[]
  
 }
 
@@ -31,7 +31,6 @@ model Product {
   old_price Int
 
   description String
-  cartItems  CartItem[]
   sizeItems ProductSizes[]
 
 }
@@ -42,30 +41,15 @@ model ProductSizes{
   quantity Int
   product Product @relation(fields: [fk_prodId], references: [prodId], onDelete: Cascade)
   fk_prodId String 
-  cartItems CartItem[]
-}
-
-
-model Cart {
-  cartId       Int        @id @default(autoincrement())
- 
-  subtotal     Int
-  shippingFee  Int
-  total        Int
-  user        User       @relation(fields: [fk_userId], references: [uid], onDelete: NoAction)
-  fk_userId    Int        @unique
-  cartItems    CartItem[]
-}
-
-model CartItem {
-  cartItemId   Int        @id @default(autoincrement())
-  itemQuantity     Int
- 
-  cart         Cart       @relation(fields: [fk_cartId], references: [cartId])
-  fk_cartId    Int
-  product      Product    @relation(fields: [fk_productId], references: [prodId])
-  fk_productId  String
-  productSize ProductSizes @relation(fields: [fk_sizeId], references: [sizeId])
-  fk_sizeId  Int 
   
 }
+
+model Order{
+  orderId Int  @id @default(autoincrement())
+  Total   Int
+  orderItems Json
+  user User  @relation(fields: [fk_userId], references: [uid], onDelete: NoAction)
+  fk_userId Int 
+}
+
+

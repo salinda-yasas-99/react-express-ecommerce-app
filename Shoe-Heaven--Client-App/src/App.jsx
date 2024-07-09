@@ -18,15 +18,17 @@ import Cart from "./Pages/Cart";
 import NewProduct from "./Pages/Admin/newproduct/NewProduct";
 import ProductList from "./Pages/Admin/list/productlist/ProductList";
 import AdminLogin from "./Pages/Admin/Admin-Login/AdminLogin";
+import OrderSuccess from "./Components/OrderSuccess/OrderSuccess";
 
 const App = () => {
-  const isDashboardRoute = window.location.pathname.startsWith("/dashboard");
+  
+  const isHiddenRoute  = window.location.pathname.startsWith("/dashboard")|| location.pathname === '/success' ;
 
   return (
     <div className="main">
       <BrowserRouter>
         {/* {window.location.pathname != "/dashboard"  &&  <Navbar />} */}
-        {!isDashboardRoute && <Navbar />}
+        {!isHiddenRoute  && <Navbar />}
         <Routes>
           <Route path="/" element={<Shop />} />
           <Route
@@ -43,6 +45,7 @@ const App = () => {
           />
           <Route path="/product/:productId" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/success" element={<OrderSuccess />} />
           <Route path="/register" element={<LoginSignup />} />
           <Route path="/login" element={<LoginSignIn />} />
           <Route path="/dashboard/adminLogin" element={<AdminLogin />} />
@@ -69,7 +72,7 @@ const App = () => {
         </Routes>
       </BrowserRouter>
       {/* {window.location.pathname != "/dashboard"  && <Footer />} */}
-      {!isDashboardRoute && <Footer />}
+      { !isHiddenRoute  && <Footer />}
     </div>
   );
 };
