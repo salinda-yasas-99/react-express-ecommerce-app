@@ -18,15 +18,6 @@ const ShopContextProvider = (props) => {
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
 
-  // const initializeCart = (products) => {
-  //   let newCart = {};
-  //   products.forEach((product) => {
-  //     newCart[product.prodId] = 0;
-  //   });
-  //   setCartItems(newCart);
-  //   console.log(`this is cart ${newCart}`);
-  // };
-
   const addToCart = (itemId, sizeId) => {
     setCartItems((prevCartItems) => {
       if (!prevCartItems.length) {

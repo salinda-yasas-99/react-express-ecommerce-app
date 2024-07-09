@@ -19,6 +19,7 @@ model User {
   Address String
   password String
   orders Order[]
+  Feedbacks FeedBack[]
  
 }
 
@@ -32,6 +33,7 @@ model Product {
 
   description String
   sizeItems ProductSizes[]
+  feedbacks FeedBack[]
 
 }
 
@@ -48,8 +50,29 @@ model Order{
   orderId Int  @id @default(autoincrement())
   Total   Int
   orderItems Json
+  date String
+  time String
   user User  @relation(fields: [fk_userId], references: [uid], onDelete: NoAction)
   fk_userId Int 
 }
 
+
+model Inquiry{
+  InqId Int  @id @default(autoincrement())
+  name   String
+  subject   String
+  message String
+ 
+}
+
+model FeedBack{
+  FeedId Int  @id @default(autoincrement())
+  stars   Int
+  comment String
+  product Product @relation(fields: [fk_prodId], references: [prodId], onDelete: Cascade)
+  fk_prodId String 
+  user User  @relation(fields: [fk_userId], references: [uid], onDelete: NoAction)
+  fk_userId Int 
+ 
+}
 
