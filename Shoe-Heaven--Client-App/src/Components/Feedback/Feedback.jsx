@@ -1,11 +1,10 @@
-
-import React, { useState } from 'react';
-import './Feedback.css'; 
-import axios from 'axios';
+import React, { useState } from "react";
+import "./Feedback.css";
+import axios from "axios";
 const Feedback = () => {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState("");
 
   const handleRatingClick = (rate) => {
     setRating(rate);
@@ -15,30 +14,30 @@ const Feedback = () => {
     setComment(event.target.value);
   };
 
-  const handleSubmit =  async() => {
-    if (rating === 0 || comment.trim() === '') {
-      alert('Please provide both a rating and a comment.');
+  const handleSubmit = async () => {
+    if (rating === 0 || comment.trim() === "") {
+      alert("Please provide both a rating and a comment.");
       return;
     }
-    
-    try{
-        const response = await axios.post('http://localhost:7000/api/feedbacks/add', {
-            rating,
-            comment,
-          });
 
-          console.log(response.data); 
-      alert('Feedback submitted successfully!');
+    try {
+      const response = await axios.post(
+        "http://localhost:7000/api/feedbacks/add",
+        {
+          rating,
+          comment,
+        }
+      );
+
+      console.log(response.data);
+      alert("Feedback submitted successfully!");
       setRating(0);
-      setComment('');
-    }catch(error){
-        console.error('Error submitting feedback:', error);
-      alert('Failed to submit feedback. Please try again later.');
+      setComment("");
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      alert("Failed to submit feedback. Please try again later.");
     }
-    console.log({ rating, comment });
-    alert('Feedback submitted successfully!');
-    setRating(0);
-    setComment('');
+   
   };
 
   return (
