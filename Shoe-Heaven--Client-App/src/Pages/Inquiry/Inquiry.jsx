@@ -1,19 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Inquiry.css";
+import axios from "axios";
 
 const Inquiry = () => {
+  const initialInquirydata ={
+    username:"",
+    subject:"",
+    message:""
+  };
+  const [inputs,setInputs] = useState(initialInquirydata);
+  const [formError, setFormError] = useState("");
+  const [error,setError] = useState(null);
+
+  const handleChange =e=>{
+    setInputs(prev =>({...prev,[e.target.name]:[e.target.value]}))
+  }
+
+  const allFieldsFilled = () => {
+    
+    return (
+      inputs.username &&
+     inputs.subject &&
+      inputs.message
+    )
+  };
+
+  const handleSubmit = async e=>{
+     e.preventDefault();
+
+     if (!allFieldsFilled()) {
+      setFormError("Please fill out all fields before submitting your inquiry.");
+ 
+      setTimeout(() => setFormError(""), 5000);
+      return;
+    }
+     try{
+        const response = await axios.post('http://localhost:7000/api/inquiries/add', inputs);
+        console.log(response.data);
+        alert("Inquiry added sucessfully");
+        setInputs(initialInquirydata);
+     }catch(error){
+      console.log(error);
+      setError('Failed to submit inquiry. Please try again later.');
+     }
+  }
   return (
     <div className="inquiry">
       <div className="inquiry-container">
         <h3>HOW CAN WE HELP YOU?</h3>
         <form className="inquiry-fields">
-        <input type="text" placeholder="Name" name="subject" required />
-          <input type="text" placeholder="Subject" name="subject" required />
-          <textarea className="inquiry-content" placeholder="Message..." />
+        <input type="text" placeholder="Name" name="username" required onChange={handleChange} />
+          <input type="text" placeholder="Subject" name="subject" required onChange={handleChange} />
+          <textarea className="inquiry-content" placeholder="Message..." name="message" onChange={handleChange}/>
+          <p className="error-msg">{formError}</p>
         </form>
 
         <div>
-        <button className="inquiry-btn">Submit </button>
+        <button  onClick={handleSubmit} className="inquiry-btn">Submit </button>
       </div>
       </div>
       
