@@ -43,7 +43,7 @@ const FeedbackList = () => {
                 <strong>{feedback.name}</strong>
               </div>
               <div className="feedback-rating">
-                <strong>Rating:</strong> {feedback.rating} / 5
+                <strong>Rating:</strong> {feedback.stars} / 5
               </div>
               <div className="feedback-comment">
                 <strong>Comment:</strong> {feedback.comment}
