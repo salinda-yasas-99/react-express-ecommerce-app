@@ -5,6 +5,7 @@ import star_dull_icon from "../../assets/star_dull_icon.png";
 
 import { ShopContext } from "../../Context/ShopContext";
 import Feedback from "../Feedback/Feedback";
+import FeedbackList from "../FeedbackList/FeedbackList";
 
 const ProductDisplay = (props) => {
   const { product } = props;
@@ -101,7 +102,9 @@ const ProductDisplay = (props) => {
     </div>
     <div className="feedback">
       <Feedback/>
+     
       </div>
+      <FeedbackList/>
     </div>
   );
 };
