@@ -19,6 +19,7 @@ import NewProduct from "./Pages/Admin/newproduct/NewProduct";
 import ProductList from "./Pages/Admin/list/productlist/ProductList";
 import AdminLogin from "./Pages/Admin/Admin-Login/AdminLogin";
 import OrderSuccess from "./Components/OrderSuccess/OrderSuccess";
+import Inquiry from "./Pages/Inquiry/Inquiry";
 
 const App = () => {
   
@@ -45,6 +46,7 @@ const App = () => {
           />
           <Route path="/product/:productId" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/inquiry" element={<Inquiry/>}/>
           <Route path="/success" element={<OrderSuccess />} />
           <Route path="/register" element={<LoginSignup />} />
           <Route path="/login" element={<LoginSignIn />} />
