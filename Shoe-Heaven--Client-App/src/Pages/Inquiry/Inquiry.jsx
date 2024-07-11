@@ -4,7 +4,7 @@ import axios from "axios";
 
 const Inquiry = () => {
   const initialInquirydata ={
-    username:"",
+    name:"",
     subject:"",
     message:""
   };
@@ -19,7 +19,7 @@ const Inquiry = () => {
   const allFieldsFilled = () => {
     
     return (
-      inputs.username &&
+      inputs.name &&
      inputs.subject &&
       inputs.message
     )
@@ -49,9 +49,9 @@ const Inquiry = () => {
       <div className="inquiry-container">
         <h3>HOW CAN WE HELP YOU?</h3>
         <form className="inquiry-fields">
-        <input type="text" placeholder="Name" name="username" required onChange={handleChange} />
-          <input type="text" placeholder="Subject" name="subject" required onChange={handleChange} />
-          <textarea className="inquiry-content" placeholder="Message..." name="message" onChange={handleChange}/>
+        <input type="text" placeholder="Name" name="username" value={inputs.name} required onChange={handleChange} />
+          <input type="text" placeholder="Subject" name="subject" value={inputs.subject} required onChange={handleChange} />
+          <textarea className="inquiry-content" placeholder="Message..." name="message"  value={inputs.message}onChange={handleChange}/>
           <p className="error-msg">{formError}</p>
         </form>
 
