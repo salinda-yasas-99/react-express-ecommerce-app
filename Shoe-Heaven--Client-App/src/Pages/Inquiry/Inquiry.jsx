@@ -9,7 +9,7 @@ const Inquiry = () => {
     message:""
   };
   const [inputs,setInputs] = useState(initialInquirydata);
-  const [formError, setFormError] = useState("");
+  const [formError, setFormError] = useState(null);
   const [error,setError] = useState(null);
 
   const handleChange =e=>{
@@ -39,6 +39,7 @@ const Inquiry = () => {
         console.log(response.data);
         alert("Inquiry added sucessfully");
         setInputs(initialInquirydata);
+        setFormError(null);
      }catch(error){
       console.log(error);
       setError('Failed to submit inquiry. Please try again later.');
