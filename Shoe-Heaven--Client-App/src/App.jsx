@@ -20,6 +20,7 @@ import ProductList from "./Pages/Admin/list/productlist/ProductList";
 import AdminLogin from "./Pages/Admin/Admin-Login/AdminLogin";
 import OrderSuccess from "./Components/OrderSuccess/OrderSuccess";
 import Inquiry from "./Pages/Inquiry/Inquiry";
+import OrdersList from "./Pages/Admin/Orders/OrdersList";
 
 const App = () => {
   
@@ -67,6 +68,17 @@ const App = () => {
                 element={
                   // <New inputs={productInputs} title="Add New Products" />
                   <NewProduct title="Add New Products" />
+                }
+              />
+            </Route>
+
+            <Route path="orders">
+              <Route index element={<OrdersList/>} />
+              <Route
+                path="new"
+                element={
+                  // <New inputs={productInputs} title="Add New Products" />
+                  <NewProduct title="Orders" />
                 }
               />
             </Route>
