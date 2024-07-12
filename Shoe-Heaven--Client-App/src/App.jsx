@@ -21,6 +21,8 @@ import AdminLogin from "./Pages/Admin/Admin-Login/AdminLogin";
 import OrderSuccess from "./Components/OrderSuccess/OrderSuccess";
 import Inquiry from "./Pages/Inquiry/Inquiry";
 import OrdersList from "./Pages/Admin/Orders/OrdersList";
+import EditProfile from "./Pages/EditProfile/EditProfile";
+import MyOrders from "./Components/MyOrders/MyOrders";
 
 const App = () => {
   
@@ -47,6 +49,8 @@ const App = () => {
           />
           <Route path="/product/:productId" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/editprofile" element={<EditProfile/>}/>
+          <Route path="/my-orders" element={<MyOrders/>}/>
           <Route path="/inquiry" element={<Inquiry/>}/>
           <Route path="/success" element={<OrderSuccess />} />
           <Route path="/register" element={<LoginSignup />} />
