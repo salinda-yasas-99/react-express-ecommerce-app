@@ -33,12 +33,13 @@ const OrdersDataTable = () => {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                
+                OD1234
               </TableCell>
-              <TableCell align="right">OD123</TableCell>
+             
               <TableCell align="right">Kasun</TableCell>
               <TableCell align="right">Asics Men Running Shoes</TableCell>
               <TableCell align="right">2</TableCell>
+              <TableCell align="right">10</TableCell>
               <TableCell align="right">12000</TableCell>
               <TableCell align="right">12/07/2024</TableCell>
             </TableRow>
