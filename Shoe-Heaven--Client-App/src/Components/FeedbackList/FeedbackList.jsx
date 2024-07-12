@@ -59,7 +59,7 @@ const FeedbackList = ({ productId }) => {
           {feedbacks.map((feedback, index) => (
             <li key={index} className="feedback-item">
               <div className="feedback-user">
-                <strong>{feedback.name}</strong>
+                <strong>{feedback.username}</strong>
               </div>
               <div className="feedback-rating">
                 <strong>Rating:</strong> {feedback.stars} / 5

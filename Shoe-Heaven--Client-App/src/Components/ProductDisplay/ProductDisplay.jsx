@@ -1,18 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "./ProductDisplay.css";
 import star_icon from "../../assets/star_icon.png";
 import star_dull_icon from "../../assets/star_dull_icon.png";
-
 import { ShopContext } from "../../Context/ShopContext";
 import Feedback from "../Feedback/Feedback";
-import FeedbackList from "../FeedbackList/FeedbackList";
 
-const ProductDisplay = (props) => {
-  const { product } = props;
+const ProductDisplay = ({ product, feedbacks }) => {
   const { addToCart } = useContext(ShopContext);
-  const [sizeActive, setSizeActive] = useState(null); // Initialize with null or an empty string
+  const [sizeActive, setSizeActive] = useState(null);
 
   let sizeItems = [];
+
   try {
     sizeItems = product?.sizeItems
       ? product.sizeItems.sort((a, b) => a.sizeId - b.sizeId)
@@ -100,7 +98,30 @@ const ProductDisplay = (props) => {
       <div className="feedback">
         <Feedback productId={product?.prodId} />
       </div>
-      <FeedbackList productId={product?.prodId} />
+      <div>
+        <div className="user-feedbacks">
+          <h2>Reviews</h2>
+          <ul className="feedback-list">
+            {feedbacks && feedbacks.length > 0 ? (
+              feedbacks.map((feedback, index) => (
+                <li key={index} className="feedback-item">
+                  <div className="feedback-user">
+                    <strong>{feedback.username}</strong>
+                  </div>
+                  <div className="feedback-rating">
+                    <strong>Rating:</strong> {feedback.stars} / 5
+                  </div>
+                  <div className="feedback-comment">
+                    <strong>Comment:</strong> {feedback.comment}
+                  </div>
+                </li>
+              ))
+            ) : (
+              <div>No feedbacks available.</div>
+            )}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };
