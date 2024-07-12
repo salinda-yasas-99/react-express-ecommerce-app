@@ -1,34 +1,53 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 // import axios from 'axios';
-import './FeedbackList.css'; 
+import "./FeedbackList.css";
+import axios from "axios";
 
-const FeedbackList = () => {
+const FeedbackList = ({ productId }) => {
   const [feedbacks, setFeedbacks] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  //const [loading, setLoading] = useState(true);
+  //const [error, setError] = useState(null);
 
-//   useEffect(() => {
-//     const fetchFeedbacks = async () => {
-//       try {
-//         const response = await axios.get('http://localhost:7000/api/feedbacks/get/');
-//         setFeedbacks(response.data);
-//         setLoading(false);
-//       } catch (error) {
-//         setError('Failed to load feedbacks. Please try again later.');
-//         setLoading(false);
-//       }
-//     };
+  const fetchFeedbacks = async () => {
+    const prodId = productId;
+    try {
+      const response = await axios.get(
+        `http://localhost:7000/api/feedbacks/get/${prodId}`
+      );
+      console.log("fetch feedbacks", response.data);
+      setFeedbacks(response.data);
+      //return response.data;
+    } catch (err) {
+      console.log("This is error", err);
+    }
+  };
 
-//     fetchFeedbacks();
-//   }, []);
+  useEffect(() => {
+    fetchFeedbacks();
+  }, []);
 
-//   if (loading) {
-//     return <div className="user-feedbacks">Loading feedbacks...</div>;
-//   }
+  //   useEffect(() => {
+  //     const fetchFeedbacks = async () => {
+  //       try {
+  //         const response = await axios.get('http://localhost:7000/api/feedbacks/get/');
+  //         setFeedbacks(response.data);
+  //         setLoading(false);
+  //       } catch (error) {
+  //         setError('Failed to load feedbacks. Please try again later.');
+  //         setLoading(false);
+  //       }
+  //     };
 
-//   if (error) {
-//     return <div className="user-feedbacks">{error}</div>;
-//   }
+  //     fetchFeedbacks();
+  //   }, []);
+
+  //   if (loading) {
+  //     return <div className="user-feedbacks">Loading feedbacks...</div>;
+  //   }
+
+  //   if (error) {
+  //     return <div className="user-feedbacks">{error}</div>;
+  //   }
 
   return (
     <div className="user-feedbacks">
