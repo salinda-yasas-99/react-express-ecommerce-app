@@ -4,6 +4,8 @@ import star_icon from "../../assets/star_icon.png";
 import star_dull_icon from "../../assets/star_dull_icon.png";
 
 import { ShopContext } from "../../Context/ShopContext";
+import Feedback from "../Feedback/Feedback";
+import FeedbackList from "../FeedbackList/FeedbackList";
 
 const ProductDisplay = (props) => {
   const { product } = props;
@@ -25,6 +27,8 @@ const ProductDisplay = (props) => {
   };
 
   return (
+    <div className="productdiplay-main">
+
     <div className="productdisplay">
       <div className="productdisplay-left">
         <div className="productdisplay-img-list">
@@ -93,6 +97,14 @@ const ProductDisplay = (props) => {
           ADD TO CART
         </button>
       </div>
+
+      
+    </div>
+    <div className="feedback">
+      <Feedback/>
+     
+      </div>
+      <FeedbackList/>
     </div>
   );
 };

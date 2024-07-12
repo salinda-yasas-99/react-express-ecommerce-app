@@ -1,0 +1,68 @@
+.inquiry{
+    width: 100%;
+    background: #fce3fe;
+    padding-top: 30px;
+    padding-bottom: 40px;
+}
+
+.inquiry-container{
+    max-width: 400px;
+    width: 100%;
+    height: auto;
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: start;
+    margin: auto;
+    padding: 20px 30px 40px;
+    gap: 20px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+}
+
+.inquiry-fields{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+    gap: 15px;
+}
+
+.inquiry-fields input{
+    padding: 15px 15px;
+    border-radius: 8px;
+    border: 1px solid #c9c9c9;
+    outline: none;
+    color: #5c5c5c;
+    font-size: 14px;
+}
+
+.inquiry-btn{
+    color: white;
+    background: #ff4141;
+    margin-top: 20px;
+    padding: 15px 30px;
+    width: 100%;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+}
+
+.inquiry-content{
+    
+    height: 100px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.error-msg{
+    font-size: 12px;
+    color: red;
+  }

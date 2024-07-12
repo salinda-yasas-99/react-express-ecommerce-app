@@ -1,0 +1,50 @@
+.customer-support{
+    display: flex;
+    width: 65%;
+    margin: auto;
+    padding: 20px 140px;
+    margin-bottom: 150px;background: rgb(240, 213, 217);
+}
+
+.customer-support-left{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.customer-support-left h1{
+    color: #171717;
+    font-size: 80px;
+    font-weight: 600;
+
+}
+
+.customer-support-left p{
+    color: #171717;
+    font-size: 16px;
+    font-weight: 500;
+
+}
+
+.btn-customer-support{
+    width: 282px;
+    height: 70px;
+    border-radius: 35px;
+    background-color: #ff4141;
+    border: none;
+    color: white;
+    font-size: 22px;
+    font-weight: 500;
+    margin-top: 30px;
+    cursor: pointer;
+
+}
+
+.customer-support-right{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 50px;
+}
