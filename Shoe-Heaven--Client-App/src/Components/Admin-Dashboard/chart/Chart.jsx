@@ -8,20 +8,20 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { name: "January", Total: 1200 },
-  { name: "February", Total: 2100 },
-  { name: "March", Total: 800 },
-  { name: "April", Total: 1600 },
-  { name: "May", Total: 900 },
-  { name: "June", Total: 1700 },
-];
+// const data = [
+//   { name: "January", Total: 1200 },
+//   { name: "February", Total: 2100 },
+//   { name: "March", Total: 800 },
+//   { name: "April", Total: 1600 },
+//   { name: "May", Total: 900 },
+//   { name: "June", Total: 1700 },
+// ];
 
-const Chart = () => {
+const Chart = ({ data }) => {
   return (
     <div className="chart">
       <div className="title">Last 6 months Shoe Sales</div>
-      <ResponsiveContainer width="100%" aspect={2/ 1}>
+      <ResponsiveContainer width="100%" aspect={2 / 1}>
         <AreaChart
           width={730}
           height={250}
@@ -36,9 +36,9 @@ const Chart = () => {
           </defs>
           <XAxis dataKey="name" stroke="gray" />
           <div className="chartGrid">
-          <CartesianGrid strokeDasharray="3 3"  />
+            <CartesianGrid strokeDasharray="3 3" />
           </div>
-          
+
           <Tooltip />
           <Area
             type="monotone"

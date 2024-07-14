@@ -39,6 +39,11 @@ const MyOrders = () => {
                 {Array.isArray(order.orderItems) &&
                   order.orderItems.map((item, index) => (
                     <div key={index} className="order-item-details">
+                      <img
+                        src={item.productImage}
+                        alt={item.name}
+                        className="item-image"
+                      />
                       <div className="item-info">
                         <p className="item-name">{item.name}</p>
                         <p className="item-size">Size Id: {item.sizeId}</p>
