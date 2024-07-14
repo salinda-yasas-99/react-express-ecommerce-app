@@ -1,40 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import './MyOrders.css';
+import React, { useState, useEffect } from "react";
+import "./MyOrders.css";
+import axios from "axios";
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-   
     const fetchOrders = async () => {
-      const mockOrders = [
-        {
-          id: 'RO374915036',
-          date: 'Thu, 17th Feb 2024',
-          status: 'Pending',
-          deliveryDate: '24 December 2024',
-          total: 30100,
-          items: [
-            {
-              name: 'AVI men Hiking Shoes',
-              image: '/images/shoe1.jpg',
-              price: 12500,
-              size: '5',
-              qty: 1,
-              author: 'Milly Thomas'
-            },
-            {
-              name: 'winner Ladies',
-              image: '/images/shoe2.jpg',
-              price: 17600,
-              size: '9',
-              qty: 1,
-              
-            },
-          ],
-        },
-      ];
-      setOrders(mockOrders);
+      const uid = localStorage.getItem("uid");
+      try {
+        const response = await axios.get(
+          `http://localhost:7000/api/orders/userOrders/${uid}`
+        );
+        setOrders(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
     };
 
     fetchOrders();
@@ -43,44 +24,42 @@ const MyOrders = () => {
   return (
     <div className="my-orders">
       <h2>My Orders</h2>
-      <p>View  your pending, delivered orders here.</p>
+      <p>View your pending, delivered orders here.</p>
       <div className="orders-list">
-        {orders.map((order) => (
-          <div key={order.id} className="order-item">
-            <div className="order-header">
-              <div className="order-id">
-                <span>Order</span> <a href="#">{order.id}</a>
-              </div>
-              <div className="order-date">
-                Order Placed: {order.date}
-              </div>
-              
-            </div>
-            <div className="order-items">
-              {order.items.map((item, index) => (
-                <div key={index} className="order-item-details">
-                  <img src={item.image} alt={item.name} className="item-image" />
-                  <div className="item-info">
-                    <p className="item-name">{item.name}</p>
-                    <p className="item-author">By: {item.author}</p>
-                    <p className="item-size">Size: {item.size}</p>
-                    <p className="item-qty">Qty: {item.qty}</p>
-                    <p className="item-price">Rs. {item.price}</p>
-                  </div>
-                  <div className="item-status">
-                    <p className="status-label">Status</p>
-                    <p className="status">{order.status}</p>
-                    <p className="delivery-date">Placed Date: {order.deliveryDate}</p>
-                  </div>
+        {orders.length > 0 ? (
+          orders.map((order) => (
+            <div key={order.id} className="order-item">
+              <div className="order-header">
+                <div className="order-id">
+                  <span>Order</span> <a href="#">{order.orderId}</a>
                 </div>
-              ))}
+                <div className="order-date">Order Placed: {order.date}</div>
+              </div>
+              <div className="order-items">
+                {Array.isArray(order.orderItems) &&
+                  order.orderItems.map((item, index) => (
+                    <div key={index} className="order-item-details">
+                      <div className="item-info">
+                        <p className="item-name">{item.name}</p>
+                        <p className="item-size">Size Id: {item.sizeId}</p>
+                        <p className="item-qty">Qty: {item.qty}</p>
+                      </div>
+                      <div className="item-status">
+                        <p className="status-label">Status</p>
+                        <p className="status">{order.status}</p>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+              <div className="order-footer">
+                <p>Total Amount</p>
+                <p className="order-total">Rs. {order.Total}</p>
+              </div>
             </div>
-            <div className="order-footer">
-               <p>Total Amount</p>
-              <p className="order-total">Rs. {order.total}</p>
-            </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p>No orders found. Please check back later or try again.</p>
+        )}
       </div>
     </div>
   );
