@@ -61,7 +61,7 @@ exports.getAllOrders = async (req, res, next) => {
           productImage: productMap[item.itemId]?.imageUrl,
         })),
         date: formattedDate,
-        time: formattedTime,
+        time: order.time,
         status: order.status,
         fk_userId: order.fk_userId,
       };
@@ -166,7 +166,7 @@ exports.getCurrentMonthOrders = async (req, res, next) => {
           productImage: productMap[item.itemId]?.imageUrl,
         })),
         date: formattedDate,
-        time: formattedTime,
+        time: order.time,
         status: order.status,
         fk_userId: order.fk_userId,
       };
