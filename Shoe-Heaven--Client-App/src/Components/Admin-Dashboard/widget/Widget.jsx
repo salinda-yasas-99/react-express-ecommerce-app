@@ -1,13 +1,13 @@
-import React from 'react'
-import './Widget.css'
+import React from "react";
+import "./Widget.css";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 
-const Widget = ({type}) => {
-    let data;
+const Widget = ({ type, count }) => {
+  let data;
 
   //temporary
   const amount = 100;
@@ -17,6 +17,7 @@ const Widget = ({type}) => {
     case "user":
       data = {
         title: "USERS",
+        count: count,
         isMoney: false,
         link: "See all users",
         icon: (
@@ -33,10 +34,11 @@ const Widget = ({type}) => {
     case "order":
       data = {
         title: "ORDERS",
+        count: count,
         isMoney: false,
         link: "View all orders",
         icon: (
-            <MonetizationOnOutlinedIcon
+          <MonetizationOnOutlinedIcon
             className="icon"
             style={{ backgroundColor: "rgba(0, 128, 0, 0.2)", color: "green" }}
           />
@@ -46,10 +48,11 @@ const Widget = ({type}) => {
     case "products":
       data = {
         title: "Products",
+        count: count,
         isMoney: true,
         link: "View net earnings",
         icon: (
-            <ShoppingCartOutlinedIcon
+          <ShoppingCartOutlinedIcon
             className="icon"
             style={{
               backgroundColor: "rgba(218, 165, 32, 0.2)",
@@ -62,6 +65,7 @@ const Widget = ({type}) => {
     case "inquiry":
       data = {
         title: "Inquiry",
+        count: count,
         isMoney: true,
         link: "See details",
         icon: (
@@ -79,20 +83,20 @@ const Widget = ({type}) => {
       break;
   }
   return (
-    <div className='widget'>
-       <div className="left">
-         <span className="title">{data.title}</span>
-         <span className="counter">120</span>
-         <span className="link">See all users</span>
-       </div>
-       <div className="right">
-       <div className="percentage positive">
-       <KeyboardArrowUpIcon /> 
-       </div>
+    <div className="widget">
+      <div className="left">
+        <span className="title">{data.title}</span>
+        <span className="counter">{data.count}</span>
+        <span className="link">See all users</span>
+      </div>
+      <div className="right">
+        <div className="percentage positive">
+          <KeyboardArrowUpIcon />
+        </div>
         {data.icon}
-       </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Widget
+export default Widget;

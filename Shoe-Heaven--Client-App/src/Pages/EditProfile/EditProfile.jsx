@@ -1,68 +1,105 @@
-import React,{useState} from 'react'
-import './EditProfile.css'
-import { Link,useNavigate} from "react-router-dom";
-// import axios from 'axios'
-// import Alert from '@mui/material/Alert';
+import React, { useState, useEffect } from "react";
+import "./EditProfile.css";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import Alert from "@mui/material/Alert";
 
 const EditProfile = () => {
+  const [inputs, setInputs] = useState({
+    username: "",
+    Address: "",
+    contactNumber: "",
+  });
 
-//   const [inputs,setInputs] = useState({
-//     username:"",
-//     address:"",
-//     email:"",
-//     contact_number:"",
-    
-//   })
+  const [err, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
 
-//   const [err,setError] = useState(null)
-//   const [successMessage,setSuccessMessage] = useState('');
+  // Fetch user details when the component mounts
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const uid = localStorage.getItem("uid");
+      try {
+        const response = await axios.get(
+          `http://localhost:7000/api/users/userdetails/${uid}`
+        );
+        setInputs(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
 
-//   const navigate = useNavigate()
+    fetchUserData();
+  }, []);
 
-//   const handleChange = e =>{
-//     setInputs(prev=>({...prev,[e.target.name]:e.target.value}))
-//     setError(null);
-//   }
+  const handleChange = (e) => {
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setError(null);
+  };
 
-//   const handleSubmit = async e =>{
-//     e.preventDefault()
-//     try{
-//       console.log("work");
-//       const res = await axios.post("http://localhost:7000/api/auth/register",inputs)
-//       console.log(res);
-//       setSuccessMessage("Registration successful!");
-//       setTimeout(() => navigate("/login"), 2000);
-      
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const uid = localStorage.getItem("uid");
+    try {
+      const response = await axios.put(
+        `http://localhost:7000/api/users/update/${uid}`,
+        inputs
+      ); // Adjust the endpoint as needed
+      setSuccessMessage("Profile updated successfully!");
+      setTimeout(() => navigate("/profile"), 2000); // Redirect to profile page or another page
+    } catch (err) {
+      console.log(err);
+      setError(err.response.data);
+    }
+  };
 
-//     }catch(err){
-//         console.log(err);
-//         setError(err.response.data)
-//     }
-//   }
   return (
     <div className="user-profile ">
       <div className="user-profile-container">
         <h1>Edit Profile</h1>
-        {/* {successMessage && <Alert severity="success">{successMessage}</Alert>} */}
-        <form className="user-profile-fields">
-          <input type="text" placeholder="Your Name" name="username" required/>
-          <input type="text" placeholder="Address" name="address"   required/>
-          <input type="email" placeholder="Email" name="email"   required/>
-          <input type="text" placeholder="contact number"  name="contact_number"   required/>
-         
+        <form className="user-profile-fields" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Your Name"
+            name="username"
+            value={inputs.username}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Address"
+            name="Address"
+            value={inputs.Address}
+            onChange={handleChange}
+            required
+          />
+          {/* <input
+            type="email"
+            placeholder="Email"
+            name="email"
+            value={inputs.email}
+            onChange={handleChange}
+            required
+          /> */}
+          <input
+            type="text"
+            placeholder="Contact Number"
+            name="contactNumber"
+            value={inputs.contactNumber}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit" className="edit-btn">
+            Edit
+          </button>
         </form>
 
-        <div className="user-profile-footer">
-          <div className="user-profile-agree">
-            {/* {err &&<p> {err}</p>} */}
-          </div>
-          <button className="edit-btn" >Edit</button>
-          
-        </div>
+        {err && <p>{err}</p>}
+        {successMessage && <Alert severity="success">{successMessage}</Alert>}
       </div>
     </div>
   );
 };
 
 export default EditProfile;
-

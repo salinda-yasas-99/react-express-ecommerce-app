@@ -25,14 +25,15 @@ import EditProfile from "./Pages/EditProfile/EditProfile";
 import MyOrders from "./Components/MyOrders/MyOrders";
 
 const App = () => {
-  
-  const isHiddenRoute  = window.location.pathname.startsWith("/dashboard")|| location.pathname === '/success' ;
+  const isHiddenRoute =
+    window.location.pathname.startsWith("/dashboard") ||
+    location.pathname === "/success";
 
   return (
     <div className="main">
       <BrowserRouter>
         {/* {window.location.pathname != "/dashboard"  &&  <Navbar />} */}
-        {!isHiddenRoute  && <Navbar />}
+        {!isHiddenRoute && <Navbar />}
         <Routes>
           <Route path="/" element={<Shop />} />
           <Route
@@ -49,9 +50,9 @@ const App = () => {
           />
           <Route path="/product/:productId" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/editprofile" element={<EditProfile/>}/>
-          <Route path="/my-orders" element={<MyOrders/>}/>
-          <Route path="/inquiry" element={<Inquiry/>}/>
+          <Route path="/editprofile" element={<EditProfile />} />
+          <Route path="/my-orders" element={<MyOrders />} />
+          <Route path="/inquiry" element={<Inquiry />} />
           <Route path="/success" element={<OrderSuccess />} />
           <Route path="/register" element={<LoginSignup />} />
           <Route path="/login" element={<LoginSignIn />} />
@@ -77,7 +78,7 @@ const App = () => {
             </Route>
 
             <Route path="orders">
-              <Route index element={<OrdersList/>} />
+              <Route index element={<OrdersList />} />
               <Route
                 path="new"
                 element={
@@ -90,7 +91,7 @@ const App = () => {
         </Routes>
       </BrowserRouter>
       {/* {window.location.pathname != "/dashboard"  && <Footer />} */}
-      { !isHiddenRoute  && <Footer />}
+      {!isHiddenRoute && <Footer />}
     </div>
   );
 };

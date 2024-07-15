@@ -41,6 +41,7 @@ router.post("/payment", async (req, res) => {
         orderItems: items,
         date: dateTime,
         time: time,
+        status: "Pending",
         user: {
           connect: {
             uid: parseInt(userId),

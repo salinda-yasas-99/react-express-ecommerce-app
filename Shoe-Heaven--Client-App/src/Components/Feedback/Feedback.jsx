@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Feedback.css";
 import axios from "axios";
-const Feedback = () => {
+const Feedback = ({ productId }) => {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [comment, setComment] = useState("");
@@ -15,18 +15,23 @@ const Feedback = () => {
   };
 
   const handleSubmit = async () => {
-    if (rating === 0 || comment.trim() === "") {
-      alert("Please provide both a rating and a comment.");
-      return;
-    }
+    // if (rating === 0 || comment.trim() === "") {
+    //   alert("Please provide both a rating and a comment.");
+    //   return;
+    // }
+    const uid = localStorage.getItem("uid");
 
     try {
+      const feedbackObj = {
+        stars: parseInt(rating),
+        comment: comment,
+        prodID: productId,
+        userID: parseInt(uid),
+      };
+      console.log("this is feed", feedbackObj);
       const response = await axios.post(
         "http://localhost:7000/api/feedbacks/add",
-        {
-          rating,
-          comment,
-        }
+        feedbackObj
       );
 
       console.log(response.data);
@@ -37,7 +42,6 @@ const Feedback = () => {
       console.error("Error submitting feedback:", error);
       alert("Failed to submit feedback. Please try again later.");
     }
-   
   };
 
   return (

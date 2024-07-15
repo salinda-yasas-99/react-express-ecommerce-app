@@ -133,30 +133,57 @@ exports.deleteUser = async (req, res, next) => {
   }
 };
 
-// exports.getUsers = (req, res) => {
-//   const query = "SELECT * FROM users";
-//   db.query(query, (err, results) => {
-//     if (err) {
-//       console.error("Error fetching users:", err);
-//       res.status(500).json({ error: "Failed to fetch users" });
-//       return;
-//     }
-//     res.json(results);
-//   });
-// };
+// Update user details
+exports.updateUserDetails = async (req, res, next) => {
+  try {
+    // Extract userId from the request parameters
+    const userId = parseInt(req.params.userId);
 
-// exports.deleteUser = (req, res) => {
-//   const userId = req.params.id;
-//   const sql = "DELETE FROM users WHERE id=?";
+    // Extract new details from the request body
+    const { username, contactNumber, Address } = req.body;
 
-//   db.query(sql, [userId], (err, result) => {
-//     if (err) {
-//       console.error("Error deleting user:", err);
-//       return res.status(500).json({ message: "Failed to delete the user" });
-//     }
-//     if (result.affectedRows === 0) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-//     res.json({ message: "User deleted successfully" });
-//   });
-// };
+    // Update the user's details
+    const updateUser = await prisma.user.update({
+      where: {
+        uid: userId,
+      },
+      data: {
+        username,
+        contactNumber,
+        Address,
+      },
+    });
+
+    res.status(200).json({ message: "User details updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error updating user details");
+  }
+};
+
+// Get user details by ID without the password
+exports.getUserById = async (req, res, next) => {
+  try {
+    // Extract userId from the request parameters
+    const userId = parseInt(req.params.userId);
+
+    // Retrieve the user's details
+    const user = await prisma.user.findUnique({
+      where: {
+        uid: userId, // Assuming 'uid' is the unique identifier for users in your database
+      },
+    });
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    // Construct the response object without the password field
+    const { password, ...userWithoutPassword } = user;
+
+    res.status(200).json(userWithoutPassword);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error fetching user details");
+  }
+};

@@ -17,5 +17,7 @@ router.delete(
   // authController.accessAuthorizeAdmin,
   userController.deleteUser
 );
+router.put("/update/:userId", userController.updateUserDetails);
 
+router.get("/userdetails/:userId", userController.getUserById);
 module.exports = router;
