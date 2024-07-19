@@ -1,48 +1,67 @@
-import React, { useState } from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import Collapse from '@mui/material/Collapse';
-import Box from '@mui/material/Box';
+import React, { useState } from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import Collapse from "@mui/material/Collapse";
+import Box from "@mui/material/Box";
 
 const OrdersDataTable = () => {
   const [orders, setOrders] = useState([
     {
-      id: 'OD1234',
-      customer: 'Kasun',
+      id: "OD1234",
+      customer: "Kasun",
       products: [
-        { name: 'Asics Men Running Shoes', quantity: 2, size: 10, amount: 6000 },
-        { name: 'Nike Women Running Shoes', quantity: 1, size: 8, amount: 6000 }
+        {
+          name: "Asics Men Running Shoes",
+          quantity: 2,
+          size: 10,
+          amount: 6000,
+        },
+        {
+          name: "Nike Women Running Shoes",
+          quantity: 1,
+          size: 8,
+          amount: 6000,
+        },
       ],
-      placedDate: '12/07/2024',
-      placedTime: '14:35',
-      status: 'Pending'
+      placedDate: "12/07/2024",
+      placedTime: "14:35",
+      status: "Pending",
     },
 
     {
-      id: 'OD1356',
-      customer: 'Ranil',
+      id: "OD1356",
+      customer: "Ranil",
       products: [
-        { name: 'Asics Men Running Shoes', quantity: 1, size: 10, amount: 16000 },
-        { name: 'Nike Women Running Shoes', quantity: 1, size: 8, amount: 9900 }
+        {
+          name: "Asics Men Running Shoes",
+          quantity: 1,
+          size: 10,
+          amount: 16000,
+        },
+        {
+          name: "Nike Women Running Shoes",
+          quantity: 1,
+          size: 8,
+          amount: 9900,
+        },
       ],
-      placedDate: '12/07/2024',
-      placedTime: '14:35',
-      status: 'Pending'
+      placedDate: "12/07/2024",
+      placedTime: "14:35",
+      status: "Pending",
     },
-    
   ]);
 
   const changeStatus = (orderId) => {
     setOrders((prevOrders) =>
       prevOrders.map((order) =>
-        order.id === orderId && order.status === 'Pending'
-          ? { ...order, status: 'Approved' }
+        order.id === orderId && order.status === "Pending"
+          ? { ...order, status: "Approved" }
           : order
       )
     );
@@ -54,7 +73,7 @@ const OrdersDataTable = () => {
   };
 
   return (
-    <div className='orders-table'>
+    <div className="orders-table">
       <h2>Orders</h2>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -98,10 +117,12 @@ const OrderRow = ({ order, changeStatus, calculateTotalAmount }) => {
         <TableCell align="right">{order.customer}</TableCell>
         <TableCell align="right">{order.placedDate}</TableCell>
         <TableCell align="right">{order.placedTime}</TableCell>
-        <TableCell align="right">{calculateTotalAmount(order.products)}</TableCell>
+        <TableCell align="right">
+          {calculateTotalAmount(order.products)}
+        </TableCell>
         <TableCell align="right">{order.status}</TableCell>
         <TableCell align="right">
-          {order.status === 'Pending' && (
+          {order.status === "Pending" ? (
             <Button
               variant="contained"
               color="primary"
@@ -109,6 +130,8 @@ const OrderRow = ({ order, changeStatus, calculateTotalAmount }) => {
             >
               Approve
             </Button>
+          ) : (
+            "Completed"
           )}
         </TableCell>
         <TableCell align="right">
@@ -117,7 +140,7 @@ const OrderRow = ({ order, changeStatus, calculateTotalAmount }) => {
             color="secondary"
             onClick={() => setOpen(!open)}
           >
-            {open ? 'Hide Details' : 'View Details'}
+            {open ? "Hide Details" : "View Details"}
           </Button>
         </TableCell>
       </TableRow>
