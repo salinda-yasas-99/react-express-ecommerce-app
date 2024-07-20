@@ -24,6 +24,17 @@ const ProductDisplay = ({ product, feedbacks }) => {
     console.log(`this is size ${sizeActive}`);
   };
 
+  const renderStars = (rating) => {
+    return [...Array(5)].map((star, index) => {
+      index += 1;
+      return (
+        <span key={index} className={index <= rating ? "star on" : "star off"}>
+          &#9733;
+        </span>
+      );
+    });
+  };
+
   return (
     <div className="productdiplay-main">
       <div className="productdisplay">
@@ -109,7 +120,7 @@ const ProductDisplay = ({ product, feedbacks }) => {
                     <strong>{feedback.username}</strong>
                   </div>
                   <div className="feedback-rating">
-                    <strong>Rating:</strong> {feedback.stars} / 5
+                    <strong>Rating: </strong> {renderStars(feedback.stars)}
                   </div>
                   <div className="feedback-comment">
                     <strong>Comment:</strong> {feedback.comment}

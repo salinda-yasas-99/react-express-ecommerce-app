@@ -180,3 +180,13 @@
   font-size: 1em;
   color: #444;
 }
+
+.star {
+  font-size: 20px; 
+  color: gold; 
+}
+
+.star.off {
+  color: lightgray; 
+}
+

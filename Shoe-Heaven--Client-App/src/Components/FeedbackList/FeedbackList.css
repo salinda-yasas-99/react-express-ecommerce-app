@@ -1,4 +1,4 @@
-
+/* 
 
 .user-feedbacks {
     margin: 20px auto;
@@ -65,4 +65,13 @@
     font-size: 1em;
     color: #444;
   }
+
+  .filled-star {
+    color: gold;
+  }
   
+  .empty-star {
+    color: lightgray;
+  }
+  
+   */

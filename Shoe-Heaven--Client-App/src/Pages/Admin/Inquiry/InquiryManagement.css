@@ -1,0 +1,13 @@
+.inquiry-management {
+    padding: 20px;
+  }
+  
+  button {
+    margin-right: 10px;
+  }
+  
+  .MuiDataGrid-root .MuiDataGrid-cell {
+    display: flex;
+    align-items: center;
+  }
+  
