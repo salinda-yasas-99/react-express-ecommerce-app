@@ -92,9 +92,14 @@ exports.addNewAdmin = async (req, res, next) => {
 
 //get all users
 exports.getAllUsers = async (req, res, next) => {
+  const role = req.params.role;
   try {
     // Fetch all users
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      where: {
+        role: role,
+      },
+    });
 
     // Exclude the password field from each user
     const usersWithoutPasswords = users.map((user) => ({
@@ -170,7 +175,7 @@ exports.getUserById = async (req, res, next) => {
     // Retrieve the user's details
     const user = await prisma.user.findUnique({
       where: {
-        uid: userId, // Assuming 'uid' is the unique identifier for users in your database
+        uid: userId,
       },
     });
 

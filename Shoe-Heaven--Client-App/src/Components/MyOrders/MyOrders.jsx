@@ -34,6 +34,8 @@ const MyOrders = () => {
                   <span>Order</span> <a href="#">{order.orderId}</a>
                 </div>
                 <div className="order-date">Order Placed: {order.date}</div>
+
+                <div className="order-date">Order time: {order.time}</div>
               </div>
               <div className="order-items">
                 {Array.isArray(order.orderItems) &&
@@ -47,6 +49,7 @@ const MyOrders = () => {
                       <div className="item-info">
                         <p className="item-name">{item.name}</p>
                         <p className="item-size">Size Id: {item.sizeId}</p>
+                        <p className="item-size">Size name: {item.sizeName}</p>
                         <p className="item-qty">Qty: {item.qty}</p>
                       </div>
                       <div className="item-status">

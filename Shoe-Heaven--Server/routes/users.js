@@ -6,7 +6,7 @@ const router = express.Router();
 const path = require("path");
 
 router.get(
-  "/getAllUsers",
+  "/getAllUsers/:role",
   // authController.accessAuthorizeAdmin,
   userController.getAllUsers
 );

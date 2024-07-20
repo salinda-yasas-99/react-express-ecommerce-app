@@ -3,13 +3,14 @@ const prisma = new PrismaClient();
 
 exports.getAllOrders = async (req, res, next) => {
   try {
-    // Fetch all orders and order them by date
+    // Step 1: Fetch all orders and order them by date
     const orders = await prisma.order.findMany({
       orderBy: { date: "asc" },
     });
 
-    // Extract unique product IDs from order items
+    // Step 2: Extract unique product and size IDs from order items
     const productIds = [];
+    const sizeIds = [];
     orders.forEach((order) => {
       let parsedOrderItems;
       try {
@@ -21,10 +22,13 @@ exports.getAllOrders = async (req, res, next) => {
         if (!productIds.includes(item.itemId)) {
           productIds.push(item.itemId);
         }
+        if (item.sizeId && !sizeIds.includes(item.sizeId)) {
+          sizeIds.push(item.sizeId);
+        }
       });
     });
 
-    // Fetch product details
+    // Step 3: Fetch product details
     const products = await prisma.product.findMany({
       where: {
         prodId: { in: productIds },
@@ -40,8 +44,21 @@ exports.getAllOrders = async (req, res, next) => {
       };
     });
 
-    // Enrich order items with product details and format date/time
-    const enrichedOrders = orders.map((order) => {
+    // Fetch size details
+    const sizes = await prisma.productSizes.findMany({
+      where: {
+        sizeId: { in: sizeIds },
+      },
+    });
+
+    // Create a mapping of sizeId to size details
+    const sizeMap = {};
+    sizes.forEach((size) => {
+      sizeMap[size.sizeId] = size.sizeName;
+    });
+
+    // Step 4: Enrich order items with product details, size details, format date/time, and include user names
+    const enrichedOrders = orders.map(async (order) => {
       let parsedOrderItems;
       try {
         parsedOrderItems = JSON.parse(order.orderItems);
@@ -50,7 +67,11 @@ exports.getAllOrders = async (req, res, next) => {
       }
 
       const formattedDate = new Date(order.date).toDateString();
-      const formattedTime = new Date(order.time).toTimeString().split(" ")[0];
+
+      // Fetch user details using fk_userId
+      const user = await prisma.user.findUnique({
+        where: { uid: parseInt(order.fk_userId) },
+      });
 
       return {
         orderId: order.orderId,
@@ -59,20 +80,217 @@ exports.getAllOrders = async (req, res, next) => {
           ...item,
           productName: productMap[item.itemId]?.name,
           productImage: productMap[item.itemId]?.imageUrl,
+          sizeName: sizeMap[item.sizeId],
         })),
         date: formattedDate,
         time: order.time,
         status: order.status,
         fk_userId: order.fk_userId,
+        username: user?.username || "", // Include user name if available
       };
     });
 
-    res.status(200).json(enrichedOrders);
+    // Wait for all promises to resolve
+    const resolvedEnrichedOrders = await Promise.all(enrichedOrders);
+
+    res.status(200).json(resolvedEnrichedOrders);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error fetching orders");
   }
 };
+
+// exports.getAllOrders = async (req, res, next) => {
+//   try {
+//     // Step 1: Fetch all orders and order them by date
+//     const orders = await prisma.order.findMany({
+//       orderBy: { date: "asc" },
+//     });
+
+//     // Step 2: Extract unique product IDs from order items
+//     const productIds = [];
+//     orders.forEach((order) => {
+//       let parsedOrderItems;
+//       try {
+//         parsedOrderItems = JSON.parse(order.orderItems);
+//       } catch (e) {
+//         parsedOrderItems = order.orderItems;
+//       }
+//       parsedOrderItems.forEach((item) => {
+//         if (!productIds.includes(item.itemId)) {
+//           productIds.push(item.itemId);
+//         }
+//       });
+//     });
+
+//     // Step 3: Fetch product details
+//     const products = await prisma.product.findMany({
+//       where: {
+//         prodId: { in: productIds },
+//       },
+//     });
+
+//     // Create a mapping of productId to product details
+//     const productMap = {};
+//     products.forEach((product) => {
+//       productMap[product.prodId] = {
+//         name: product.name,
+//         imageUrl: product.imageUrl,
+//       };
+//     });
+
+//     // Step 4: Enrich order items with product details, format date/time, and include user names
+//     const enrichedOrders = orders.map(async (order) => {
+//       let parsedOrderItems;
+//       try {
+//         parsedOrderItems = JSON.parse(order.orderItems);
+//       } catch (e) {
+//         parsedOrderItems = order.orderItems;
+//       }
+
+//       const formattedDate = new Date(order.date).toDateString();
+//       //const formattedTime = new Date(order.time).toTimeString().split(" ")[0];
+
+//       // Fetch user details using fk_userId
+//       const user = await prisma.user.findUnique({
+//         where: { uid: parseInt(order.fk_userId) },
+//       });
+
+//       return {
+//         orderId: order.orderId,
+//         Total: order.Total,
+//         orderItems: parsedOrderItems.map((item) => ({
+//           ...item,
+//           productName: productMap[item.itemId]?.name,
+//           productImage: productMap[item.itemId]?.imageUrl,
+//         })),
+//         date: formattedDate,
+//         time: order.time,
+//         status: order.status,
+//         fk_userId: order.fk_userId,
+//         username: user?.username || "", // Include user name if available
+//       };
+//     });
+
+//     // Wait for all promises to resolve
+//     const resolvedEnrichedOrders = await Promise.all(enrichedOrders);
+
+//     res.status(200).json(resolvedEnrichedOrders);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Error fetching orders");
+//   }
+// };
+
+// exports.getAllOrders = async (req, res, next) => {
+//   try {
+//     // Step 1: Fetch all orders and order them by date
+//     const orders = await prisma.order.findMany({
+//       orderBy: { date: "asc" },
+//     });
+
+//     // Step 2: Extract unique product IDs and size IDs from order items
+//     const productIds = [];
+//     const sizeIds = []; // Array to hold unique size IDs
+//     orders.forEach((order) => {
+//       let parsedOrderItems;
+//       try {
+//         parsedOrderItems = JSON.parse(order.orderItems);
+//       } catch (e) {
+//         parsedOrderItems = order.orderItems;
+//       }
+//       parsedOrderItems.forEach((item) => {
+//         if (!productIds.includes(item.itemId)) {
+//           productIds.push(item.itemId);
+//         }
+//         if (!sizeIds.includes(item.sizeId)) {
+//           // Check for unique size IDs
+//           sizeIds.push(item.sizeId);
+//         }
+//       });
+//     });
+
+//     console.log("This is the product ids", productIds);
+//     console.log("This is the size ids", sizeIds);
+
+//     // Step 3: Fetch product details and sizes
+//     const products = await prisma.product.findMany({
+//       where: {
+//         prodId: { in: productIds },
+//       },
+//       include: {
+//         sizeItems: true,
+//       },
+//     });
+
+//     //console.log("This is the fetched products", products);
+
+//     // Create a mapping of productId to product details and sizeNames
+//     const productMap = {};
+//     products.forEach((product) => {
+//       const sizeNames = product.sizeItems
+//         .map((size) => size.sizeName)
+//         .join(", ");
+//       productMap[product.prodId] = {
+//         name: product.name,
+//         imageUrl: product.imageUrl,
+//         sizeNames: sizeNames, // Include size names in the map
+//       };
+//     });
+
+//     // Create a mapping of sizeId to sizeName for easy lookup
+//     const sizeMap = {};
+//     sizeIds.forEach((sizeId) => {
+//       const product = productMap[sizeId];
+//       if (product) {
+//         sizeMap[sizeId] = product.sizeNames; // Assuming one size per product for simplicity
+//       }
+//     });
+
+//     console.log("This is sizemap ", sizeMap);
+
+//     // Step 4: Enrich order items with product details, format date/time, and include user names
+//     const enrichedOrders = orders.map(async (order) => {
+//       let parsedOrderItems;
+//       try {
+//         parsedOrderItems = JSON.parse(order.orderItems);
+//       } catch (e) {
+//         parsedOrderItems = order.orderItems;
+//       }
+
+//       const formattedDate = new Date(order.date).toDateString();
+
+//       // Fetch user details using fk_userId
+//       const user = await prisma.user.findUnique({
+//         where: { uid: parseInt(order.fk_userId) },
+//       });
+
+//       return {
+//         orderId: order.orderId,
+//         Total: order.Total,
+//         orderItems: parsedOrderItems.map((item) => ({
+//           ...item,
+//           productName: productMap[item.itemId]?.name,
+//           productImage: productMap[item.itemId]?.imageUrl,
+//           sizeName: sizeMap[item.sizeId] || "", // Include size name if available
+//         })),
+//         date: formattedDate,
+//         time: order.time,
+//         status: order.status,
+//         fk_userId: order.fk_userId,
+//         username: user?.username || "", // Include user name if available
+//       };
+//     });
+
+//     // Wait for all promises to resolve
+//     const resolvedEnrichedOrders = await Promise.all(enrichedOrders);
+
+//     res.status(200).json(resolvedEnrichedOrders);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Error fetching orders");
+//   }
+// };
 
 exports.getCurrentMonthOrders = async (req, res, next) => {
   try {
@@ -179,6 +397,73 @@ exports.getCurrentMonthOrders = async (req, res, next) => {
   }
 };
 
+// exports.getOrdersByUserId = async (req, res, next) => {
+//   const userId = req.params.userId;
+
+//   try {
+//     // Fetch all orders that match the provided userId
+//     const orders = await prisma.order.findMany({
+//       where: { fk_userId: Number(userId) },
+//     });
+
+//     // Extract unique product IDs from order items
+//     const productIds = [];
+//     orders.forEach((order) => {
+//       let parsedOrderItems;
+//       try {
+//         parsedOrderItems = JSON.parse(order.orderItems);
+//       } catch (e) {
+//         parsedOrderItems = order.orderItems;
+//       }
+//       parsedOrderItems.forEach((item) => {
+//         if (!productIds.includes(item.itemId)) {
+//           productIds.push(item.itemId);
+//         }
+//       });
+//     });
+
+//     // Fetch product details
+//     const products = await prisma.product.findMany({
+//       where: {
+//         prodId: { in: productIds },
+//       },
+//     });
+
+//     // Create a mapping of productId to product details
+//     const productMap = {};
+//     products.forEach((product) => {
+//       productMap[product.prodId] = {
+//         name: product.name,
+//         imageUrl: product.imageUrl,
+//       };
+//     });
+
+//     // Enrich order items with product details
+//     const enrichedOrders = orders.map((order) => {
+//       let parsedOrderItems;
+//       try {
+//         parsedOrderItems = JSON.parse(order.orderItems);
+//       } catch (e) {
+//         parsedOrderItems = order.orderItems;
+//       }
+
+//       return {
+//         ...order,
+//         orderItems: parsedOrderItems.map((item) => ({
+//           ...item,
+//           productName: productMap[item.itemId]?.name,
+//           productImage: productMap[item.itemId]?.imageUrl,
+//         })),
+//       };
+//     });
+
+//     res.status(200).json(enrichedOrders);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Error fetching orders");
+//   }
+// };
+
 exports.getOrdersByUserId = async (req, res, next) => {
   const userId = req.params.userId;
 
@@ -188,8 +473,9 @@ exports.getOrdersByUserId = async (req, res, next) => {
       where: { fk_userId: Number(userId) },
     });
 
-    // Extract unique product IDs from order items
+    // Extract unique product and size IDs from order items
     const productIds = [];
+    const sizeIds = [];
     orders.forEach((order) => {
       let parsedOrderItems;
       try {
@@ -200,6 +486,9 @@ exports.getOrdersByUserId = async (req, res, next) => {
       parsedOrderItems.forEach((item) => {
         if (!productIds.includes(item.itemId)) {
           productIds.push(item.itemId);
+        }
+        if (item.sizeId && !sizeIds.includes(item.sizeId)) {
+          sizeIds.push(item.sizeId);
         }
       });
     });
@@ -220,7 +509,20 @@ exports.getOrdersByUserId = async (req, res, next) => {
       };
     });
 
-    // Enrich order items with product details
+    // Fetch size details
+    const sizes = await prisma.productSizes.findMany({
+      where: {
+        sizeId: { in: sizeIds },
+      },
+    });
+
+    // Create a mapping of sizeId to size details
+    const sizeMap = {};
+    sizes.forEach((size) => {
+      sizeMap[size.sizeId] = size.sizeName;
+    });
+
+    // Enrich order items with product and size details
     const enrichedOrders = orders.map((order) => {
       let parsedOrderItems;
       try {
@@ -235,6 +537,7 @@ exports.getOrdersByUserId = async (req, res, next) => {
           ...item,
           productName: productMap[item.itemId]?.name,
           productImage: productMap[item.itemId]?.imageUrl,
+          sizeName: sizeMap[item.sizeId],
         })),
       };
     });
