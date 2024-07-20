@@ -31,7 +31,7 @@ const AdminHome = () => {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:7000/api/users/getAllUsers`
+        `http://localhost:7000/api/users/getAllUsers/user`
       );
       console.log("fetch feedbacks", response.data);
       const userArr = response.data;
@@ -105,7 +105,7 @@ const AdminHome = () => {
     <div className="home">
       <Sidebar />
       <div className="homeContainer">
-        container
+        <h1>Welcome {localStorage.getItem("username")}</h1>
         <div className="widgets">
           <Widget type="user" count={users} />
           <Widget type="order" count={orders} />

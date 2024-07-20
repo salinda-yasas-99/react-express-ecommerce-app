@@ -9,8 +9,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const CartItems = () => {
-  const { getTotalCartAmount, products, cartItems, removeFromCart, addToCart } =
-    useContext(ShopContext);
+  const {
+    getTotalCartAmount,
+    products,
+    cartItems,
+    removeFromCart,
+    addToCart,
+    clearCart,
+  } = useContext(ShopContext);
 
   const KEY =
     "pk_test_51PZDQYGtHEDchr7LN5VKrI4bTTedKBTYHe1KqSchbR8r8IteKIrjob2qLx71GnsjAQbp27jHd0vu0c2omHSxtE2C00MlvZAAUF";
@@ -51,6 +57,7 @@ const CartItems = () => {
           order
         );
         console.log("order placed", res.data);
+        clearCart();
         navigate("/success");
       } catch (err) {
         console.log(err);

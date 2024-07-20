@@ -13,7 +13,6 @@ const ShopContextProvider = (props) => {
       .then((response) => {
         console.log(response.data);
         setProducts(response.data);
-        //initializeCart(response.data);
       })
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
@@ -21,7 +20,6 @@ const ShopContextProvider = (props) => {
   const addToCart = (itemId, sizeId) => {
     setCartItems((prevCartItems) => {
       if (!prevCartItems.length) {
-        // If cartItems array is empty, add the product at once
         return [{ itemId, sizeId, qty: 1 }];
       }
 
@@ -30,14 +28,10 @@ const ShopContextProvider = (props) => {
       );
 
       if (existingItemIndex !== -1) {
-        // Item exists, increment the quantity
         const updatedCartItems = [...prevCartItems];
         updatedCartItems[existingItemIndex].qty += 1;
-        console.log(`This is cart `, cartItems);
         return updatedCartItems;
       } else {
-        console.log(`This is cart `, cartItems);
-        // Item does not exist, add as new item
         return [...prevCartItems, { itemId, sizeId, qty: 1 }];
       }
     });
@@ -53,10 +47,8 @@ const ShopContextProvider = (props) => {
         const updatedCartItems = [...prevCartItems];
 
         if (removeAll || updatedCartItems[existingItemIndex].qty === 1) {
-          // Remove the item completely
           updatedCartItems.splice(existingItemIndex, 1);
         } else {
-          // Decrement the quantity
           updatedCartItems[existingItemIndex].qty -= 1;
         }
         return updatedCartItems;
@@ -68,13 +60,8 @@ const ShopContextProvider = (props) => {
 
   const getTotalCartItems = () => {
     let totalItem = 0;
-    //for (let item in cartItems) {
-    // if (cartItems[item] > 0) {
-    //   totalItem += cartItems[item];
-    // }
     if (cartItems.length) {
       totalItem = totalItem + cartItems.length;
-      // }
     }
 
     return totalItem;
@@ -94,6 +81,10 @@ const ShopContextProvider = (props) => {
     return totalAmount;
   };
 
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
   const contextValue = {
     getTotalCartAmount,
     getTotalCartItems,
@@ -101,6 +92,7 @@ const ShopContextProvider = (props) => {
     cartItems,
     addToCart,
     removeFromCart,
+    clearCart,
   };
 
   return (

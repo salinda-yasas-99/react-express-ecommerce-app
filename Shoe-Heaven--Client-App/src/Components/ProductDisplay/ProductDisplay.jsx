@@ -21,7 +21,7 @@ const ProductDisplay = ({ product, feedbacks }) => {
 
   const sizeHandleClick = (sizeId) => {
     setSizeActive(sizeId);
-    console.log(`this is size ${sizeActive}`);
+    console.log(`this is size ${sizeId}`); // Updated to log the correct sizeId
   };
 
   const renderStars = (rating) => {
@@ -33,6 +33,21 @@ const ProductDisplay = ({ product, feedbacks }) => {
         </span>
       );
     });
+  };
+
+  const handleAddToCart = () => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      alert("You must be logged in to add items to the cart.");
+      return;
+    }
+
+    if (sizeActive === null) {
+      alert("Please select a size before adding to the cart.");
+      return;
+    }
+
+    addToCart(product?.prodId, sizeActive);
   };
 
   return (
@@ -81,27 +96,24 @@ const ProductDisplay = ({ product, feedbacks }) => {
               }`}
             >
               {sizeItems.map((sizeObj, index) => (
-                <button
-                  style={{
-                    border:
-                      sizeActive === sizeObj.sizeId
-                        ? "2px solid black"
-                        : "2px solid #ebebeb",
-                  }}
-                  onClick={() => sizeHandleClick(sizeObj.sizeId)}
-                  key={index}
-                >
-                  {sizeObj.sizeName}
-                </button>
+                <div key={index}>
+                  <button
+                    style={{
+                      border:
+                        sizeActive === sizeObj.sizeId
+                          ? "2px solid black"
+                          : "2px solid #ebebeb",
+                    }}
+                    onClick={() => sizeHandleClick(sizeObj.sizeId)}
+                  >
+                    {sizeObj.sizeName}
+                  </button>
+                  <p> {sizeObj.quantity}</p>
+                </div>
               ))}
             </div>
           </div>
-          <button
-            className="add-to-cart"
-            onClick={() => {
-              addToCart(product?.prodId, sizeActive);
-            }}
-          >
+          <button className="add-to-cart" onClick={handleAddToCart}>
             ADD TO CART
           </button>
         </div>

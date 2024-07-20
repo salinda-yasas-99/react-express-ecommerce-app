@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,55 +9,28 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Collapse from "@mui/material/Collapse";
 import Box from "@mui/material/Box";
+import axios from "axios";
 
 const OrdersDataTable = () => {
-  const [orders, setOrders] = useState([
-    {
-      id: "OD1234",
-      customer: "Kasun",
-      products: [
-        {
-          name: "Asics Men Running Shoes",
-          quantity: 2,
-          size: 10,
-          amount: 6000,
-        },
-        {
-          name: "Nike Women Running Shoes",
-          quantity: 1,
-          size: 8,
-          amount: 6000,
-        },
-      ],
-      placedDate: "12/07/2024",
-      placedTime: "14:35",
-      status: "Pending",
-    },
+  const [orders, setOrders] = useState([]);
 
-    {
-      id: "OD1356",
-      customer: "Ranil",
-      products: [
-        {
-          name: "Asics Men Running Shoes",
-          quantity: 1,
-          size: 10,
-          amount: 16000,
-        },
-        {
-          name: "Nike Women Running Shoes",
-          quantity: 1,
-          size: 8,
-          amount: 9900,
-        },
-      ],
-      placedDate: "12/07/2024",
-      placedTime: "14:35",
-      status: "Pending",
-    },
-  ]);
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
-  const changeStatus = (orderId) => {
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:7000/api/orders/getAllOrders`
+      );
+      console.log(response);
+      setOrders(response.data);
+    } catch (err) {
+      console.log("This is error", err);
+    }
+  };
+
+  const changeStatus = async (orderId) => {
     setOrders((prevOrders) =>
       prevOrders.map((order) =>
         order.id === orderId && order.status === "Pending"
@@ -66,6 +39,19 @@ const OrdersDataTable = () => {
       )
     );
     console.log(`Order ${orderId} status changed to Approved`);
+    try {
+      const data = {
+        status: "Delivered",
+      };
+      const response = await axios.put(
+        `http://localhost:7000/api/orders/statusUpdate/${orderId}`,
+        data
+      );
+      console.log("This is status update response", response.data);
+      fetchOrders();
+    } catch (err) {
+      console.log("This is error", err);
+    }
   };
 
   const calculateTotalAmount = (products) => {
@@ -92,7 +78,7 @@ const OrdersDataTable = () => {
           <TableBody>
             {orders.map((order) => (
               <OrderRow
-                key={order.id}
+                key={order.orderId}
                 order={order}
                 changeStatus={changeStatus}
                 calculateTotalAmount={calculateTotalAmount}
@@ -112,13 +98,14 @@ const OrderRow = ({ order, changeStatus, calculateTotalAmount }) => {
     <>
       <TableRow>
         <TableCell component="th" scope="row">
-          {order.id}
+          {order.orderId}
         </TableCell>
-        <TableCell align="right">{order.customer}</TableCell>
-        <TableCell align="right">{order.placedDate}</TableCell>
-        <TableCell align="right">{order.placedTime}</TableCell>
+        <TableCell align="right">{order.username}</TableCell>
+        <TableCell align="right">{order.date}</TableCell>
+        <TableCell align="right">{order.time}</TableCell>
         <TableCell align="right">
-          {calculateTotalAmount(order.products)}
+          {/* {calculateTotalAmount(order.orderItems)} */}
+          {order.Total}
         </TableCell>
         <TableCell align="right">{order.status}</TableCell>
         <TableCell align="right">
@@ -126,7 +113,7 @@ const OrderRow = ({ order, changeStatus, calculateTotalAmount }) => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => changeStatus(order.id)}
+              onClick={() => changeStatus(order.orderId)}
             >
               Approve
             </Button>
@@ -158,14 +145,14 @@ const OrderRow = ({ order, changeStatus, calculateTotalAmount }) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {order.products.map((product, index) => (
+                  {order.orderItems.map((product, index) => (
                     <TableRow key={index}>
                       <TableCell component="th" scope="row">
-                        {product.name}
+                        {product.productName}
                       </TableCell>
-                      <TableCell align="right">{product.quantity}</TableCell>
-                      <TableCell align="right">{product.size}</TableCell>
-                      <TableCell align="right">{product.amount}</TableCell>
+                      <TableCell align="right">{product.qty}</TableCell>
+                      <TableCell align="right">{product.sizeName}</TableCell>
+                      <TableCell align="right">{product.qty}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
