@@ -95,6 +95,9 @@ const ProductDisplay = ({ product, feedbacks }) => {
                 </button>
               ))}
             </div>
+            <div className="in-stock">
+              In stock: <strong>12</strong>
+            </div>
           </div>
           <button
             className="add-to-cart"
@@ -116,14 +119,15 @@ const ProductDisplay = ({ product, feedbacks }) => {
             {feedbacks && feedbacks.length > 0 ? (
               feedbacks.map((feedback, index) => (
                 <li key={index} className="feedback-item">
+                  <div className="feedback-rating">
+                     {renderStars(feedback.stars)}
+                  </div>
                   <div className="feedback-user">
                     <strong>{feedback.username}</strong>
                   </div>
-                  <div className="feedback-rating">
-                    <strong>Rating: </strong> {renderStars(feedback.stars)}
-                  </div>
+                  
                   <div className="feedback-comment">
-                    <strong>Comment:</strong> {feedback.comment}
+                     {feedback.comment}
                   </div>
                 </li>
               ))
