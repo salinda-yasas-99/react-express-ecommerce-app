@@ -217,17 +217,21 @@ const Navbar = () => {
 
         </button>
         {isLoggedIn && isDropdownVisible && (
+          <>
         <div className="btn-dropdown">
+
           <span>{username}</span>
           <hr />
           <Link to="/editprofile" >
-          <button className="" >Edit Profile</button>
+          <button className="dropdown-options" >Edit Profile</button>
           
           </Link>
           <Link to={"/my-orders"}>
-          <button className="my-orders-btn" style={{margin:"5px"}} >My Orders</button>
+          <button className="dropdown-options" >My Orders</button>
           </Link>
         </div>
+        <div className="overlay" onClick={toggleDropdown}></div>
+        </>
       )}
       </div>
       
