@@ -48,8 +48,8 @@ const MyOrders = () => {
                       />
                       <div className="item-info">
                         <p className="item-name">{item.productName}</p>
-                        <p className="item-size">Size Id: {item.sizeId}</p>
-                        <p className="item-size">Size name: {item.sizeName}</p>
+                       
+                        <p className="item-size">Size: {item.sizeName}</p>
                         <p className="item-qty">Qty: {item.qty}</p>
                       </div>
                       <div className="item-status">
