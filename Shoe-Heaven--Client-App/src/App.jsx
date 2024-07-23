@@ -25,6 +25,7 @@ import EditProfile from "./Pages/EditProfile/EditProfile";
 import MyOrders from "./Components/MyOrders/MyOrders";
 import InquiryManagement from "./Pages/Admin/Inquiry/InquiryManagement";
 import InquiryList from "./Pages/Admin/Inquiry/InquiryList";
+import StaffList from "./Pages/Admin/Staff/StaffList";
 
 const App = () => {
   const isHiddenRoute =
@@ -88,6 +89,11 @@ const App = () => {
                   <NewProduct title="Orders" />
                 }
               />
+            </Route>
+
+            <Route path="staff">
+              <Route index element={<StaffList/>} />
+              
             </Route>
 
             
