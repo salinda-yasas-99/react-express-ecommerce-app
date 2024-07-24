@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,32 +8,43 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import { getAllAdmins } from "../../../Services/RestApiCalls";
+import axios from "axios";
 
 const StaffDataTable = () => {
-  const [staffData, setStaffData] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      role: "Admin",
-      address: "123 Main St",
-      email: "john.doe@example.com",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      role: "Order Manager",
-      address: "456 Elm St",
-      email: "jane.smith@example.com",
-    },
-  ]);
+  // const [userIdToDelete, setUserIdToDelete] = useState(null);
+  const [staffData, setStaffData] = useState([]);
 
-  const handleDelete = (id) => {
-    setStaffData(staffData.filter((staff) => staff.id !== id));
+  const fetchUsers = async () => {
+    const users = await getAllAdmins();
+    setStaffData(users);
+    console.log("This is users", staffData);
+  };
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const handleDelete = async (userIdToDelete) => {
+    if (userIdToDelete) {
+      try {
+        const response = await axios.delete(
+          `http://localhost:7000/api/users/delete/${userIdToDelete}`
+        );
+        console.log(response.data);
+        fetchUsers();
+        // setOpen(false);
+        // window.location.reload();
+      } catch (error) {
+        console.error("Failed to delete user:", error);
+      }
+    }
   };
 
   return (
     <div className="staff-management">
-      <h2 style={{padding:"20px 0 30px",color:"green"}}>Staff Management</h2>
+      <h2 style={{ padding: "20px 0 30px", color: "green" }}>
+        Staff Management
+      </h2>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="staff table">
           <TableHead>
@@ -49,7 +60,7 @@ const StaffDataTable = () => {
             {staffData.map((staff) => (
               <TableRow key={staff.id}>
                 <TableCell component="th" scope="row">
-                  {staff.name}
+                  {staff.username}
                 </TableCell>
                 <TableCell align="center">{staff.role}</TableCell>
                 <TableCell align="center">{staff.address}</TableCell>
@@ -65,7 +76,7 @@ const StaffDataTable = () => {
                         padding: "10px 15px",
                         fontWeight: "500",
                       }}
-                      onClick={() => handleDelete(staff.id)}
+                      onClick={() => handleDelete(staff.uid)}
                     >
                       Delete
                     </button>
