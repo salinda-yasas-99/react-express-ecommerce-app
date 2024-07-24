@@ -107,6 +107,8 @@ exports.getAllUsers = async (req, res, next) => {
       username: user.username,
       email: user.email,
       role: user.role,
+      address: user.Address,
+      contact: user.contactNumber,
     }));
 
     res.status(200).json(usersWithoutPasswords);
