@@ -5,18 +5,18 @@ const Hero = () => {
   return (
     <div className='hero'>
         <div className="hero-left">
-            <h2>walk with confidence</h2>
+            <h5>walk with confidence</h5>
             <div>
                 <div className="shop-icon">
-                <p>Discover Your Next </p>
-                <p>Favourite Pair</p>
+                <h1>Discover Your Next <span>Favourite Pair</span> </h1>
+                
 
                 </div>
                 
             </div>
         </div>
         <div className="hero-right">
-            <img src={Main_Image} alt=""  className='hero-image'/>
+            {/* <img src={Main_Image} alt=""  className='hero-image'/> */}
         </div>
       
     </div>

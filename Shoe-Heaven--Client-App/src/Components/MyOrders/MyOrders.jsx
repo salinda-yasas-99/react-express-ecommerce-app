@@ -27,8 +27,8 @@ const MyOrders = () => {
       <p>View your pending, delivered orders here.</p>
       <div className="orders-list">
         {orders.length > 0 ? (
-          orders.map((order) => (
-            <div key={order.id} className="order-item">
+          orders.map((order,index) => (
+            <div key={index} className="order-item">
               <div className="order-header">
                 <div className="order-id">
                   <span>Order</span> <a href="#">{order.orderId}</a>
@@ -47,14 +47,16 @@ const MyOrders = () => {
                         className="item-image"
                       />
                       <div className="item-info">
-                        <p className="item-name">{item.name}</p>
-                        <p className="item-size">Size Id: {item.sizeId}</p>
-                        <p className="item-size">Size name: {item.sizeName}</p>
+                        <p className="item-name">{item.productName}</p>
+                       
+                        <p className="item-size">Size: {item.sizeName}</p>
                         <p className="item-qty">Qty: {item.qty}</p>
                       </div>
                       <div className="item-status">
-                        <p className="status-label">Status</p>
-                        <p className="status">{order.status}</p>
+                     
+                        <p className="status-label">Status:</p>
+                        <p className="status">delivered</p>
+                        
                       </div>
                     </div>
                   ))}

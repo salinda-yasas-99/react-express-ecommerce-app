@@ -24,7 +24,7 @@ router.delete(
 );
 router.put(
   "/update/:Id",
-  authController.accessAuthorizeAdmin,
+  // authController.accessAuthorizeAdmin,
   productController.updateProductById
 );
 
