@@ -89,7 +89,7 @@ const Datatable = (props) => {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {user.id}
+                  {user.uid}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {user.username}
@@ -101,7 +101,7 @@ const Datatable = (props) => {
                   {user.email}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {user.contact_number}
+                  {user.contact}
                 </TableCell>
                 <TableCell
                   component="th"
