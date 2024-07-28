@@ -27,6 +27,9 @@ import InquiryManagement from "./Pages/Admin/Inquiry/InquiryManagement";
 import InquiryList from "./Pages/Admin/Inquiry/InquiryList";
 import StaffList from "./Pages/Admin/Staff/StaffList";
 import AdminRegister from "./Pages/Admin/Admin-Register/AdminRegister";
+import StockPrediction from "./Pages/Admin/StockPrediction/StockPrediction";
+import StockPredictionMain from "./Pages/Admin/StockPrediction/StockPredictionMain";
+import StaffNew from "./Pages/Admin/Staff/StaffNew/StaffNew";
 
 const App = () => {
   const isHiddenRoute =
@@ -95,12 +98,21 @@ const App = () => {
 
             <Route path="staff">
               <Route index element={<StaffList/>} />
+              <Route
+                path="new"
+                element={<StaffNew/>}
+              />
               
             </Route>
 
             
             <Route path="manage/inquiry">
             <Route index element={<InquiryList/>} />
+              
+            </Route>
+
+            <Route path="stock-prediction">
+            <Route index element={<StockPredictionMain/>} />
               
             </Route>
           </Route>
