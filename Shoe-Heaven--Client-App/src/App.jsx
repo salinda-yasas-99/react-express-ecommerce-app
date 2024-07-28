@@ -26,6 +26,7 @@ import MyOrders from "./Components/MyOrders/MyOrders";
 import InquiryManagement from "./Pages/Admin/Inquiry/InquiryManagement";
 import InquiryList from "./Pages/Admin/Inquiry/InquiryList";
 import StaffList from "./Pages/Admin/Staff/StaffList";
+import AdminRegister from "./Pages/Admin/Admin-Register/AdminRegister";
 
 const App = () => {
   const isHiddenRoute =
@@ -60,6 +61,7 @@ const App = () => {
           <Route path="/register" element={<LoginSignup />} />
           <Route path="/login" element={<LoginSignIn />} />
           <Route path="/dashboard/adminLogin" element={<AdminLogin />} />
+          <Route path="/dashboard/adminRegister"  element={<AdminRegister/>}/>
           <Route path="/dashboard">
             <Route index element={<AdminHome />}></Route>
             <Route path="users">

@@ -8,6 +8,7 @@ import Feedback from "../Feedback/Feedback";
 const ProductDisplay = ({ product, feedbacks }) => {
   const { addToCart } = useContext(ShopContext);
   const [sizeActive, setSizeActive] = useState(null);
+  const [inStock, setInStock] = useState(0);
 
   let sizeItems = [];
 
@@ -19,9 +20,10 @@ const ProductDisplay = ({ product, feedbacks }) => {
     console.error("Error parsing sizeItems:", e);
   }
 
-  const sizeHandleClick = (sizeId) => {
+  const sizeHandleClick = (sizeId,quantity) => {
     setSizeActive(sizeId);
-    console.log(`this is size ${sizeId}`); // Updated to log the correct sizeId
+    setInStock(quantity);
+    console.log(`this is size ${sizeId}`);
   };
 
   const renderStars = (rating) => {
@@ -95,7 +97,7 @@ const ProductDisplay = ({ product, feedbacks }) => {
                 sizeActive ? "sizeActive" : ""
               }`}
             >
-              {sizeItems.map((sizeObj, index) => (
+              {/* {sizeItems.map((sizeObj, index) => (
                 <div key={index}>
                   <button
                     style={{
@@ -110,11 +112,35 @@ const ProductDisplay = ({ product, feedbacks }) => {
                   </button>
                   <p> {sizeObj.quantity}</p>
                 </div>
-              ))}
+              ))} */}
+            {sizeItems
+          .sort((a, b) => {
+            const sizeA = parseInt(a.sizeName.replace("size ", ""), 10);
+            const sizeB = parseInt(b.sizeName.replace("size ", ""), 10);
+            return sizeA - sizeB;
+          })
+          .map((sizeObj, index) => (
+            <div key={index}>
+              <button
+                style={{
+                  border:
+                    sizeActive === sizeObj.sizeId
+                      ? "2px solid black"
+                      : "2px solid #ebebeb",
+                }}
+                onClick={() => sizeHandleClick(sizeObj.sizeId, sizeObj.quantity)}
+              >
+                {sizeObj.sizeName}
+              </button>
+              <p>{sizeActive === sizeObj.sizeId && sizeObj.quantity}</p> 
             </div>
-            <div className="in-stock">
-              In stock: <strong>12</strong>
-            </div>
+          ))}
+      </div>
+      {sizeActive !== null && (
+        <div className="in-stock">
+          In stock: <strong>{inStock}</strong>
+        </div>
+      )}
           </div>
           <button className="add-to-cart" onClick={handleAddToCart}>
             ADD TO CART
@@ -132,15 +158,13 @@ const ProductDisplay = ({ product, feedbacks }) => {
               feedbacks.map((feedback, index) => (
                 <li key={index} className="feedback-item">
                   <div className="feedback-rating">
-                     {renderStars(feedback.stars)}
+                    {renderStars(feedback.stars)}
                   </div>
                   <div className="feedback-user">
                     <strong>{feedback.username}</strong>
                   </div>
-                  
-                  <div className="feedback-comment">
-                     {feedback.comment}
-                  </div>
+
+                  <div className="feedback-comment">{feedback.comment}</div>
                 </li>
               ))
             ) : (

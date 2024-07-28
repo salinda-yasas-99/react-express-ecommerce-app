@@ -76,7 +76,7 @@ const AdminLogin = () => {
         <button onClick={handleSubmit}>Login</button>
 
         <span>
-          Don't you have an Account? <Link to="#">Register</Link>
+          Don't you have an Account? <Link to="/dashboard/adminRegister">Register</Link>
         </span>
       </form>
     </div>
