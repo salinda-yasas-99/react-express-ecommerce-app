@@ -22,7 +22,7 @@ const StaffNew = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formValues);
-    // You can also handle the form submission logic here
+    
   };
 
   return (
