@@ -36,13 +36,17 @@ const ProductDataTable = () => {
         const response = await axios.get(
           "http://localhost:7000/api/products/getAllProducts"
         );
+        // const response = await axios.get(
+        //   "http://localhost:7000/api/products/getAllProducts",
+        //   { headers: { Authorization: `Bearer ${token}` } }
+        // );
         console.log("Fetched products:", response.data);
         const updatedProductData = response.data.map((product) => ({
           ...product,
-          sizes: product.sizeItems.map(sizeItem => ({
+          sizes: product.sizeItems.map((sizeItem) => ({
             sizeId: sizeItem.sizeId,
             sizeName: sizeItem.sizeName,
-            quantity: sizeItem.quantity
+            quantity: sizeItem.quantity,
           })),
         }));
         setProductData(updatedProductData);
@@ -68,9 +72,18 @@ const ProductDataTable = () => {
         ...editProductData,
         sizes: editProductData.sizes,
       };
+      const updateObj = {
+        name: updatedProductData.name,
+        imageUrl: updatedProductData.imageUrl,
+        category: updatedProductData.category,
+        new_price: updatedProductData.new_price,
+        old_price: updatedProductData.old_price,
+        description: updatedProductData.description,
+        sizeItems: updatedProductData.sizes,
+      };
       const response = await axios.put(
         `http://localhost:7000/api/products/update/${editProductData.prodId}`,
-        updatedProductData
+        updateObj
       );
       console.log("Update response:", response);
       if (response.data) {
@@ -79,13 +92,11 @@ const ProductDataTable = () => {
             ? { ...prod, ...response.data, sizes: response.data.sizeItems }
             : prod
         );
-
         setProductData(updatedProducts);
-
         setSuccessMessage("Product Updated Successfully");
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000);
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 3000);
         setEditOpen(false);
       }
     } catch (error) {
@@ -310,7 +321,10 @@ const ProductDataTable = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button onClick={() => handleDelete(editProductData.prodId)} autoFocus>
+          <Button
+            onClick={() => handleDelete(editProductData.prodId)}
+            autoFocus
+          >
             Delete
           </Button>
         </DialogActions>
