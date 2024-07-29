@@ -9,8 +9,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const CartItems = () => {
-  const { getTotalCartAmount, products, cartItems, removeFromCart, addToCart } =
-    useContext(ShopContext);
+  const {
+    getTotalCartAmount,
+    products,
+    cartItems,
+    removeFromCart,
+    addToCart,
+    clearCart,
+  } = useContext(ShopContext);
 
   const KEY =
     "pk_test_51PZDQYGtHEDchr7LN5VKrI4bTTedKBTYHe1KqSchbR8r8IteKIrjob2qLx71GnsjAQbp27jHd0vu0c2omHSxtE2C00MlvZAAUF";
@@ -38,6 +44,7 @@ const CartItems = () => {
 
   useEffect(() => {
     const makeRequest = async () => {
+      const authToken = localStorage.getItem("access_token");
       try {
         const order = {
           tokenId: stripeToken.id,
@@ -46,11 +53,18 @@ const CartItems = () => {
           total: getTotalCartAmount(),
           userId: parseInt(userId),
         };
-        const res = await axios.post(
+        const authAxios = axios.create({
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          withCredentials: true,
+        });
+        const res = await authAxios.post(
           "http://localhost:7000/api/checkout/payment",
           order
         );
         console.log("order placed", res.data);
+        clearCart();
         navigate("/success");
       } catch (err) {
         console.log(err);

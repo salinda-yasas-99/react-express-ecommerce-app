@@ -19,15 +19,28 @@ import NewProduct from "./Pages/Admin/newproduct/NewProduct";
 import ProductList from "./Pages/Admin/list/productlist/ProductList";
 import AdminLogin from "./Pages/Admin/Admin-Login/AdminLogin";
 import OrderSuccess from "./Components/OrderSuccess/OrderSuccess";
+import Inquiry from "./Pages/Inquiry/Inquiry";
+import OrdersList from "./Pages/Admin/Orders/OrdersList";
+import EditProfile from "./Pages/EditProfile/EditProfile";
+import MyOrders from "./Components/MyOrders/MyOrders";
+import InquiryManagement from "./Pages/Admin/Inquiry/InquiryManagement";
+import InquiryList from "./Pages/Admin/Inquiry/InquiryList";
+import StaffList from "./Pages/Admin/Staff/StaffList";
+import AdminRegister from "./Pages/Admin/Admin-Register/AdminRegister";
+import StockPrediction from "./Pages/Admin/StockPrediction/StockPrediction";
+import StockPredictionMain from "./Pages/Admin/StockPrediction/StockPredictionMain";
+import StaffNew from "./Pages/Admin/Staff/StaffNew/StaffNew";
 
 const App = () => {
-  const isDashboardRoute = window.location.pathname.startsWith("/dashboard");
+  const isHiddenRoute =
+    window.location.pathname.startsWith("/dashboard") ||
+    location.pathname === "/success";
 
   return (
     <div className="main">
       <BrowserRouter>
         {/* {window.location.pathname != "/dashboard"  &&  <Navbar />} */}
-        {!isDashboardRoute && <Navbar />}
+        {!isHiddenRoute && <Navbar />}
         <Routes>
           <Route path="/" element={<Shop />} />
           <Route
@@ -44,10 +57,14 @@ const App = () => {
           />
           <Route path="/product/:productId" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/editprofile" element={<EditProfile />} />
+          <Route path="/my-orders" element={<MyOrders />} />
+          <Route path="/inquiry" element={<Inquiry />} />
           <Route path="/success" element={<OrderSuccess />} />
           <Route path="/register" element={<LoginSignup />} />
           <Route path="/login" element={<LoginSignIn />} />
           <Route path="/dashboard/adminLogin" element={<AdminLogin />} />
+          <Route path="/dashboard/adminRegister"  element={<AdminRegister/>}/>
           <Route path="/dashboard">
             <Route index element={<AdminHome />}></Route>
             <Route path="users">
@@ -67,11 +84,42 @@ const App = () => {
                 }
               />
             </Route>
+
+            <Route path="orders">
+              <Route index element={<OrdersList />} />
+              <Route
+                path="new"
+                element={
+                  // <New inputs={productInputs} title="Add New Products" />
+                  <NewProduct title="Orders" />
+                }
+              />
+            </Route>
+
+            <Route path="staff">
+              <Route index element={<StaffList/>} />
+              <Route
+                path="new"
+                element={<StaffNew/>}
+              />
+              
+            </Route>
+
+            
+            <Route path="manage/inquiry">
+            <Route index element={<InquiryList/>} />
+              
+            </Route>
+
+            <Route path="stock-prediction">
+            <Route index element={<StockPredictionMain/>} />
+              
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
       {/* {window.location.pathname != "/dashboard"  && <Footer />} */}
-      {!isDashboardRoute && <Footer />}
+      {!isHiddenRoute && <Footer />}
     </div>
   );
 };

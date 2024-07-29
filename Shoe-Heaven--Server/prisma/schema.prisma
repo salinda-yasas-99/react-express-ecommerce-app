@@ -51,6 +51,7 @@ model Order{
   Total   Int
   orderItems Json
   date String
+  status String
   time String
   user User  @relation(fields: [fk_userId], references: [uid], onDelete: NoAction)
   fk_userId Int 

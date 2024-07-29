@@ -18,7 +18,16 @@ const NewProduct = ({ title }) => {
     sizes: [],
     description: "",
   };
-  const availableSizes = ["size 3", "size 4", "size 5", "size 6", "size 7", "size 8", "size 9", "size 10"];
+  const availableSizes = [
+    "size 3",
+    "size 4",
+    "size 5",
+    "size 6",
+    "size 7",
+    "size 8",
+    "size 9",
+    "size 10",
+  ];
   const [productData, setProductData] = useState(initialProductData);
   const [file, setFile] = useState(null);
   const [idError, setIdError] = useState("");
@@ -27,8 +36,17 @@ const NewProduct = ({ title }) => {
   const [imageError, setImageError] = useState("");
 
   const validateProductId = async (prodId) => {
+    const authToken = localStorage.getItem("access_token");
     try {
-      const response = await axios.get(`http://localhost:7000/api/products/IsIdAvailable/${prodId}`);
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+      const response = await authAxios.get(
+        `http://localhost:7000/api/products/IsIdAvailable/${prodId}`
+      );
       if (response.data.isUnique) {
         setIdError("This product ID is already in use. Please choose another.");
         return false;
@@ -110,6 +128,8 @@ const NewProduct = ({ title }) => {
     let formData = new FormData();
     formData.append("file", file);
 
+    const authToken = localStorage.getItem("access_token");
+
     try {
       const response = await fetch("http://localhost:7000/upload", {
         method: "POST",
@@ -126,8 +146,9 @@ const NewProduct = ({ title }) => {
           new_price: parseInt(productData.new_price),
         };
         console.log(productWithImage);
+        const authToken = localStorage.getItem("access_token");
         // Post to your products API endpoint
-        const productResponse = await axios.post(
+        const productResponse = await authToken.post(
           "http://localhost:7000/api/products/addProduct",
           productWithImage
         );
@@ -156,14 +177,23 @@ const NewProduct = ({ title }) => {
         <div className="bottom">
           <div className="left">
             <img
-              src={file ? URL.createObjectURL(file) : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"}
+              src={
+                file
+                  ? URL.createObjectURL(file)
+                  : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+              }
               alt="Product Preview"
             />
 
             <div className="formInput">
               <label htmlFor="file" className="file">
                 Image:
-                <input type="file" id="file" onChange={handleFileChange} style={{ display: "none" }} />
+                <input
+                  type="file"
+                  id="file"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
                 <DriveFolderUploadOutlinedIcon className="icon" />
               </label>
 
@@ -256,8 +286,14 @@ const NewProduct = ({ title }) => {
                   <label>
                     <input
                       type="checkbox"
-                      checked={!!productData.sizes.find((s) => s.size === size && s.quantity > 0)}
-                      onChange={(e) => handleSizeChange(size, e.target.checked ? 1 : 0)}
+                      checked={
+                        !!productData.sizes.find(
+                          (s) => s.size === size && s.quantity > 0
+                        )
+                      }
+                      onChange={(e) =>
+                        handleSizeChange(size, e.target.checked ? 1 : 0)
+                      }
                     />{" "}
                     {size}
                   </label>
@@ -266,8 +302,13 @@ const NewProduct = ({ title }) => {
                       type="number"
                       id="qty"
                       className="quantity"
-                      value={productData.sizes.find((s) => s.size === size)?.quantity || 0}
-                      onChange={(e) => handleSizeChange(size, parseInt(e.target.value))}
+                      value={
+                        productData.sizes.find((s) => s.size === size)
+                          ?.quantity || 0
+                      }
+                      onChange={(e) =>
+                        handleSizeChange(size, parseInt(e.target.value))
+                      }
                       min="0"
                     />
                     <span>Qty</span>

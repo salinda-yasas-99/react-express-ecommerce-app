@@ -1,0 +1,49 @@
+.hero{
+    height: calc(100vh - 10rem);
+    background:rgb(240, 213, 217);
+    display: grid;
+    align-items: center;
+    padding: 40px 60px ;
+    background-image: url('../../assets/Main_image.png');
+    background-size: 900px;
+    background-repeat: no-repeat;
+    background-position:  bottom right 
+}
+
+.hero-left{
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    
+    
+
+}
+
+.hero-left h5{
+    color:#ebac39;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.hero-left h1{
+    color: #171717;
+    font-size: 80px;
+    max-width: 60%;
+    font-weight: 700;
+    margin-right: auto;
+    line-height: 100px;
+
+}
+
+.hero-right{
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+}
+.hero-image{
+    width: 800px;
+    align-self: center;  
+}

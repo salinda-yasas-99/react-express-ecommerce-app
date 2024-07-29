@@ -1,0 +1,152 @@
+
+
+.my-orders {
+    margin: 40px auto;
+    width: 100%;
+    padding: 20px;
+    max-width: 80%;
+    
+    border-radius: 10px;
+    
+  }
+  
+  .my-orders h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 2em;
+  }
+  
+  .my-orders p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1em;
+  }
+  
+  .orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .order-item {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background:rgb(240, 213, 217);
+    transition: box-shadow 0.3s;
+    padding: 20px;
+  }
+  
+  .order-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .order-header, .order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .order-footer {
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+  }
+  
+  .order-id {
+    font-size: 1.2em;
+  }
+  
+  .order-id a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .order-id a:hover {
+    text-decoration: underline;
+  }
+  
+  .track-order-btn, .cancel-order-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .track-order-btn:hover, .cancel-order-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .order-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0;
+  }
+  
+  .order-item-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 100%;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .item-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .item-info {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    text-transform: capitalize;
+  }
+  
+  .item-info p {
+    margin: 5px 0;
+  }
+  
+  .item-name {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  
+  .item-status {
+    display: flex;
+    align-items: center;
+    justify-self: flex-end;
+    text-align: right;
+    gap: 8px;
+  }
+  
+  .status-label {
+    font-size: 0.9em;
+    color: #666;
+  }
+  
+  .status {
+    font-size: 1em;
+    color: #ff9800;
+    font-weight: bold;
+  }
+  
+  .delivery-date {
+    font-size: 0.9em;
+    color: #333;
+  }
+  
+  .order-total {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+  }
+  

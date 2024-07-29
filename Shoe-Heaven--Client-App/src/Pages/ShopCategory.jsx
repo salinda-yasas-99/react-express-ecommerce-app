@@ -1,31 +1,3 @@
-//   return (
-//     <div className='shop-category'>
-//       <img  className='shopcategory-banner' src={props.banner} alt="" />
-//       <div className="shopcategory-indexSort">
-//         <p>
-//           <span>Showing 1-12</span> out of 36 products
-
-//         </p>
-//           <div className="shopcategory-sort">
-//              Sort by <img src={dropdown_icon} alt="" />
-//           </div>
-//       </div>
-//       <div className="shopcategory-products">
-//         {products.map((item,i)=>{
-//               if(props.category === item.category){
-//                   return <Item key={i} id ={item.id} name ={item.name} image ={item.image} new_price ={item.new_price} old_price ={item.old_price} />
-//               } else{
-//                 return null;
-//               }
-//         })}
-//       </div>
-//       <div className="shopcategory-loadmore">
-//         Explore more
-//       </div>
-//     </div>
-//   )
-// }
-
 import React, { useContext, useEffect, useState } from "react";
 import "./CSS/ShopCategory.css";
 import { ShopContext } from "../Context/ShopContext";
@@ -38,7 +10,15 @@ const ShopCategory = (props) => {
   const [displayCount, setDisplayCount] = useState(6); // Start by showing 6 products
 
   useEffect(() => {
-    axios
+    const authToken = localStorage.getItem("access_token");
+    const authAxios = axios.create({
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+      withCredentials: true,
+    });
+
+    authAxios
       .get("http://localhost:7000/api/products/getAllProducts")
       .then((response) => {
         setProducts(response.data);

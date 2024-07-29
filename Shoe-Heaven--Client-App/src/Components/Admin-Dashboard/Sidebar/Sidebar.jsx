@@ -9,17 +9,15 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import SettingsSystemDaydreamOutlinedIcon from "@mui/icons-material/SettingsSystemDaydreamOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import FeedbackIcon from '@mui/icons-material/Feedback';
-import ReviewsIcon from '@mui/icons-material/Reviews';
-import LocalAtmIcon from '@mui/icons-material/LocalAtm';
-import ShoppingCartCheckoutRoundedIcon from '@mui/icons-material/ShoppingCartCheckoutRounded';
-import HelpCenterRoundedIcon from '@mui/icons-material/HelpCenterRounded';
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import FeedbackIcon from "@mui/icons-material/Feedback";
+import ReviewsIcon from "@mui/icons-material/Reviews";
+import LocalAtmIcon from "@mui/icons-material/LocalAtm";
+import ShoppingCartCheckoutRoundedIcon from "@mui/icons-material/ShoppingCartCheckoutRounded";
+import HelpCenterRoundedIcon from "@mui/icons-material/HelpCenterRounded";
 import { Link } from "react-router-dom";
 
-
 const Sidebar = () => {
-
   return (
     <div className="sidebar">
       <div className="top">
@@ -31,17 +29,17 @@ const Sidebar = () => {
       <div className="center">
         <ul>
           <p className="title">MAIN</p>
-          <Link  to="/dashboard" style={{ textDecoration: "none" }}>
-          <li>
-            <DashboardIcon className="icon" />
-            <span>Dashboard</span>
-          </li>
+          <Link to="/dashboard" style={{ textDecoration: "none" }}>
+            <li>
+              <DashboardIcon className="icon" />
+              <span>Dashboard</span>
+            </li>
           </Link>
           {/* <p className="title">MANAGE</p> */}
           <Link to="/dashboard/users" style={{ textDecoration: "none" }}>
             <li>
               <PersonOutlineIcon className="icon" />
-              <span>Users</span>
+              <span>Customers</span>
             </li>
           </Link>
           <Link to="/dashboard/products" style={{ textDecoration: "none" }}>
@@ -50,40 +48,40 @@ const Sidebar = () => {
               <span>Products</span>
             </li>
           </Link>
-          <Link to ="/dashboard/orders"style={{ textDecoration: "none" }}>
-          <li>
-            <ShoppingCartCheckoutRoundedIcon className="icon" />
-            <span>Orders</span>
-          </li>
+          <Link to="/dashboard/orders" style={{ textDecoration: "none" }}>
+            <li>
+              <ShoppingCartCheckoutRoundedIcon className="icon" />
+              <span>Orders</span>
+            </li>
           </Link>
-          <Link to ="/dashboard/staff"style={{ textDecoration: "none" }}>
-          <li>
-            <ManageAccountsIcon className="icon" />
-            <span>Staff Management</span>
-          </li>
+          <Link to="/dashboard/staff" style={{ textDecoration: "none" }}>
+            <li>
+              <ManageAccountsIcon className="icon" />
+              <span>Staff Management</span>
+            </li>
           </Link>
           <p className="title">Services</p>
+          <Link to="/dashboard/stock-prediction" style={{ textDecoration: "none" }}>
           <li>
             <InsertChartIcon className="icon" />
             <span>Stock Prediction</span>
           </li>
+          </Link>
           <li>
             <CreditCardIcon className="icon" />
             <span>Payments</span>
           </li>
-          {/* <p className="title">SERVICES</p> */}
-          <li>
-            <ReviewsIcon className="icon" />
-            <span>Feedback </span>
-          </li>
-          <li>
-            <HelpCenterRoundedIcon className="icon" />
-            <span>Inquiry</span>
-          </li>
-          <li>
-            <SettingsApplicationsIcon className="icon" />
-            <span>Settings</span>
-          </li>
+
+          <Link
+            to="/dashboard/manage/inquiry"
+            style={{ textDecoration: "none" }}
+          >
+            <li>
+              <HelpCenterRoundedIcon className="icon" />
+              <span>Inquiry</span>
+            </li>
+          </Link>
+
           <p className="title">USER</p>
           <li>
             <AccountCircleOutlinedIcon className="icon" />
@@ -95,7 +93,6 @@ const Sidebar = () => {
           </li>
         </ul>
       </div>
-     
     </div>
   );
 };

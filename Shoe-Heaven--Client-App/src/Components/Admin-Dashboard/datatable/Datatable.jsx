@@ -48,8 +48,15 @@ const Datatable = (props) => {
 
   const handleDelete = async () => {
     if (userIdToDelete) {
+      const authToken = localStorage.getItem("access_token");
       try {
-        const response = await axios.delete(
+        const authAxios = axios.create({
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          withCredentials: true,
+        });
+        const response = await authAxios.delete(
           `http://localhost:7000/api/users/delete/${userIdToDelete}`
         );
         console.log(response.data);
@@ -89,7 +96,7 @@ const Datatable = (props) => {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {user.id}
+                  {user.uid}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {user.username}
@@ -101,7 +108,7 @@ const Datatable = (props) => {
                   {user.email}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {user.contact_number}
+                  {user.contact}
                 </TableCell>
                 <TableCell
                   component="th"

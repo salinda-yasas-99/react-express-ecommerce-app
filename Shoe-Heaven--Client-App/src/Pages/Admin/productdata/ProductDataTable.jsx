@@ -19,8 +19,6 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  Checkbox,
-  FormControlLabel,
   DialogContentText,
 } from "@mui/material";
 
@@ -32,46 +30,40 @@ const ProductDataTable = () => {
   const availableSizes = [3, 4, 5, 6, 7, 8, 9, 10];
   const [successMessage, setSuccessMessage] = useState("");
 
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:7000/api/product");
-  //       console.log("Fetched products:", response.data);
-  //       console.log(
-  //         response.data
-  //       );
-  //       setProductData(response.data.map(product => ({
-  //         ...product,
-  //         sizes: JSON.parse(product.sizes)
-  //       })));
-  //       console.log("Data before parsing:", product.sizes);
-
-  //     } catch (error) {
-  //       console.error("Error fetching products", error);
-  //     }
-  //   };
-  //   fetchProducts();
-  // }, []);
-
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:7000/api/products/getAllProducts"
-        );
-        console.log("Fetched products:", response.data);
-        const updatedProductData = response.data.map((product) => ({
-          ...product,
-          sizes: product.sizeItems,
-        }));
-        setProductData(updatedProductData);
-        // console.log("Data after parsing:", updatedProductData);
-      } catch (error) {
-        console.error("Error fetching products", error);
-      }
-    };
     fetchProducts();
   }, []);
+
+  const fetchProducts = async () => {
+    const authToken = localStorage.getItem("access_token");
+    try {
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+      const response = await authAxios.get(
+        "http://localhost:7000/api/products/getAllProducts"
+      );
+      // const response = await axios.get(
+      //   "http://localhost:7000/api/products/getAllProducts",
+      //   { headers: { Authorization: `Bearer ${token}` } }
+      // );
+      console.log("Fetched products:", response.data);
+      const updatedProductData = response.data.map((product) => ({
+        ...product,
+        sizes: product.sizeItems.map((sizeItem) => ({
+          sizeId: sizeItem.sizeId,
+          sizeName: sizeItem.sizeName,
+          quantity: sizeItem.quantity,
+        })),
+      }));
+      setProductData(updatedProductData);
+    } catch (error) {
+      console.error("Error fetching products", error);
+    }
+  };
 
   const handleEditOpen = (product) => {
     setEditProductData({
@@ -83,29 +75,43 @@ const ProductDataTable = () => {
 
   const handleUpdateProduct = async () => {
     console.log("Updating product with data:", editProductData);
+    const authToken = localStorage.getItem("access_token");
     try {
       const updatedProductData = {
         ...editProductData,
         sizes: editProductData.sizes,
       };
-      const response = await axios.put(
-        `http://localhost:7000/api/product/${editProductData.id}`,
-        updatedProductData
+      const updateObj = {
+        name: updatedProductData.name,
+        imageUrl: updatedProductData.imageUrl,
+        category: updatedProductData.category,
+        new_price: updatedProductData.new_price,
+        old_price: updatedProductData.old_price,
+        description: updatedProductData.description,
+        sizeItems: updatedProductData.sizes,
+      };
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+      const response = await authAxios.put(
+        `http://localhost:7000/api/products/update/${editProductData.prodId}`,
+        updateObj
       );
       console.log("Update response:", response);
       if (response.data) {
         const updatedProducts = productData.map((prod) =>
-          prod.id === editProductData.id
-            ? { ...prod, ...response.data, sizes: response.data.sizes }
+          prod.prodId === editProductData.prodId
+            ? { ...prod, ...response.data, sizes: response.data.sizeItems }
             : prod
         );
-
         setProductData(updatedProducts);
-
         setSuccessMessage("Product Updated Successfully");
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000);
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 3000);
         setEditOpen(false);
       }
     } catch (error) {
@@ -113,32 +119,40 @@ const ProductDataTable = () => {
     }
   };
 
-  const handleSizeChange = (size) => {
+  const handleSizeQuantityChange = (sizeId, sizeName, quantity) => {
     setEditProductData((prev) => {
       const currentSizes = prev.sizes;
-      console.log(currentSizes);
-      const sizeIndex = currentSizes.indexOf(size);
+      const sizeIndex = currentSizes.findIndex((s) => s.sizeId === sizeId);
       let newSizes;
 
       if (sizeIndex === -1) {
-        // Size is not currently selected, add it to the array
-        newSizes = [...currentSizes, parseInt(size)];
+        newSizes = [...currentSizes, { sizeId, sizeName, quantity }];
       } else {
-        // Size is already selected, remove it from the array
-        newSizes = currentSizes.filter((s) => s !== parseInt(size));
+        newSizes = currentSizes.map((s, index) =>
+          index === sizeIndex ? { sizeId, sizeName, quantity } : s
+        );
       }
 
-      console.log("Previous sizes:", currentSizes);
-      console.log("Updated sizes:", newSizes);
       return { ...prev, sizes: newSizes };
     });
   };
 
   const handleDelete = async (id) => {
+    // Retrieve the authentication token from local storage
+    const authToken = localStorage.getItem("access_token"); // Adjust 'authToken' based on your application's naming convention
+
     try {
-      await axios.delete(`http://localhost:7000/api/product/${id}`);
-      setProductData(productData.filter((p) => p.id !== id));
+      // Include the Authorization header with the retrieved token
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+      await authAxios.delete(`http://localhost:7000/api/products/delete/${id}`);
+      //setProductData(productData.filter((p) => p.prodId !== id));
       setOpen(false);
+      fetchProducts();
     } catch (error) {
       console.error("Failed to delete the product", error);
     }
@@ -166,7 +180,7 @@ const ProductDataTable = () => {
           {successMessage}
         </p>
       )}
-      {/* <p style={{color:"green",fontSize:"16px",paddingLeft:"10px",paddingBottom:"8px"}}>successfully updated</p> */}
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -279,22 +293,38 @@ const ProductDataTable = () => {
                 <MenuItem value="kid">Kids</MenuItem>
               </Select>
             </FormControl>
-            {availableSizes.map((size) => (
-              <FormControlLabel
-                key={size}
-                control={
-                  <Checkbox
-                    checked={
-                      editProductData.sizes &&
-                      editProductData.sizes.includes(size)
-                    }
-                    onChange={() => handleSizeChange(size)}
-                    name={`size-${size}`}
-                  />
-                }
-                label={`Size ${size}`}
-              />
-            ))}
+
+            {/* Table to show sizes and quantities */}
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 450 }} aria-label="sizes table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">Size</TableCell>
+                    <TableCell align="center">Quantity</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {editProductData.sizes.map((size) => (
+                    <TableRow key={size.sizeId}>
+                      <TableCell align="center">{size.sizeName}</TableCell>
+                      <TableCell align="center">
+                        <TextField
+                          type="number"
+                          value={size.quantity}
+                          onChange={(e) =>
+                            handleSizeQuantityChange(
+                              size.sizeId,
+                              size.sizeName,
+                              parseInt(e.target.value)
+                            )
+                          }
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setEditOpen(false)}>Cancel</Button>
@@ -317,7 +347,10 @@ const ProductDataTable = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button onClick={() => handleDelete(editProductData.id)} autoFocus>
+          <Button
+            onClick={() => handleDelete(editProductData.prodId)}
+            autoFocus
+          >
             Delete
           </Button>
         </DialogActions>

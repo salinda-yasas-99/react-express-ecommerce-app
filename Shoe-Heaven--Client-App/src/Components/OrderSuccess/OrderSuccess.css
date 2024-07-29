@@ -24,3 +24,45 @@
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 } */
+
+
+
+/* OrderSuccess.css */
+.order-success-container {
+  text-align: center;
+  margin-top: 50px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.success-icon {
+  font-size: 50px;
+  color: green;
+  margin-bottom: 20px;
+}
+
+h1 {
+  color: #333;
+}
+
+p {
+  color: #555;
+}
+
+.home-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.home-button:hover {
+  background-color: #0056b3;
+}
+
