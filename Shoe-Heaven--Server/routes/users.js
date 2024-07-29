@@ -7,17 +7,33 @@ const path = require("path");
 
 router.get(
   "/getAllUsers/:role",
-  // authController.accessAuthorizeAdmin,
+  authController.accessAuthorizeOrder,
   userController.getAllUsers
 );
-router.post("/register/user", userController.addNewUser);
-router.post("/register/admin", userController.addNewAdmin);
+router.post(
+  "/register/user",
+  authController.accessAuthorizeAdmin,
+  userController.addNewUser
+);
+router.post(
+  "/register/admin",
+  authController.accessAuthorizeAdmin,
+  userController.addNewAdmin
+);
 router.delete(
   "/delete/:Id",
-  // authController.accessAuthorizeAdmin,
+  authController.accessAuthorizeAdmin,
   userController.deleteUser
 );
-router.put("/update/:userId", userController.updateUserDetails);
+router.put(
+  "/update/:userId",
+  authController.accessAuthorizeAdmin,
+  userController.updateUserDetails
+);
 
-router.get("/userdetails/:userId", userController.getUserById);
+router.get(
+  "/userdetails/:userId",
+  authController.accessAuthorizeUser,
+  userController.getUserById
+);
 module.exports = router;

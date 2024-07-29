@@ -27,8 +27,15 @@ const StaffDataTable = () => {
 
   const handleDelete = async (userIdToDelete) => {
     if (userIdToDelete) {
+      const authToken = localStorage.getItem("access_token");
       try {
-        const response = await axios.delete(
+        const authAxios = axios.create({
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          withCredentials: true,
+        });
+        const response = await authAxios.delete(
           `http://localhost:7000/api/users/delete/${userIdToDelete}`
         );
         console.log(response.data);
@@ -81,23 +88,24 @@ const StaffDataTable = () => {
                 <TableCell align="center">{staff.address}</TableCell>
                 <TableCell align="center">{staff.email}</TableCell>
                 <TableCell align="center">
-                  {staff.role !== "admin" ? (
-                    <button
-                      style={{
-                        border: "1px solid red",
-                        color: "red",
-                        background: "white",
-                        borderRadius: "5px",
-                        padding: "10px 15px",
-                        fontWeight: "500",
-                      }}
-                      onClick={() => handleDelete(staff.uid)}
-                    >
-                      Delete
-                    </button>
+                  <button
+                    style={{
+                      border: "1px solid red",
+                      color: "red",
+                      background: "white",
+                      borderRadius: "5px",
+                      padding: "10px 15px",
+                      fontWeight: "500",
+                    }}
+                    onClick={() => handleDelete(staff.uid)}
+                  >
+                    Delete
+                  </button>
+                  {/* {staff.role !== "admin" ? (
+                   
                   ) : (
                     <span style={{ color: "grey" }}>Not Allowed</span>
-                  )}
+                  )} */}
                 </TableCell>
               </TableRow>
             ))}

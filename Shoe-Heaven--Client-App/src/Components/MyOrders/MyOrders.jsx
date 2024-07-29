@@ -8,8 +8,16 @@ const MyOrders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       const uid = localStorage.getItem("uid");
+      const authToken = localStorage.getItem("access_token");
       try {
-        const response = await axios.get(
+        const authAxios = axios.create({
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          withCredentials: true,
+        });
+
+        const response = await authAxios.get(
           `http://localhost:7000/api/orders/userOrders/${uid}`
         );
         setOrders(response.data);
@@ -27,7 +35,7 @@ const MyOrders = () => {
       <p>View your pending, delivered orders here.</p>
       <div className="orders-list">
         {orders.length > 0 ? (
-          orders.map((order,index) => (
+          orders.map((order, index) => (
             <div key={index} className="order-item">
               <div className="order-header">
                 <div className="order-id">
@@ -48,15 +56,13 @@ const MyOrders = () => {
                       />
                       <div className="item-info">
                         <p className="item-name">{item.productName}</p>
-                       
+
                         <p className="item-size">Size: {item.sizeName}</p>
                         <p className="item-qty">Qty: {item.qty}</p>
                       </div>
                       <div className="item-status">
-                     
                         <p className="status-label">Status:</p>
-                        <p className="status">delivered</p>
-                        
+                        <p className="status">{item.status}</p>
                       </div>
                     </div>
                   ))}

@@ -10,7 +10,15 @@ const ShopCategory = (props) => {
   const [displayCount, setDisplayCount] = useState(6); // Start by showing 6 products
 
   useEffect(() => {
-    axios
+    const authToken = localStorage.getItem("access_token");
+    const authAxios = axios.create({
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+      withCredentials: true,
+    });
+
+    authAxios
       .get("http://localhost:7000/api/products/getAllProducts")
       .then((response) => {
         setProducts(response.data);

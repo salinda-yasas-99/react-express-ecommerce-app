@@ -80,7 +80,11 @@ exports.accessAuthorizeUser = async (req, res, next) => {
 
     if (userDb) {
       console.log(`User found: ${JSON.stringify(userDb)}`);
-      if (userDb.role === "user" || userDb.role === "admin") {
+      if (
+        userDb.role === "user" ||
+        userDb.role === "admin" ||
+        userDb.role === "order-manager"
+      ) {
         return next();
       } else {
         console.error("You are unauthorized to perform this action");
@@ -147,6 +151,7 @@ exports.accessAuthorizeAdmin = async (req, res, next) => {
 //order-manager authorize
 exports.accessAuthorizeOrder = async (req, res, next) => {
   let jwtToken;
+  console.log("access -order");
 
   if (
     req.headers.authorization &&
@@ -172,7 +177,7 @@ exports.accessAuthorizeOrder = async (req, res, next) => {
 
     if (user) {
       console.log(`User found: ${user}`);
-      if (user.role === "order-manger") {
+      if (user.role === "order-manager" || user.role === "admin") {
         return next();
       } else {
         console.error("You are unauthorized to perform this action");
