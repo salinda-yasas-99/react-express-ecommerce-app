@@ -12,7 +12,7 @@ router.post(
 );
 router.get(
   "/getAllProducts",
-  authController.accessAuthorizeUser,
+  //authController.accessAuthorizeUser,
   productController.getAllProducts
 );
 router.get(

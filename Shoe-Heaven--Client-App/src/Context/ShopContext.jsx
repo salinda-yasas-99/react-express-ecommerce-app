@@ -7,22 +7,46 @@ const ShopContextProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
 
+  // useEffect(() => {
+  //   const authToken = localStorage.getItem("access_token");
+  //   const authAxios = axios.create({
+  //     headers: {
+  //       Authorization: `Bearer ${authToken}`,
+  //     },
+  //     withCredentials: true,
+  //   });
+
+  //   authAxios
+  //     .get("http://localhost:7000/api/products/getAllProducts")
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       setProducts(response.data);
+  //     })
+  //     .catch((error) => console.error("Error fetching products:", error));
+  // }, []);
   useEffect(() => {
     const authToken = localStorage.getItem("access_token");
-    const authAxios = axios.create({
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-      withCredentials: true,
-    });
 
-    authAxios
-      .get("http://localhost:7000/api/products/getAllProducts")
-      .then((response) => {
-        console.log(response.data);
-        setProducts(response.data);
-      })
-      .catch((error) => console.error("Error fetching products:", error));
+    try {
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+
+      authAxios
+        .get("http://localhost:7000/api/products/getAllProducts")
+        .then((response) => {
+          console.log(response.data);
+          setProducts(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching products:", error);
+        });
+    } catch (error) {
+      console.error("An unexpected error occurred:", error);
+    }
   }, []);
 
   const addToCart = (itemId, sizeId) => {
