@@ -39,7 +39,7 @@ const Sidebar = () => {
           <Link to="/dashboard/users" style={{ textDecoration: "none" }}>
             <li>
               <PersonOutlineIcon className="icon" />
-              <span>Users</span>
+              <span>Customers</span>
             </li>
           </Link>
           <Link to="/dashboard/products" style={{ textDecoration: "none" }}>
@@ -61,10 +61,12 @@ const Sidebar = () => {
             </li>
           </Link>
           <p className="title">Services</p>
+          <Link to="/dashboard/stock-prediction" style={{ textDecoration: "none" }}>
           <li>
             <InsertChartIcon className="icon" />
             <span>Stock Prediction</span>
           </li>
+          </Link>
           <li>
             <CreditCardIcon className="icon" />
             <span>Payments</span>

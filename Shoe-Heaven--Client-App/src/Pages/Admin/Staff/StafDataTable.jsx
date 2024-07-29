@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -42,9 +43,23 @@ const StaffDataTable = () => {
 
   return (
     <div className="staff-management">
-      <h2 style={{ padding: "20px 0 30px", color: "green" }}>
-        Staff Management
-      </h2>
+      <h2 style={{ padding: "20px 0 30px" }}>Staff Management</h2>
+      <div className="add-member">
+        <Link
+          to="/dashboard/staff/new"
+          style={{
+            textDecoration: "none",
+            color: "green",
+            fontSize: "16px",
+            border: "1px solid green",
+            padding: "5px",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Add New
+        </Link>
+      </div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="staff table">
           <TableHead>
@@ -66,7 +81,7 @@ const StaffDataTable = () => {
                 <TableCell align="center">{staff.address}</TableCell>
                 <TableCell align="center">{staff.email}</TableCell>
                 <TableCell align="center">
-                  {staff.role !== "Admin" ? (
+                  {staff.role !== "admin" ? (
                     <button
                       style={{
                         border: "1px solid red",
