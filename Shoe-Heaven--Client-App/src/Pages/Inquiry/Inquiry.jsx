@@ -47,6 +47,7 @@ const Inquiry = () => {
     // }
     try {
       console.log("this is inq", inquiry);
+
       const response = await axios.post(
         "http://localhost:7000/api/inqueries/add",
         inquiry

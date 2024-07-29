@@ -10,8 +10,17 @@ const Product = () => {
   const { productId } = useParams();
 
   const fetchProducts = async () => {
+    const authToken = localStorage.getItem("access_token");
+
     try {
-      const response = await axios.get(
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+
+      const response = await authAxios.get(
         "http://localhost:7000/api/products/getAllProducts"
       );
       console.log(response.data);
@@ -27,9 +36,17 @@ const Product = () => {
 
   const fetchFeedbacks = async (productId) => {
     if (!productId) return;
+    const authToken = localStorage.getItem("access_token");
 
     try {
-      const response = await axios.get(
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+
+      const response = await authAxios.get(
         `http://localhost:7000/api/feedbacks/get/${productId}`
       );
       console.log("fetch feedbacks", response.data);

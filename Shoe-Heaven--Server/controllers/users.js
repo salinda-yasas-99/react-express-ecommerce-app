@@ -52,6 +52,7 @@ exports.addNewAdmin = async (req, res, next) => {
   try {
     const username = req.body.username;
     const email = req.body.email;
+    const role = req.body.role;
     const Address = req.body.Address;
     const password = req.body.password;
     const contactNumber = req.body.contactNumber;
@@ -62,7 +63,7 @@ exports.addNewAdmin = async (req, res, next) => {
       data: {
         email,
         username,
-        role: "admin",
+        role,
         password: hashedPassword,
         contactNumber,
         Address,

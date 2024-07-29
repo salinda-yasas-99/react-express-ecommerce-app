@@ -33,3 +33,22 @@ exports.getAllInquiry = async (req, res, next) => {
     res.status(500).send("Error fetching inquries");
   }
 };
+
+exports.deleteInquiry = async (req, res, next) => {
+  let inqId;
+  try {
+    inqId = parseInt(req.params.Id);
+
+    const deleteInq = await prisma.Inquiry.delete({
+      where: {
+        InqId: inqId,
+      },
+    });
+
+    res.status(200).json({ message: "inquiry deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    console.log(`Attempting to delete user with ID: ${userId}`);
+    res.status(500).send("Error deleting user");
+  }
+};

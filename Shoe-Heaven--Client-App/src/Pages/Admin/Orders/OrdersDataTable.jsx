@@ -19,8 +19,15 @@ const OrdersDataTable = () => {
   }, []);
 
   const fetchOrders = async () => {
+    const authToken = localStorage.getItem("access_token");
     try {
-      const response = await axios.get(
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+      const response = await authAxios.get(
         `http://localhost:7000/api/orders/getAllOrders`
       );
       console.log(response);
@@ -39,11 +46,18 @@ const OrdersDataTable = () => {
       )
     );
     console.log(`Order ${orderId} status changed to Approved`);
+    const authToken = localStorage.getItem("access_token");
     try {
       const data = {
         status: "Delivered",
       };
-      const response = await axios.put(
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+      const response = await authAxios.put(
         `http://localhost:7000/api/orders/statusUpdate/${orderId}`,
         data
       );

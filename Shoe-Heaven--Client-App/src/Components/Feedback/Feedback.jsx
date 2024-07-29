@@ -20,6 +20,7 @@ const Feedback = ({ productId }) => {
     //   return;
     // }
     const uid = localStorage.getItem("uid");
+    const authToken = localStorage.getItem("access_token");
 
     try {
       const feedbackObj = {
@@ -29,7 +30,14 @@ const Feedback = ({ productId }) => {
         userID: parseInt(uid),
       };
       console.log("this is feed", feedbackObj);
-      const response = await axios.post(
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+
+      const response = await authAxios.post(
         "http://localhost:7000/api/feedbacks/add",
         feedbackObj
       );
