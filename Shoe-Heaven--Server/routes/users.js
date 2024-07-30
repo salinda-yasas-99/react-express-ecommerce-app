@@ -12,7 +12,7 @@ router.get(
 );
 router.post(
   "/register/user",
-  authController.accessAuthorizeAdmin,
+
   userController.addNewUser
 );
 router.post(
