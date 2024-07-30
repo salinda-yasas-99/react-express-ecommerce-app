@@ -27,6 +27,7 @@ const Sidebar = () => {
       localStorage.removeItem("access_token");
       localStorage.removeItem("uid");
       localStorage.removeItem("username");
+      localStorage.removeItem("role");
       navigate("/dashboard/adminLogin");
     }
   }

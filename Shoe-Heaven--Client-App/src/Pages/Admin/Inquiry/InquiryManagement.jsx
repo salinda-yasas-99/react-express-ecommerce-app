@@ -154,6 +154,11 @@ const InquiryManagement = () => {
                 <TableCell align="center">
                   <Button
                     onClick={() => {
+                      const role = localStorage.getItem("role");
+                      if (role == "order-manager") {
+                        alert("You are not authorized to perform this action");
+                        return;
+                      }
                       setOpen(true);
                       setSelectedInq(inq);
                     }}

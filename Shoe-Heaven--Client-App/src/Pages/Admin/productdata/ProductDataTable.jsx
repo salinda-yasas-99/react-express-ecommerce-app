@@ -146,10 +146,16 @@ const ProductDataTable = () => {
 
   const handleDelete = async (id) => {
     // Retrieve the authentication token from local storage
+    const role = localStorage.getItem("role");
+    if (role == "order-manager") {
+      alert("You are not authorized to perform this action");
+      return;
+    }
     const authToken = localStorage.getItem("access_token"); // Adjust 'authToken' based on your application's naming convention
 
     try {
       // Include the Authorization header with the retrieved token
+      
       const authAxios = axios.create({
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -210,6 +216,11 @@ const ProductDataTable = () => {
                   <Button onClick={() => handleEditOpen(product)}>Edit</Button>
                   <Button
                     onClick={() => {
+                      const role = localStorage.getItem("role");
+                      if (role == "order-manager") {
+                        alert("You are not authorized to perform this action");
+                        return;
+                      }
                       setOpen(true);
                       setEditProductData(product);
                     }}
@@ -341,6 +352,7 @@ const ProductDataTable = () => {
       )}
 
       <Dialog
+      
         open={open}
         onClose={() => setOpen(false)}
         aria-labelledby="alert-dialog-title"
