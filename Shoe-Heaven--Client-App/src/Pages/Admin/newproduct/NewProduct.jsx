@@ -148,7 +148,13 @@ const NewProduct = ({ title }) => {
         console.log(productWithImage);
         const authToken = localStorage.getItem("access_token");
         // Post to your products API endpoint
-        const productResponse = await authToken.post(
+        const authAxios = axios.create({
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          withCredentials: true,
+        });
+        const productResponse = await authAxios.post(
           "http://localhost:7000/api/products/addProduct",
           productWithImage
         );
