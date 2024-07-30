@@ -5,7 +5,7 @@ exports.getAllOrders = async (req, res, next) => {
   try {
     // Step 1: Fetch all orders and order them by date
     const orders = await prisma.order.findMany({
-      orderBy: { date: "asc" },
+      orderBy: { date: "desc" },
     });
 
     // Step 2: Extract unique product and size IDs from order items

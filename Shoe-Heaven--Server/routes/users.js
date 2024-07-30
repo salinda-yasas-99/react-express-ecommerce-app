@@ -12,7 +12,7 @@ router.get(
 );
 router.post(
   "/register/user",
-  authController.accessAuthorizeAdmin,
+
   userController.addNewUser
 );
 router.post(
@@ -27,7 +27,7 @@ router.delete(
 );
 router.put(
   "/update/:userId",
-  authController.accessAuthorizeAdmin,
+  authController.accessAuthorizeUser,
   userController.updateUserDetails
 );
 
