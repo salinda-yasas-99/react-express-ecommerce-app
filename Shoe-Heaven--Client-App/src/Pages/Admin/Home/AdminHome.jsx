@@ -116,10 +116,10 @@ const AdminHome = () => {
           <Featured />
           <Chart data={data} />
         </div>
-        <div className="listContainer">
+        {/* <div className="listContainer">
           <div className="listTitle">Recent Orders</div>
           <Table />
-        </div>
+        </div> */}
       </div>
     </div>
   );

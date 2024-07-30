@@ -49,7 +49,7 @@ const LoginSignup = () => {
           <input type="text" placeholder="Address" name="Address"  onChange={handleChange}  required/>
           <input type="email" placeholder="Email" name="email"  onChange={handleChange} required/>
           <input type="text" placeholder="contact number"  name="contactNumber"   onChange={handleChange} required/>
-          <input type="text" placeholder="Password" name="password"  onChange={handleChange} required />
+          <input type="password" placeholder="Password" name="password"  onChange={handleChange} required />
         </form>
 
         <div className="register-footer">

@@ -67,10 +67,6 @@ const Sidebar = () => {
             <span>Stock Prediction</span>
           </li>
           </Link>
-          <li>
-            <CreditCardIcon className="icon" />
-            <span>Payments</span>
-          </li>
 
           <Link
             to="/dashboard/manage/inquiry"

@@ -16,7 +16,7 @@ const Widget = ({ type, count }) => {
   switch (type) {
     case "user":
       data = {
-        title: "USERS",
+        title: "CUSTOMERS",
         count: count,
         isMoney: false,
         link: "See all users",
@@ -87,7 +87,7 @@ const Widget = ({ type, count }) => {
       <div className="left">
         <span className="title">{data.title}</span>
         <span className="counter">{data.count}</span>
-        <span className="link">See all users</span>
+        <span className="link">See all {data.title}</span>
       </div>
       <div className="right">
         <div className="percentage positive">

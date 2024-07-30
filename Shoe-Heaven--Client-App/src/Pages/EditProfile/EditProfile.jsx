@@ -46,7 +46,7 @@ const EditProfile = () => {
         inputs
       ); // Adjust the endpoint as needed
       setSuccessMessage("Profile updated successfully!");
-      setTimeout(() => navigate("/profile"), 2000); // Redirect to profile page or another page
+      // setTimeout(() => navigate("/"), 2000); // Redirect to profile page or another page
     } catch (err) {
       console.log(err);
       setError(err.response.data);
