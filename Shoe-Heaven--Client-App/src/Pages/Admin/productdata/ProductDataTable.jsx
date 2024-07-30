@@ -66,6 +66,12 @@ const ProductDataTable = () => {
   };
 
   const handleEditOpen = (product) => {
+    const role = localStorage.getItem("role");
+    if (role == "order-manager") {
+      alert("You are not authorized to perform this action");
+      return;
+    }
+
     setEditProductData({
       ...product,
       sizes: product.sizes,
@@ -75,6 +81,7 @@ const ProductDataTable = () => {
 
   const handleUpdateProduct = async () => {
     console.log("Updating product with data:", editProductData);
+
     const authToken = localStorage.getItem("access_token");
     try {
       const updatedProductData = {

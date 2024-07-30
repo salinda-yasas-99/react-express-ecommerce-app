@@ -132,6 +132,7 @@ const Navbar = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("uid");
     localStorage.removeItem("username");
+    localStorage.removeItem("role");
     setUsername("");
     setIsLoggedIn(false);
     setIsDropdownVisible(false);

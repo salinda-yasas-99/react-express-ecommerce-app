@@ -39,6 +39,7 @@ const AdminLogin = () => {
         localStorage.setItem("access_token", token);
         localStorage.setItem("uid", decodedToken.userId);
         localStorage.setItem("username", decodedToken.username);
+        localStorage.setItem("role", decodedToken.role);
         console.log(decodedToken);
         setSuccessMessage("Login successful!");
         setTimeout(() => navigate("/dashboard"), 2000);
@@ -76,7 +77,8 @@ const AdminLogin = () => {
         <button onClick={handleSubmit}>Login</button>
 
         <span>
-          Don't you have an Account? <Link to="/dashboard/adminRegister">Register</Link>
+          Don't you have an Account?{" "}
+          <Link to="/dashboard/adminRegister">Register</Link>
         </span>
       </form>
     </div>
