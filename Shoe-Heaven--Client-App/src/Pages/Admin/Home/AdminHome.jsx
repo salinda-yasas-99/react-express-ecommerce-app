@@ -188,12 +188,10 @@ const AdminHome = () => {
           <Featured />
           <Chart data={data} />
         </div>
-        {/* <div className="listContainer">
+        <div className="listContainer">
           <div className="listTitle">Recent Orders</div>
           <Table orders={currentOrders} />
         </div>
-          <Table />
-        </div> */}
       </div>
     </div>
   );
