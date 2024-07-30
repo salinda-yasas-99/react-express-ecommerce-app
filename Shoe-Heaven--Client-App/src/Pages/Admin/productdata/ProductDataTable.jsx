@@ -31,31 +31,39 @@ const ProductDataTable = () => {
   const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:7000/api/products/getAllProducts"
-        );
-        // const response = await axios.get(
-        //   "http://localhost:7000/api/products/getAllProducts",
-        //   { headers: { Authorization: `Bearer ${token}` } }
-        // );
-        console.log("Fetched products:", response.data);
-        const updatedProductData = response.data.map((product) => ({
-          ...product,
-          sizes: product.sizeItems.map((sizeItem) => ({
-            sizeId: sizeItem.sizeId,
-            sizeName: sizeItem.sizeName,
-            quantity: sizeItem.quantity,
-          })),
-        }));
-        setProductData(updatedProductData);
-      } catch (error) {
-        console.error("Error fetching products", error);
-      }
-    };
     fetchProducts();
   }, []);
+
+  const fetchProducts = async () => {
+    const authToken = localStorage.getItem("access_token");
+    try {
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+      const response = await authAxios.get(
+        "http://localhost:7000/api/products/getAllProducts"
+      );
+      // const response = await axios.get(
+      //   "http://localhost:7000/api/products/getAllProducts",
+      //   { headers: { Authorization: `Bearer ${token}` } }
+      // );
+      console.log("Fetched products:", response.data);
+      const updatedProductData = response.data.map((product) => ({
+        ...product,
+        sizes: product.sizeItems.map((sizeItem) => ({
+          sizeId: sizeItem.sizeId,
+          sizeName: sizeItem.sizeName,
+          quantity: sizeItem.quantity,
+        })),
+      }));
+      setProductData(updatedProductData);
+    } catch (error) {
+      console.error("Error fetching products", error);
+    }
+  };
 
   const handleEditOpen = (product) => {
     setEditProductData({
@@ -67,6 +75,7 @@ const ProductDataTable = () => {
 
   const handleUpdateProduct = async () => {
     console.log("Updating product with data:", editProductData);
+    const authToken = localStorage.getItem("access_token");
     try {
       const updatedProductData = {
         ...editProductData,
@@ -81,7 +90,13 @@ const ProductDataTable = () => {
         description: updatedProductData.description,
         sizeItems: updatedProductData.sizes,
       };
-      const response = await axios.put(
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+      const response = await authAxios.put(
         `http://localhost:7000/api/products/update/${editProductData.prodId}`,
         updateObj
       );
@@ -123,10 +138,21 @@ const ProductDataTable = () => {
   };
 
   const handleDelete = async (id) => {
+    // Retrieve the authentication token from local storage
+    const authToken = localStorage.getItem("access_token"); // Adjust 'authToken' based on your application's naming convention
+
     try {
-      await axios.delete(`http://localhost:7000/api/products/delete/${id}`);
-      setProductData(productData.filter((p) => p.prodId !== id));
+      // Include the Authorization header with the retrieved token
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+      await authAxios.delete(`http://localhost:7000/api/products/delete/${id}`);
+      //setProductData(productData.filter((p) => p.prodId !== id));
       setOpen(false);
+      fetchProducts();
     } catch (error) {
       console.error("Failed to delete the product", error);
     }

@@ -48,8 +48,15 @@ const Datatable = (props) => {
 
   const handleDelete = async () => {
     if (userIdToDelete) {
+      const authToken = localStorage.getItem("access_token");
       try {
-        const response = await axios.delete(
+        const authAxios = axios.create({
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          withCredentials: true,
+        });
+        const response = await authAxios.delete(
           `http://localhost:7000/api/users/delete/${userIdToDelete}`
         );
         console.log(response.data);

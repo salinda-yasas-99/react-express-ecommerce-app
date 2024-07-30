@@ -19,8 +19,15 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const uid = localStorage.getItem("uid");
+      const authToken = localStorage.getItem("access_token");
       try {
-        const response = await axios.get(
+        const authAxios = axios.create({
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          withCredentials: true,
+        });
+        const response = await authAxios.get(
           `http://localhost:7000/api/users/userdetails/${uid}`
         );
         setInputs(response.data);
@@ -40,8 +47,15 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const uid = localStorage.getItem("uid");
+    const authToken = localStorage.getItem("access_token");
     try {
-      const response = await axios.put(
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+      const response = await authAxios.put(
         `http://localhost:7000/api/users/update/${uid}`,
         inputs
       ); // Adjust the endpoint as needed

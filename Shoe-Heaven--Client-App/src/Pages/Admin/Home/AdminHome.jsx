@@ -13,10 +13,20 @@ const AdminHome = () => {
   const [products, setProducts] = useState(0);
   const [inquiry, setInquiry] = useState(0);
   const [data, setData] = useState([]);
+  const [currentOrders, setCurrentOrders] = useState([]);
 
   const fetchChartData = async () => {
+    const authToken = localStorage.getItem("access_token");
+
     try {
-      const response = await axios.get(
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+
+      const response = await authAxios.get(
         `http://localhost:7000/api/orders/monthlyOrders`
       );
       console.log("fetch feedbacks", response.data);
@@ -28,9 +38,40 @@ const AdminHome = () => {
     }
   };
 
-  const fetchUsers = async () => {
+  const fetchCurrentMonthOrders = async () => {
+    const authToken = localStorage.getItem("access_token");
+
     try {
-      const response = await axios.get(
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+
+      const response = await authAxios.get(
+        `http://localhost:7000/api/orders/currentOrders`
+      );
+      console.log("fetch orders", response.data);
+
+      setCurrentOrders(response.data);
+      //return response.data;
+    } catch (err) {
+      console.log("This is error", err);
+    }
+  };
+
+  const fetchUsers = async () => {
+    const authToken = localStorage.getItem("access_token");
+    try {
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+
+      const response = await authAxios.get(
         `http://localhost:7000/api/users/getAllUsers/user`
       );
       console.log("fetch feedbacks", response.data);
@@ -43,8 +84,17 @@ const AdminHome = () => {
   };
 
   const fetchOrder = async () => {
+    const authToken = localStorage.getItem("access_token");
+
     try {
-      const response = await axios.get(
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+
+      const response = await authAxios.get(
         `http://localhost:7000/api/orders/getAllOrders`
       );
       console.log("fetch feedbacks", response.data);
@@ -57,8 +107,17 @@ const AdminHome = () => {
   };
 
   const fetchProducts = async () => {
+    const authToken = localStorage.getItem("access_token");
+
     try {
-      const response = await axios.get(
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+
+      const response = await authAxios.get(
         `http://localhost:7000/api/products/getAllProducts`
       );
       console.log("fetch feedbacks", response.data);
@@ -71,8 +130,17 @@ const AdminHome = () => {
   };
 
   const fetchInquiry = async () => {
+    const authToken = localStorage.getItem("access_token");
+
     try {
-      const response = await axios.get(
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+
+      const response = await authAxios.get(
         `http://localhost:7000/api/inqueries/get`
       );
       console.log("fetch feedbacks", response.data);
@@ -101,6 +169,10 @@ const AdminHome = () => {
     fetchInquiry();
   }, []);
 
+  useEffect(() => {
+    fetchCurrentMonthOrders();
+  }, []);
+
   return (
     <div className="home">
       <Sidebar />
@@ -118,6 +190,8 @@ const AdminHome = () => {
         </div>
         {/* <div className="listContainer">
           <div className="listTitle">Recent Orders</div>
+          <Table orders={currentOrders} />
+        </div>
           <Table />
         </div> */}
       </div>
