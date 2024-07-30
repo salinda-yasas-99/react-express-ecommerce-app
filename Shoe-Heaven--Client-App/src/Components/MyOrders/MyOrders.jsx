@@ -62,7 +62,7 @@ const MyOrders = () => {
                       </div>
                       <div className="item-status">
                         <p className="status-label">Status:</p>
-                        <p className="status">{item.status}</p>
+                        <p className="status">{order.status}</p>
                       </div>
                     </div>
                   ))}
