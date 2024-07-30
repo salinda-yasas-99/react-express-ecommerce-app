@@ -38,7 +38,7 @@ export const getAllAdmins = async () => {
     });
 
     const response = await authAxios.get(
-      "http://localhost:7000/api/users/getAllUsers/admin"
+      "http://localhost:7000/api/users/getAdminAndOrderManagers"
     );
     //console.log(response);
     return response.data;

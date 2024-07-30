@@ -36,4 +36,11 @@ router.get(
   authController.accessAuthorizeUser,
   userController.getUserById
 );
+
+router.get(
+  "/getAdminAndOrderManagers",
+  authController.accessAuthorizeOrder,
+  userController.getAllAdminsAndOrderMangers
+);
+
 module.exports = router;
