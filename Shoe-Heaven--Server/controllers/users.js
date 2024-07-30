@@ -195,3 +195,32 @@ exports.getUserById = async (req, res, next) => {
     res.status(500).send("Error fetching user details");
   }
 };
+
+exports.getAllAdminsAndOrderMangers = async (req, res, next) => {
+  try {
+    // Define the roles you want to filter by
+    const targetRoles = ["admin", "order-manager"];
+
+    // Fetch all users who have one of the target roles
+    const users = await prisma.user.findMany({
+      where: {
+        OR: [{ role: "admin" }, { role: "order-manager" }],
+      },
+    });
+
+    // Exclude the password field from each user
+    const usersWithoutPasswords = users.map((user) => ({
+      uid: user.uid,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      address: user.address, // Ensure this matches the property name in your schema
+      contact: user.contactNumber,
+    }));
+
+    res.status(200).json(usersWithoutPasswords);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error fetching users");
+  }
+};
