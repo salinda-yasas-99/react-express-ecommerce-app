@@ -366,6 +366,24 @@ const ProductDataTable = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Cancel</Button>
+          {/* <Button
+            onClick={(event) => {
+              const userRole = localStorage.getItem("role");
+
+              if (userRole == "order-manager") {
+                // Prevent the default action (setting setOpen to false)
+                event.preventDefault();
+
+                console.log("Unauthorized access attempt");
+                alert("Access denied");
+                // Return early to stop execution
+                return;
+              }
+
+              // If the role is not 'orderManager', proceed with closing the modal/dialog
+              setOpen(false);
+            }}
+          ></Button> */}
           <Button
             onClick={() => handleDelete(editProductData.prodId)}
             autoFocus
