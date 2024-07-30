@@ -27,7 +27,7 @@ router.delete(
 );
 router.put(
   "/update/:userId",
-  authController.accessAuthorizeAdmin,
+  authController.accessAuthorizeUser,
   userController.updateUserDetails
 );
 
