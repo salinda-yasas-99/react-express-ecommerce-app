@@ -34,7 +34,7 @@ const ProductDataTable = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [isViewMoreDialogOpen, setIsViewMoreDialogOpen] = useState(false);
   const [availableSizesAndQuantities, setAvailableSizesAndQuantities] =
-    useState();
+    useState({});
 
   useEffect(() => {
     fetchProducts();
@@ -422,9 +422,9 @@ const ProductDataTable = () => {
         </DialogTitle>
         <DialogContent>
           <List>
-            {availableSizesAndQuantities.sizeItems.map((item) => (
+            {availableSizesAndQuantities.sizeItems?.map((item) => (
               <ListItem
-                key={item.size}
+                key={item.sizeId}
                 style={{ borderBottom: "1px solid #ddd", padding: "8px 16px" }}
               >
                 <Typography
