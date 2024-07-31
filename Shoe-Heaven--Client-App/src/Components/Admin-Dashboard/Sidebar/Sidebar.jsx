@@ -15,9 +15,22 @@ import ReviewsIcon from "@mui/icons-material/Reviews";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import ShoppingCartCheckoutRoundedIcon from "@mui/icons-material/ShoppingCartCheckoutRounded";
 import HelpCenterRoundedIcon from "@mui/icons-material/HelpCenterRounded";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const logout = () =>{
+    const confirmLogout = window.confirm("Are you sure you want to logout?");
+    
+    if (confirmLogout) {
+      
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("uid");
+      localStorage.removeItem("username");
+      localStorage.removeItem("role");
+      navigate("/dashboard/adminLogin");
+    }
+  }
   return (
     <div className="sidebar">
       <div className="top">
@@ -87,7 +100,7 @@ const Sidebar = () => {
             <AccountCircleOutlinedIcon className="icon" />
             <span>Profile</span>
           </li>
-          <li>
+          <li onClick={logout}>
             <ExitToAppIcon className="icon" />
             <span>Logout</span>
           </li>

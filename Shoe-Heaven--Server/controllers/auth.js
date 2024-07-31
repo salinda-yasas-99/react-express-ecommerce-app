@@ -42,7 +42,7 @@ exports.loginUser = async (req, res, next) => {
         email: user.email,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" } // Token expires in 1 hour
+      { expiresIn: "4h" } // Token expires in 1 hour
     );
 
     res.status(200).json({ token: `${token}` });

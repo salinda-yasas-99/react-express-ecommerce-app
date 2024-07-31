@@ -90,14 +90,21 @@ const OrdersDataTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order) => (
-              <OrderRow
-                key={order.orderId}
-                order={order}
-                changeStatus={changeStatus}
-                calculateTotalAmount={calculateTotalAmount}
-              />
-            ))}
+            {orders
+              .sort((a, b) => {
+               
+                const dateA = new Date(`${a.date} ${a.time}`);
+                const dateB = new Date(`${b.date} ${b.time}`);
+                return dateB - dateA; 
+              })
+              .map((order) => (
+                <OrderRow
+                  key={order.orderId}
+                  order={order}
+                  changeStatus={changeStatus}
+                  calculateTotalAmount={calculateTotalAmount}
+                />
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
