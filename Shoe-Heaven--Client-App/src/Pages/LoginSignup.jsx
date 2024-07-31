@@ -8,9 +8,9 @@ const LoginSignup = () => {
 
   const [inputs,setInputs] = useState({
     username:"",
-    address:"",
+    Address:"",
     email:"",
-    contact_number:"",
+    contactNumber:"",
     password:""
   })
 
@@ -24,8 +24,30 @@ const LoginSignup = () => {
     setError(null);
   }
 
+  const validateEmail = email => {
+    const emailPattern = /^\S+@\S+\.\S+$/;
+    return emailPattern.test(email);
+  };
+  
+
   const handleSubmit = async e =>{
     e.preventDefault()
+    if (!inputs.username || !inputs.Address || !inputs.email || !inputs.contactNumber || !inputs.password) {
+      setError("All fields are required.");
+      return;
+    }
+
+   
+    if (!validateEmail(inputs.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+   
+    if (!/^\d{10}$/.test(inputs.contactNumber)) {
+      setError("Contact number must be exactly 10 digits.");
+      return;
+    }
     try{
       console.log("work");
       const res = await axios.post("http://localhost:7000/api/users/register/user",inputs)
@@ -49,7 +71,7 @@ const LoginSignup = () => {
           <input type="text" placeholder="Address" name="Address"  onChange={handleChange}  required/>
           <input type="email" placeholder="Email" name="email"  onChange={handleChange} required/>
           <input type="text" placeholder="contact number"  name="contactNumber"   onChange={handleChange} required/>
-          <input type="text" placeholder="Password" name="password"  onChange={handleChange} required />
+          <input type="password" placeholder="Password" name="password"  onChange={handleChange} required />
         </form>
 
         <div className="register-footer">
