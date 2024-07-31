@@ -417,7 +417,7 @@ const ProductDataTable = () => {
         aria-describedby="sizes-dialog-description"
       >
         <DialogTitle id="sizes-dialog-title">
-          {/* {availableSizesAndQuantities.name} - Available Shoe Sizes and */}
+          {availableSizesAndQuantities.name} - Available Shoe Sizes and
           Quantities
         </DialogTitle>
         <DialogContent>
