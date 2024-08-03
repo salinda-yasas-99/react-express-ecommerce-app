@@ -34,8 +34,12 @@ router.post(
       }
 
       const now = new Date();
-      // const date = now.toISOString().split("T")[0];
-      const time = now.toTimeString().split(" ")[0];
+
+      // Format the date as a string (YYYY-MM-DD)
+      const dateString = now.toISOString();
+
+      // Format the time as a string (HH:MM:SS)
+      const timeString = now.toTimeString().split(" ")[0];
 
       const dateTime = now.toDateString();
 
@@ -43,8 +47,8 @@ router.post(
         data: {
           Total: parseInt(total),
           orderItems: items,
-          date: dateTime,
-          time: time,
+          date: dateString,
+          time: timeString,
           status: "Pending",
           user: {
             connect: {
