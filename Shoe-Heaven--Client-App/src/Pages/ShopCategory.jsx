@@ -4,10 +4,12 @@ import { ShopContext } from "../Context/ShopContext";
 import dropdown_icon from "../assets/dropdown_icon.png";
 import Item from "../Components/Item/Item";
 import axios from "axios";
+import { useLocation } from 'react-router-dom';
 
 const ShopCategory = (props) => {
   const [products, setProducts] = useState([]);
   const [displayCount, setDisplayCount] = useState(6); // Start by showing 6 products
+  const [sortOrder, setSortOrder] = useState('');
 
   useEffect(() => {
     const authToken = localStorage.getItem("access_token");
@@ -41,6 +43,31 @@ const ShopCategory = (props) => {
     (item) => item.category === props.category
   );
 
+  let location = useLocation();
+  useEffect(() => {
+    setSortOrder("");
+    console.log("work");
+   
+    
+  }, [location]);
+
+  const handleSortChange = (order) => {
+    setSortOrder(order);
+  };
+
+  const getSortedProducts = () => {
+    
+    let sortedProducts = [...categoryProducts];
+    if (sortOrder === 'asc') {
+      sortedProducts.sort((a, b) => a.new_price - b.new_price);
+    } else if (sortOrder === 'desc') {
+      sortedProducts.sort((a, b) => b.new_price - a.new_price);
+    }
+    return sortedProducts;
+  };
+
+  const sortedProducts = getSortedProducts();
+
   return (
     <div className="shop-category">
       <img className="shopcategory-banner" src={props.banner} alt="" />
@@ -51,12 +78,14 @@ const ShopCategory = (props) => {
           </span>{" "}
           out of {categoryProducts.length} products
         </p>
-        <div className="shopcategory-sort">
-          Sort by <img src={dropdown_icon} alt="" />
-        </div>
+         <select value={sortOrder} onChange={(e) => handleSortChange(e.target.value)} className="shopcategory-sort">
+          <option value="">Sort by</option>
+          <option value="asc">Sort by Price: Low to High</option>
+          <option value="desc">Sort by Price: High to Low</option>
+        </select>
       </div>
       <div className="shopcategory-products">
-        {categoryProducts.slice(0, displayCount).map((item, i) => (
+        {sortedProducts.slice(0, displayCount).map((item, i) => (
           <Item key={item.prodId} {...item} />
         ))}
       </div>

@@ -15,10 +15,10 @@ const Feedback = ({ productId }) => {
   };
 
   const handleSubmit = async () => {
-    // if (rating === 0 || comment.trim() === "") {
-    //   alert("Please provide both a rating and a comment.");
-    //   return;
-    // }
+    if (rating === 0 || comment.trim() === "") {
+      alert("Please provide both a rating and a comment.");
+      return;
+    }
     const uid = localStorage.getItem("uid");
     const authToken = localStorage.getItem("access_token");
 
