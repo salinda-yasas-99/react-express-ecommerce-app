@@ -19,7 +19,7 @@ const CartItems = () => {
   } = useContext(ShopContext);
 
   const KEY =
-    "pk_test_51PaDuRBIVEaofC0ue3h1UY5VBcfxvqlZqAhIkyQM0knpcQxs8MjKCbtcQPg0vSY8fueZx7ympxiogQNn6Lz8lXk200M92PL1Ai";
+    "pk_test_51PZDQYGtHEDchr7LN5VKrI4bTTedKBTYHe1KqSchbR8r8IteKIrjob2qLx71GnsjAQbp27jHd0vu0c2omHSxtE2C00MlvZAAUF";
 
   const userId = localStorage.getItem("uid");
 
