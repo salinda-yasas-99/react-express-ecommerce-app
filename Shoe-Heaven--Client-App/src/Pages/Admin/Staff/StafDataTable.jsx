@@ -8,19 +8,54 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Button,
+  Typography,
 } from "@mui/material";
+import Divider from "@mui/material/Divider";
+
 import { getAllAdmins } from "../../../Services/RestApiCalls";
 import axios from "axios";
 
 const StaffDataTable = () => {
-  // const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [staffData, setStaffData] = useState([]);
+  const [currentStaff, setCurrentStaff] = useState({
+    username: "JohnDoe",
+    email: "john@example.com",
+    password: "password123",
+    address: "123 Main St",
+    contact_number: "1234567890",
+  });
+
+  const [open, setOpen] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentStaff((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleOpenDialog = (staff) => {
+    setCurrentStaff(staff);
+    setOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpen(false);
+  };
 
   const fetchUsers = async () => {
     const users = await getAllAdmins();
     setStaffData(users);
     console.log("This is users", staffData);
   };
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -40,8 +75,6 @@ const StaffDataTable = () => {
         );
         console.log(response.data);
         fetchUsers();
-        // setOpen(false);
-        // window.location.reload();
       } catch (error) {
         console.error("Failed to delete user:", error);
       }
@@ -55,7 +88,6 @@ const StaffDataTable = () => {
       e.preventDefault();
     }
   };
-
 
   return (
     <div className="staff-management">
@@ -73,7 +105,7 @@ const StaffDataTable = () => {
             cursor: "pointer",
           }}
           onClick={handleAddNewStaffClick}
-         >
+        >
           Add New
         </Link>
       </div>
@@ -89,7 +121,7 @@ const StaffDataTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {staffData.map((staff,index) => (
+            {staffData.map((staff, index) => (
               <TableRow key={index}>
                 <TableCell component="th" scope="row">
                   {staff.username}
@@ -98,6 +130,19 @@ const StaffDataTable = () => {
                 <TableCell align="center">{staff.address}</TableCell>
                 <TableCell align="center">{staff.email}</TableCell>
                 <TableCell align="center">
+                  <button
+                    style={{
+                      border: "1px solid blue",
+                      color: "blue",
+                      background: "white",
+                      borderRadius: "5px",
+                      padding: "10px 15px",
+                      fontWeight: "500",
+                    }}
+                    onClick={() => handleOpenDialog(staff)}
+                  >
+                    Edit
+                  </button>
                   <button
                     style={{
                       border: "1px solid red",
@@ -111,17 +156,88 @@ const StaffDataTable = () => {
                   >
                     Delete
                   </button>
-                  {/* {staff.role !== "admin" ? (
-                   
-                  ) : (
-                    <span style={{ color: "grey" }}>Not Allowed</span>
-                  )} */}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Dialog open={open} onClose={handleCloseDialog}>
+        <DialogTitle style={{ textAlign: "center" }}>
+          Update Staff Details
+        </DialogTitle>
+
+        <DialogContent>
+          <Typography
+            variant="h6"
+            style={{ margin: "20px 0", fontWeight: "bold" }}
+          >
+            Login Credentials
+          </Typography>
+          <TextField
+            autoFocus
+            margin="dense"
+            name="email"
+            label="Email"
+            type="email"
+            fullWidth
+            value={currentStaff.email}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="password"
+            label="Password"
+            type="password"
+            fullWidth
+            value={currentStaff.password}
+            onChange={handleInputChange}
+          />
+
+          <Divider style={{ margin: "40px 0" }} />
+
+          <Typography
+            variant="h6"
+            style={{ margin: "20px 0", fontWeight: "bold" }}
+          >
+            Personal Information
+          </Typography>
+          <TextField
+            margin="dense"
+            name="username"
+            label="Username"
+            type="text"
+            fullWidth
+            value={currentStaff.username}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="address"
+            label="Address"
+            type="text"
+            fullWidth
+            value={currentStaff.address}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="contact_number"
+            label="Contact Number"
+            type="text"
+            fullWidth
+            value={currentStaff.contact_number}
+            onChange={handleInputChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleCloseDialog} color="primary">
+            Update
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
