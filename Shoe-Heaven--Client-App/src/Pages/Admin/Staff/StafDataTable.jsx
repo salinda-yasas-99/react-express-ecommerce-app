@@ -48,6 +48,15 @@ const StaffDataTable = () => {
     }
   };
 
+  const handleAddNewStaffClick = (e) => {
+    const role = localStorage.getItem("role");
+    if (role === "order-manager") {
+      alert("You are not authorized to perform this action");
+      e.preventDefault();
+    }
+  };
+
+
   return (
     <div className="staff-management">
       <h2 style={{ padding: "20px 0 30px" }}>Staff Management</h2>
@@ -63,7 +72,8 @@ const StaffDataTable = () => {
             borderRadius: "5px",
             cursor: "pointer",
           }}
-        >
+          onClick={handleAddNewStaffClick}
+         >
           Add New
         </Link>
       </div>
@@ -79,8 +89,8 @@ const StaffDataTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {staffData.map((staff) => (
-              <TableRow key={staff.id}>
+            {staffData.map((staff,index) => (
+              <TableRow key={index}>
                 <TableCell component="th" scope="row">
                   {staff.username}
                 </TableCell>
