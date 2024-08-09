@@ -80,10 +80,10 @@ const Sidebar = () => {
             <span>Stock Prediction</span>
           </li>
           </Link>
-          <li>
+          {/* <li>
             <CreditCardIcon className="icon" />
             <span>Payments</span>
-          </li>
+          </li> */}
 
           <Link
             to="/dashboard/manage/inquiry"
@@ -96,10 +96,10 @@ const Sidebar = () => {
           </Link>
 
           <p className="title">USER</p>
-          <li>
+          {/* <li>
             <AccountCircleOutlinedIcon className="icon" />
             <span>Profile</span>
-          </li>
+          </li> */}
           <li onClick={logout}>
             <ExitToAppIcon className="icon" />
             <span>Logout</span>

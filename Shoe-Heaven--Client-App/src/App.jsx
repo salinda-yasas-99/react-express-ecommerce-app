@@ -11,7 +11,6 @@ import Banner_kid from "../src/assets/Banner_kid.png";
 import ShopCategory from "./Pages/ShopCategory";
 import AdminHome from "./Pages/Admin/Home/AdminHome";
 import List from "./Pages/Admin/list/List";
-import New from "./Pages/Admin/new/New";
 import { userInputs } from "./fromSource";
 import Product from "./Pages/Product";
 import Cart from "./Pages/Cart";
@@ -64,56 +63,36 @@ const App = () => {
           <Route path="/register" element={<LoginSignup />} />
           <Route path="/login" element={<LoginSignIn />} />
           <Route path="/dashboard/adminLogin" element={<AdminLogin />} />
-          <Route path="/dashboard/adminRegister"  element={<AdminRegister/>}/>
+          <Route path="/dashboard/adminRegister" element={<AdminRegister />} />
           <Route path="/dashboard">
             <Route index element={<AdminHome />}></Route>
             <Route path="users">
               <Route index element={<List />} />
-              <Route
-                path="new"
-                element={<New inputs={userInputs} title="Add New User" />}
-              />
             </Route>
             <Route path="products">
               <Route index element={<ProductList />} />
               <Route
                 path="new"
-                element={
-                  // <New inputs={productInputs} title="Add New Products" />
-                  <NewProduct title="Add New Products" />
-                }
+                element={<NewProduct title="Add New Products" />}
               />
             </Route>
 
             <Route path="orders">
               <Route index element={<OrdersList />} />
-              <Route
-                path="new"
-                element={
-                  // <New inputs={productInputs} title="Add New Products" />
-                  <NewProduct title="Orders" />
-                }
-              />
+              <Route path="new" element={<NewProduct title="Orders" />} />
             </Route>
 
             <Route path="staff">
-              <Route index element={<StaffList/>} />
-              <Route
-                path="new"
-                element={<StaffNew/>}
-              />
-              
+              <Route index element={<StaffList />} />
+              <Route path="new" element={<StaffNew />} />
             </Route>
 
-            
             <Route path="manage/inquiry">
-            <Route index element={<InquiryList/>} />
-              
+              <Route index element={<InquiryList />} />
             </Route>
 
             <Route path="stock-prediction">
-            <Route index element={<StockPredictionMain/>} />
-              
+              <Route index element={<StockPredictionMain />} />
             </Route>
           </Route>
         </Routes>

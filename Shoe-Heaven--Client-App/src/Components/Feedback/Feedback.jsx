@@ -15,12 +15,21 @@ const Feedback = ({ productId }) => {
   };
 
   const handleSubmit = async () => {
-    // if (rating === 0 || comment.trim() === "") {
-    //   alert("Please provide both a rating and a comment.");
-    //   return;
-    // }
     const uid = localStorage.getItem("uid");
     const authToken = localStorage.getItem("access_token");
+    if (!authToken) {
+      alert("Please log in");
+      setRating(0);
+      setHover(0);
+      setComment("");
+      return;
+    }
+
+    if (rating === 0 || comment.trim() === "") {
+      alert("Please provide both a rating and a comment.");
+      return;
+    }
+   
 
     try {
       const feedbackObj = {
@@ -86,3 +95,6 @@ const Feedback = ({ productId }) => {
 };
 
 export default Feedback;
+
+
+
