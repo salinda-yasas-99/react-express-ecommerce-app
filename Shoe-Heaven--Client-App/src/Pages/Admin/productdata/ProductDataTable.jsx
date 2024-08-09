@@ -20,6 +20,9 @@ import {
   FormControl,
   InputLabel,
   DialogContentText,
+  List,
+  ListItem,
+  Typography,
 } from "@mui/material";
 
 const ProductDataTable = () => {
@@ -29,6 +32,9 @@ const ProductDataTable = () => {
   const [editProductData, setEditProductData] = useState({});
   const availableSizes = [3, 4, 5, 6, 7, 8, 9, 10];
   const [successMessage, setSuccessMessage] = useState("");
+  const [isViewMoreDialogOpen, setIsViewMoreDialogOpen] = useState(false);
+  const [availableSizesAndQuantities, setAvailableSizesAndQuantities] =
+    useState({});
 
   useEffect(() => {
     fetchProducts();
@@ -66,6 +72,12 @@ const ProductDataTable = () => {
   };
 
   const handleEditOpen = (product) => {
+    const role = localStorage.getItem("role");
+    if (role == "order-manager") {
+      alert("You are not authorized to perform this action");
+      return;
+    }
+
     setEditProductData({
       ...product,
       sizes: product.sizes,
@@ -75,6 +87,7 @@ const ProductDataTable = () => {
 
   const handleUpdateProduct = async () => {
     console.log("Updating product with data:", editProductData);
+
     const authToken = localStorage.getItem("access_token");
     try {
       const updatedProductData = {
@@ -139,10 +152,16 @@ const ProductDataTable = () => {
 
   const handleDelete = async (id) => {
     // Retrieve the authentication token from local storage
+    const role = localStorage.getItem("role");
+    if (role == "order-manager") {
+      alert("You are not authorized to perform this action");
+      return;
+    }
     const authToken = localStorage.getItem("access_token"); // Adjust 'authToken' based on your application's naming convention
 
     try {
       // Include the Authorization header with the retrieved token
+
       const authAxios = axios.create({
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -156,6 +175,15 @@ const ProductDataTable = () => {
     } catch (error) {
       console.error("Failed to delete the product", error);
     }
+  };
+
+  const viewMore = (sizesAndQuantities) => {
+    setAvailableSizesAndQuantities(sizesAndQuantities);
+    setIsViewMoreDialogOpen(true);
+  };
+
+  const closeViewMore = () => {
+    setIsViewMoreDialogOpen(false);
   };
 
   return (
@@ -200,9 +228,17 @@ const ProductDataTable = () => {
                 <TableCell align="center">{product.name}</TableCell>
                 <TableCell align="right">{product.new_price}</TableCell>
                 <TableCell align="center">
+                  <Button variant="outlined" onClick={() => viewMore(product)}>
+                    View Details
+                  </Button>
                   <Button onClick={() => handleEditOpen(product)}>Edit</Button>
                   <Button
                     onClick={() => {
+                      const role = localStorage.getItem("role");
+                      if (role == "order-manager") {
+                        alert("You are not authorized to perform this action");
+                        return;
+                      }
                       setOpen(true);
                       setEditProductData(product);
                     }}
@@ -347,12 +383,65 @@ const ProductDataTable = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Cancel</Button>
+          {/* <Button
+            onClick={(event) => {
+              const userRole = localStorage.getItem("role");
+
+              if (userRole == "order-manager") {
+                // Prevent the default action (setting setOpen to false)
+                event.preventDefault();
+
+                console.log("Unauthorized access attempt");
+                alert("Access denied");
+                // Return early to stop execution
+                return;
+              }
+
+              // If the role is not 'orderManager', proceed with closing the modal/dialog
+              setOpen(false);
+            }}
+          ></Button> */}
           <Button
             onClick={() => handleDelete(editProductData.prodId)}
             autoFocus
           >
             Delete
           </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={isViewMoreDialogOpen}
+        onClose={closeViewMore}
+        aria-labelledby="sizes-dialog-title"
+        aria-describedby="sizes-dialog-description"
+      >
+        <DialogTitle id="sizes-dialog-title">
+          {availableSizesAndQuantities.name} - Available Shoe Sizes and
+          Quantities
+        </DialogTitle>
+        <DialogContent>
+          <List>
+            {availableSizesAndQuantities.sizeItems?.map((item) => (
+              <ListItem
+                key={item.sizeId}
+                style={{ borderBottom: "1px solid #ddd", padding: "8px 16px" }}
+              >
+                <Typography
+                  variant="body1"
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <span style={{ marginRight: "20px" }}>
+                    Size: {item.sizeName}
+                  </span>
+                  <span>Quantity: {item.quantity}</span>
+                </Typography>
+              </ListItem>
+            ))}
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeViewMore}>Close</Button>
         </DialogActions>
       </Dialog>
     </div>

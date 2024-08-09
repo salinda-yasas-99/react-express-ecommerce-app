@@ -304,23 +304,23 @@ exports.getCurrentMonthOrders = async (req, res, next) => {
     const endOfMonth = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth() + 1,
-      0
+      0,
+      23,
+      59,
+      59,
+      999
     );
 
-    // Convert the start and end dates to match the format stored in the database
-    const startOfMonthFormatted = startOfMonth.toDateString();
-    const endOfMonthFormatted = endOfMonth.toDateString();
-
     // Log the date range for debugging
-    console.log("Start of month:", startOfMonthFormatted);
-    console.log("End of month:", endOfMonthFormatted);
+    console.log("Start of month:", startOfMonth);
+    console.log("End of month:", endOfMonth);
 
     // Fetch all orders for the current month and order them by date
     const orders = await prisma.order.findMany({
       where: {
         date: {
-          gte: startOfMonthFormatted,
-          lte: endOfMonthFormatted,
+          gte: startOfMonth,
+          lte: endOfMonth,
         },
       },
       orderBy: { date: "asc" },
@@ -549,45 +549,83 @@ exports.getOrdersByUserId = async (req, res, next) => {
   }
 };
 
+// exports.getTotalOrdersByMonth = async (req, res, next) => {
+//   try {
+//     // Fetch all orders
+//     const orders = await prisma.order.findMany();
+
+//     // Initialize an array with placeholders for each month from January to July
+//     const monthlyTotals = Array.from({ length: 7 }, (_, i) => ({
+//       name: new Date(2024, i, 1).toLocaleString("default", { month: "long" }),
+//       Total: 0,
+//     }));
+
+//     // Calculate totals for each month
+//     const currentDate = new Date();
+//     const startOfMonth = new Date(
+//       currentDate.getFullYear(),
+//       currentDate.getMonth(),
+//       1
+//     );
+
+//     for (let order of orders) {
+//       const orderDate = new Date(order.date);
+//       for (let month = 0; month < 7; month++) {
+//         const startOfCurrentMonth = new Date(
+//           startOfMonth.getFullYear(),
+//           month,
+//           1
+//         );
+//         const endOfCurrentMonth = new Date(
+//           startOfCurrentMonth.getFullYear(),
+//           startOfCurrentMonth.getMonth() + 1,
+//           0
+//         );
+
+//         if (orderDate >= startOfCurrentMonth && orderDate < endOfCurrentMonth) {
+//           // Increment the total for the month this order belongs to
+//           monthlyTotals[month].Total++;
+//           break; // Exit the loop once the month is found
+//         }
+//       }
+//     }
+
+//     // Return the results
+//     res.status(200).json(monthlyTotals);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Error fetching monthly order totals");
+//   }
+// };
+
 exports.getTotalOrdersByMonth = async (req, res, next) => {
   try {
-    // Fetch all orders
-    const orders = await prisma.order.findMany();
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
 
-    // Initialize an array with placeholders for each month from January to July
-    const monthlyTotals = Array.from({ length: 7 }, (_, i) => ({
-      name: new Date(2024, i, 1).toLocaleString("default", { month: "long" }),
+    // Fetch all orders for the current year
+    const orders = await prisma.order.findMany({
+      where: {
+        date: {
+          gte: new Date(`${currentYear}-01-01`),
+          lte: new Date(`${currentYear}-12-31T23:59:59.999Z`),
+        },
+      },
+    });
+
+    // Initialize an array for each month of the current year
+    const monthlyTotals = Array.from({ length: 12 }, (_, i) => ({
+      name: new Date(currentYear, i, 1).toLocaleString("default", {
+        month: "long",
+      }),
       Total: 0,
     }));
 
     // Calculate totals for each month
-    const currentDate = new Date();
-    const startOfMonth = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      1
-    );
-
     for (let order of orders) {
       const orderDate = new Date(order.date);
-      for (let month = 0; month < 7; month++) {
-        const startOfCurrentMonth = new Date(
-          startOfMonth.getFullYear(),
-          month,
-          1
-        );
-        const endOfCurrentMonth = new Date(
-          startOfCurrentMonth.getFullYear(),
-          startOfCurrentMonth.getMonth() + 1,
-          0
-        );
-
-        if (orderDate >= startOfCurrentMonth && orderDate < endOfCurrentMonth) {
-          // Increment the total for the month this order belongs to
-          monthlyTotals[month].Total++;
-          break; // Exit the loop once the month is found
-        }
-      }
+      const month = orderDate.getMonth(); // Get the month index (0 for January, 11 for December)
+      monthlyTotals[month].Total++; // Increment the total for the month this order belongs to
     }
 
     // Return the results

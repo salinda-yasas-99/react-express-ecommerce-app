@@ -14,6 +14,7 @@ const AdminHome = () => {
   const [inquiry, setInquiry] = useState(0);
   const [data, setData] = useState([]);
   const [currentOrders, setCurrentOrders] = useState([]);
+  const [currentOrdersLength, setCurrentOrdersLength] = useState([]);
 
   const fetchChartData = async () => {
     const authToken = localStorage.getItem("access_token");
@@ -55,6 +56,7 @@ const AdminHome = () => {
       console.log("fetch orders", response.data);
 
       setCurrentOrders(response.data);
+      setCurrentOrdersLength(response.data.length);
       //return response.data;
     } catch (err) {
       console.log("This is error", err);
@@ -177,7 +179,10 @@ const AdminHome = () => {
     <div className="home">
       <Sidebar />
       <div className="homeContainer">
-        <h1>Welcome {localStorage.getItem("username")}</h1>
+        <h1>
+          Welcome {localStorage.getItem("username")}{" "}
+          {localStorage.getItem("role")}
+        </h1>
         <div className="widgets">
           <Widget type="user" count={users} />
           <Widget type="order" count={orders} />
@@ -185,7 +190,7 @@ const AdminHome = () => {
           <Widget type="inquiry" count={inquiry} />
         </div>
         <div className="charts">
-          <Featured />
+          <Featured count={currentOrdersLength} />
           <Chart data={data} />
         </div>
         <div className="listContainer">

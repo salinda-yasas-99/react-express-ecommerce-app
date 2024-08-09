@@ -10,11 +10,7 @@ router.get(
   authController.accessAuthorizeOrder,
   userController.getAllUsers
 );
-router.post(
-  "/register/user",
-
-  userController.addNewUser
-);
+router.post("/register/user", userController.addNewUser);
 router.post(
   "/register/admin",
   authController.accessAuthorizeAdmin,
@@ -36,4 +32,11 @@ router.get(
   authController.accessAuthorizeUser,
   userController.getUserById
 );
+
+router.get(
+  "/getAdminAndOrderManagers",
+  authController.accessAuthorizeOrder,
+  userController.getAllAdminsAndOrderMangers
+);
+
 module.exports = router;

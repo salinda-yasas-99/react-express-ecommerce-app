@@ -157,8 +157,8 @@ exports.updateProductById = async (req, res, next) => {
     const name = req.body.name;
     const imageUrl = req.body.imageUrl;
     const category = req.body.category;
-    const new_price = req.body.new_price;
-    const old_price = req.body.old_price;
+    const new_price = parseInt(req.body.new_price);
+    const old_price = parseInt(req.body.old_price);
     const sizeItems = req.body.sizeItems;
     const description = req.body.description;
 
