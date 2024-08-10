@@ -27,6 +27,12 @@ router.put(
   userController.updateUserDetails
 );
 
+router.put(
+  "/updateAdmin/:userId",
+  authController.accessAuthorizeAdmin,
+  userController.updateAdminUser
+);
+
 router.get(
   "/userdetails/:userId",
   authController.accessAuthorizeUser,
