@@ -68,13 +68,13 @@ const Datatable = (props) => {
     }
   };
 
+
+
   return (
     <div className="datatable">
       <div className="datatableTitle">
-        Add New User
-        <Link to="/dashboard/users/new" className="link">
-          Add New
-        </Link>
+        Customers
+       
       </div>
 
       <TableContainer component={Paper}>
@@ -120,7 +120,7 @@ const Datatable = (props) => {
                     gap: "10px",
                   }}
                 >
-                  <button
+                  {/* <button
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -134,7 +134,7 @@ const Datatable = (props) => {
                     }}
                   >
                     Update
-                  </button>
+                  </button> */}
                   <button
                     onClick={() => handleClickOpen(user.uid)}
                     style={{

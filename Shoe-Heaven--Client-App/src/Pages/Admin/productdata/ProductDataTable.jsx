@@ -186,11 +186,19 @@ const ProductDataTable = () => {
     setIsViewMoreDialogOpen(false);
   };
 
+  const handleAddNewProductClick = (e) => {
+    const role = localStorage.getItem("role");
+    if (role === "order-manager") {
+      alert("You are not authorized to perform this action");
+      e.preventDefault();
+    }
+  };
+
   return (
     <div className="datatable">
       <div className="datatableTitle">
         Add New Product
-        <Link to="/dashboard/products/new" className="link">
+        <Link to="/dashboard/products/new" className="link" onClick={handleAddNewProductClick}>
           Add New
         </Link>
       </div>

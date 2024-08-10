@@ -29,6 +29,14 @@ const MyOrders = () => {
     fetchOrders();
   }, []);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); 
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   return (
     <div className="my-orders">
       <h2>My Orders</h2>
@@ -41,7 +49,7 @@ const MyOrders = () => {
                 <div className="order-id">
                   <span>Order</span> <a href="#">{order.orderId}</a>
                 </div>
-                <div className="order-date">Order Placed: {order.date}</div>
+                <div className="order-date">Order Placed: {formatDate(order.date)}</div>
 
                 <div className="order-date">Order time: {order.time}</div>
               </div>
