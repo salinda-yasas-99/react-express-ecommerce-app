@@ -40,7 +40,7 @@ export const getAllAdmins = async () => {
     const response = await authAxios.get(
       "http://localhost:7000/api/users/getAdminAndOrderManagers"
     );
-    //console.log(response);
+    console.log(response);
     return response.data;
   } catch (err) {
     console.log({ err: `${err}` });
