@@ -6,6 +6,25 @@
     flex: 6;
     padding-left: 200px;
   }
+
+  .user-designation{
+    display: flex;
+    align-items: center;
+    padding: 20px 20px 5px;
+    justify-content: start;
+    text-transform: capitalize;
+    
+  }
+  .user-designation span{
+    font-weight:600;
+    color: #6439ff;
+  }
+
+  .user-designation h3{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
   
   .home .homeContainer .widgets,
   .home .homeContainer .charts {

@@ -118,7 +118,7 @@ const InquiryManagement = () => {
   // ];
 
   return (
-    <div className="inquiry management">
+    <div className="inquiry-management">
       <div className="datatableTitle">Inquiries</div>
 
       {successMessage && (

@@ -1,22 +1,25 @@
 import "./Featured.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
+
+import Order_Image from '../../../assets/Orders_Image.jpg';
 
 const Featured = ({ count }) => {
   return (
     <div className="featured">
       <div className="top">
-        <h1 className="title">Total This Month Orders</h1>
+        <h1 className="title">This Month Order Summary</h1>
         <MoreVertIcon fontSize="small" />
       </div>
       <div className="bottom">
         <div className="featuredChart">
+          <img src={Order_Image} alt="" />
           {/* <CircularProgressbar value={count} text={count} strokeWidth={5} /> */}
-          {"This is total this month orders"}
-          <span style={{ color: "red" }}>{count}</span>
+          <div className="orders-count">
+
+         Orders recieved so far&nbsp;:
+          <span style={{ color: "green",fontSize:"20px" ,marginLeft:"10px"}}>{count}</span>
+          </div>
         </div>
         {/* <p className="bottomTitle">Total sales made in this month</p> */}
         {/* <p className="amount">Rs:27000</p> */}

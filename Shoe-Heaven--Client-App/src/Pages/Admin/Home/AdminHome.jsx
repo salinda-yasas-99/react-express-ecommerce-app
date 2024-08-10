@@ -179,10 +179,14 @@ const AdminHome = () => {
     <div className="home">
       <Sidebar />
       <div className="homeContainer">
-        <h1>
-          Welcome {localStorage.getItem("username")}{" "}
-          {localStorage.getItem("role")}
-        </h1>
+        <div className="user-designation">
+          <h3>
+           <p>Welcome</p>  {localStorage.getItem("username")}
+           
+          </h3>
+          -
+          <span>{localStorage.getItem("role")}</span>
+        </div>
         <div className="widgets">
           <Widget type="user" count={users} />
           <Widget type="order" count={orders} />

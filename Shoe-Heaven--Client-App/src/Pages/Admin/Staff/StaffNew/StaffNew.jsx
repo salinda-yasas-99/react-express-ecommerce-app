@@ -46,7 +46,7 @@ const StaffNew = () => {
 
   return (
     <div className="staff-new-main">
-      {/* <Sidebar /> */}
+      <Sidebar />
       <h1>Add Member</h1>
 
       <div className="staff-new-container">
