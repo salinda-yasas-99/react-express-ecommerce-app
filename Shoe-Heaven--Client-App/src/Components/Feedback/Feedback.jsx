@@ -21,6 +21,13 @@ const Feedback = ({ productId }) => {
     // }
     const uid = localStorage.getItem("uid");
     const authToken = localStorage.getItem("access_token");
+    if (!authToken) {
+      alert("Please log in");
+      setRating(0);
+      setHover(0);
+      setComment("");
+      return;
+    }
 
     try {
       const feedbackObj = {
