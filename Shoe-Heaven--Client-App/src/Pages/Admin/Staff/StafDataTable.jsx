@@ -33,6 +33,75 @@ const StaffDataTable = () => {
 
   const [open, setOpen] = useState(false);
 
+  const [openCredentialsDialog, setOpenCredentialsDialog] = useState(false);
+  const [currentCredentials, setCurrentCredentials] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleCredentialsInputChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentCredentials((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleOpenCredentialsDialog = (staff) => {
+    setCurrentCredentials({
+      email: staff.email,
+      password: "",
+      confirmPassword: "",
+    });
+    setOpenCredentialsDialog(true);
+  };
+
+  const handleCloseCredentialsDialog = () => {
+    setOpenCredentialsDialog(false);
+  };
+
+  const validatePassword = () => {
+    if (currentCredentials.password !== currentCredentials.confirmPassword) {
+      alert("Passwords do not match. Please try again.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleUpdateCredentials = async () => {
+    if (!validatePassword()) {
+      return; // Stop the update if the passwords don't match
+    }
+
+    setOpenCredentialsDialog(false);
+    const authToken = localStorage.getItem("access_token");
+    const updatingCredentials = {
+      email: currentCredentials.email,
+      password: currentCredentials.password,
+    };
+
+    try {
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+
+      const response = await authAxios.put(
+        `http://localhost:7000/api/users/updateCredentials/${currentStaff.uid}`,
+        updatingCredentials
+      );
+
+      alert("Login credentials updated successfully!");
+      fetchUsers();
+    } catch (error) {
+      console.error("Error updating credentials:", error);
+      alert("Failed to update credentials");
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCurrentStaff((prev) => ({
@@ -178,6 +247,21 @@ const StaffDataTable = () => {
                   >
                     Edit
                   </button>
+
+                  <button
+                    style={{
+                      border: "1px solid green",
+                      color: "green",
+                      background: "white",
+                      borderRadius: "5px",
+                      padding: "10px 15px",
+                      fontWeight: "500",
+                    }}
+                    onClick={() => handleOpenCredentialsDialog(staff)}
+                  >
+                    Change
+                  </button>
+
                   <button
                     style={{
                       border: "1px solid red",
@@ -269,6 +353,52 @@ const StaffDataTable = () => {
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancel</Button>
           <Button onClick={handleUpdateDialog} color="primary">
+            Update
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Dialog for changing email and password */}
+      <Dialog
+        open={openCredentialsDialog}
+        onClose={handleCloseCredentialsDialog}
+      >
+        <DialogTitle>Update Login Credentials</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            name="email"
+            label="Email"
+            type="email"
+            fullWidth
+            value={currentCredentials.email}
+            onChange={handleCredentialsInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="password"
+            label="Password"
+            type="password"
+            fullWidth
+            value={currentCredentials.password}
+            onChange={handleCredentialsInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="confirmPassword"
+            label="Confirm Password"
+            type="password"
+            fullWidth
+            value={currentCredentials.confirmPassword}
+            onChange={handleCredentialsInputChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseCredentialsDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleUpdateCredentials} color="primary">
             Update
           </Button>
         </DialogActions>
