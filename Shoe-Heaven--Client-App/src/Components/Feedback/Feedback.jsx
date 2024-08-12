@@ -29,7 +29,6 @@ const Feedback = ({ productId }) => {
       alert("Please provide both a rating and a comment.");
       return;
     }
-   
 
     try {
       const feedbackObj = {
@@ -95,6 +94,3 @@ const Feedback = ({ productId }) => {
 };
 
 export default Feedback;
-
-
-

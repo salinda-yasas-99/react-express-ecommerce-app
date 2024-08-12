@@ -214,7 +214,7 @@ exports.getAllAdminsAndOrderMangers = async (req, res, next) => {
       username: user.username,
       email: user.email,
       role: user.role,
-      address: user.address, // Ensure this matches the property name in your schema
+      address: user.Address,
       contact: user.contactNumber,
     }));
 
@@ -224,3 +224,74 @@ exports.getAllAdminsAndOrderMangers = async (req, res, next) => {
     res.status(500).send("Error fetching users");
   }
 };
+
+exports.updateAdminUser = async (req, res) => {
+  const userId = req.params.userId;
+  const { email, password, username, address, contactNumber } = req.body;
+
+  // Check if password is provided
+  if (!password) {
+    return res.status(400).json({ message: "Password is required." });
+  }
+
+  try {
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Update the user details in the database
+    const updatedUser = await prisma.user.update({
+      where: { uid: parseInt(userId) },
+      data: {
+        email,
+        password: hashedPassword,
+        username,
+        Address: address,
+        contactNumber,
+      },
+    });
+
+    // Respond with the updated user information
+    res.status(200).json({
+      message: "User updated successfully",
+      // user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({
+      message: "Failed to update user",
+      error: error.message,
+    });
+  }
+};
+// exports.updateAdminUser = async (req, res) => {
+//   const userId = req.params.userId;
+//   const { email, password, username, address, contactNumber } = req.body;
+
+//   const hashedPassword = await bcrypt.hash(password, 10);
+
+//   try {
+//     // Update the user details in the database
+//     const updatedUser = await prisma.user.update({
+//       where: { uid: parseInt(userId) },
+//       data: {
+//         email,
+//         password: hashedPassword,
+//         username,
+//         Address: address,
+//         contactNumber,
+//       },
+//     });
+
+//     // Respond with the updated user information
+//     res.status(200).json({
+//       message: "User updated successfully",
+//       // user: updatedUser,
+//     });
+//   } catch (error) {
+//     console.error("Error updating user:", error);
+//     res.status(500).json({
+//       message: "Failed to update user",
+//       error: error.message,
+//     });
+//   }
+// };

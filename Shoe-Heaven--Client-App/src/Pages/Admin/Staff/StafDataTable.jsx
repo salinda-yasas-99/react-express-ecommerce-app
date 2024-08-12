@@ -24,11 +24,11 @@ import axios from "axios";
 const StaffDataTable = () => {
   const [staffData, setStaffData] = useState([]);
   const [currentStaff, setCurrentStaff] = useState({
-    username: "JohnDoe",
-    email: "john@example.com",
-    password: "password123",
-    address: "123 Main St",
-    contact_number: "1234567890",
+    email: "",
+    password: "",
+    username: "",
+    address: "",
+    contact: "",
   });
 
   const [open, setOpen] = useState(false);
@@ -48,6 +48,41 @@ const StaffDataTable = () => {
 
   const handleCloseDialog = () => {
     setOpen(false);
+  };
+
+  const handleUpdateDialog = async () => {
+    setOpen(false);
+    const authToken = localStorage.getItem("access_token");
+    console.log("this is current staff", currentStaff);
+    const id = currentStaff.uid;
+    const updatingUser = {
+      email: currentStaff.email,
+      password: currentStaff.password,
+      username: currentStaff.username,
+      address: currentStaff.address,
+      contactNumber: currentStaff.contact,
+    };
+    console.log("this is updated pass", updatingUser);
+    try {
+      const authAxios = axios.create({
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        withCredentials: true,
+      });
+
+      const response = await authAxios.put(
+        `http://localhost:7000/api/users/updateAdmin/${id}`,
+        updatingUser
+      );
+
+      //console.log(response.data);
+      alert("User updated successfully!");
+      fetchUsers();
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      alert("Failed to update user");
+    }
   };
 
   const fetchUsers = async () => {
@@ -223,17 +258,17 @@ const StaffDataTable = () => {
           />
           <TextField
             margin="dense"
-            name="contact_number"
+            name="contact"
             label="Contact Number"
             type="text"
             fullWidth
-            value={currentStaff.contact_number}
+            value={currentStaff.contact}
             onChange={handleInputChange}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleCloseDialog} color="primary">
+          <Button onClick={handleUpdateDialog} color="primary">
             Update
           </Button>
         </DialogActions>
