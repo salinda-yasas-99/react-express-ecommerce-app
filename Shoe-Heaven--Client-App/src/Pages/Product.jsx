@@ -39,14 +39,14 @@ const Product = () => {
     const authToken = localStorage.getItem("access_token");
 
     try {
-      const authAxios = axios.create({
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-        withCredentials: true,
-      });
+      // const authAxios = axios.create({
+      //   headers: {
+      //     Authorization: `Bearer ${authToken}`,
+      //   },
+      //   withCredentials: true,
+      // });
 
-      const response = await authAxios.get(
+      const response = await axios.get(
         `http://localhost:7000/api/feedbacks/get/${productId}`
       );
       console.log("fetch feedbacks", response.data);

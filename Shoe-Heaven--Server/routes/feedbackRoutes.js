@@ -12,7 +12,7 @@ router.post(
 );
 router.get(
   "/get/:Id",
-  authController.accessAuthorizeUser,
+  //authController.accessAuthorizeUser,
   feedbackController.getFeedbackByID
 );
 

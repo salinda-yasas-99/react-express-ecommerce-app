@@ -216,7 +216,7 @@ const NewProduct = ({ title }) => {
                 onChange={handleInputChange}
                 type="text"
                 name="prodId"
-                placeholder="MEN001/WOMEN001/KID001"
+                placeholder="MEN-001/WOMEN-001/KIDS-001"
                 required
               />
               {idError && <Alert severity="error">{idError}</Alert>}

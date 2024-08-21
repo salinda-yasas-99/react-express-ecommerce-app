@@ -138,7 +138,7 @@ const StockPrediction = () => {
     console.log(payload);
 
 
-    axios.post('https://9c59-34-125-238-189.ngrok-free.app/predict', payload)
+    axios.post('https://a870-34-106-47-216.ngrok-free.app/predict', payload)
       .then(response => {
         console.log('Prediction successful:', response.data);
         setPredictedValue(response.data.predictions[0])

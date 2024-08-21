@@ -7,7 +7,7 @@ import { jwtDecode } from "jwt-decode";
 
 const LoginSignIn = () => {
   const [inputs, setInputs] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -23,9 +23,9 @@ const LoginSignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!inputs.email.trim() || !inputs.password.trim()) {
-      setError("Please provide both Email and password.");
-      return; // Prevent the form from being submitted
+    if (!inputs.email || !inputs.password) {
+      setError("Both username and password are required.");
+      return;
     }
     try {
       const response = await axios.post(
