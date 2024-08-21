@@ -42,7 +42,12 @@ const LoginSignIn = () => {
         localStorage.setItem("role", decodedToken.role);
         console.log(decodedToken);
         setSuccessMessage("Login successful!");
-        setTimeout(() => navigate("/"), 2000);
+        setTimeout(() => {
+          navigate("/");
+          window.location.reload();
+        }, 2000);
+        
+       
       } else {
         setError("Failed to retrieve authentication token.");
       }

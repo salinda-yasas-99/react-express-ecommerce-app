@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Inquiry.css";
 import axios from "axios";
+import { FiPhoneIncoming, FiMail } from "react-icons/fi";
 
 const Inquiry = () => {
   const initialInquirydata = {
@@ -101,6 +102,19 @@ const Inquiry = () => {
           <button onClick={handleSubmit} className="inquiry-btn">
             Submit{" "}
           </button>
+        </div>
+      </div>
+      <div className="contactus">
+        <h3>Get in touch with us </h3>
+        <div className="contactus-card">
+          <div>
+            <FiPhoneIncoming className="contact-icon" />
+            <a href="tel:+94 77 440 9158" style={{color:"#000"}}>O77 440 9158</a>
+            
+          </div>
+          <div>
+          <FiMail className="contact-icon" /> shoeHeaven@gmail.com
+          </div>
         </div>
       </div>
     </div>

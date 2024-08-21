@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { getYear, addYears } from "date-fns";
-import axios from 'axios';
+import axios from "axios";
 
 const StockPrediction = () => {
   const shoeNames = [
@@ -63,11 +63,11 @@ const StockPrediction = () => {
 
   const sizes = [3, 4, 5, 6, 7, 8, 9, 10];
 
-  const [predictedValue, setPredictedValue] = useState('');
+  const [predictedValue, setPredictedValue] = useState("");
 
-  const [item_name, setItemName] = useState('');
-  const [shoe_category, setShoeCategory] = useState('');
-  const [shoe_size, setShoeSize] = useState('');
+  const [item_name, setItemName] = useState("");
+  const [shoe_category, setShoeCategory] = useState("");
+  const [shoe_size, setShoeSize] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [showMonthYearPicker, setShowMonthYearPicker] = useState(false);
 
@@ -86,7 +86,7 @@ const StockPrediction = () => {
     "December",
   ];
 
-  const years = Array.from({ length: 10 }, (_, index) =>
+  const years = Array.from({ length: 3 }, (_, index) =>
     getYear(addYears(new Date(), index))
   );
 
@@ -127,24 +127,26 @@ const StockPrediction = () => {
     const formattedMonth = months[monthIndex].slice(0, 3);
     const formattedYear = year.toString().slice(-2);
 
-
     const payload = {
-      shoe_category:[shoe_category],
-      item_name:[item_name],
-      shoe_size:[shoe_size],
-      sold_month: [`${formattedMonth}-${formattedYear}`]
-    }
+      shoe_category: [shoe_category],
+      item_name: [item_name],
+      shoe_size: [shoe_size],
+      sold_month: [`${formattedMonth}-${formattedYear}`],
+    };
 
     console.log(payload);
 
-
-    axios.post('https://a870-34-106-47-216.ngrok-free.app/predict', payload)
-      .then(response => {
-        console.log('Prediction successful:', response.data);
-        setPredictedValue(response.data.predictions[0])
+    axios
+      .post("https://cf36-34-139-178-147.ngrok-free.app/predict", payload)
+      .then((response) => {
+        console.log("Prediction successful:", response.data);
+        setPredictedValue(response.data.predictions[0]);
       })
-      .catch(error => {
-        console.error('There was an error making the prediction request:', error);
+      .catch((error) => {
+        console.error(
+          "There was an error making the prediction request:",
+          error
+        );
       });
   };
 
@@ -153,8 +155,14 @@ const StockPrediction = () => {
       <h2>Required Inventory Level</h2>
 
       <div className="stock-prediction-inputfileds">
-        <select name="shoe-select" className="shoe-select" onChange={handleShoeChange}>
-          <option value="" disabled selected>Select a shoe</option>
+        <select
+          name="shoe-select"
+          className="shoe-select"
+          onChange={handleShoeChange}
+        >
+          <option value="" disabled selected>
+            Select a shoe
+          </option>
           {shoeNames.map((shoeName, index) => (
             <option key={index} value={shoeName}>
               {shoeName}
@@ -162,15 +170,27 @@ const StockPrediction = () => {
           ))}
         </select>
 
-        <select name="category-select" className="category-select" onChange={handleCategoryChange}>
-          <option value="" disabled selected>Select a category</option>
+        <select
+          name="category-select"
+          className="category-select"
+          onChange={handleCategoryChange}
+        >
+          <option value="" disabled selected>
+            Select a category
+          </option>
           <option value="men">Men</option>
           <option value="women">Women</option>
           <option value="kids">Kids</option>
         </select>
 
-        <select name="size-select" className="size-select" onChange={handleSizeChange}>
-          <option value="" disabled selected>Select a size</option>
+        <select
+          name="size-select"
+          className="size-select"
+          onChange={handleSizeChange}
+        >
+          <option value="" disabled selected>
+            Select a size
+          </option>
           {sizes.map((size) => (
             <option key={size} value={size}>
               {size}
@@ -220,7 +240,16 @@ const StockPrediction = () => {
         </div>
       </div>
       <button onClick={handlePredictClick}>Predict</button>
-      {predictedValue !=="" && <div>Predicted Value: {predictedValue}</div>}
+      {predictedValue !== "" && (
+        <div>
+          <p>
+            Based on the selected {item_name} in the {shoe_category} category,
+            size {shoe_size}, the predicted stock requirement for
+            {months[startDate.getMonth()]}, {startDate.getFullYear()}
+            is estimated to be {predictedValue} units.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
