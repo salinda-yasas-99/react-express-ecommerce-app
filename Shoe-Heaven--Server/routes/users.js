@@ -33,6 +33,12 @@ router.put(
   userController.updateAdminUser
 );
 
+router.put(
+  "/updateAdmin/emailandPassword/:userId",
+  authController.accessAuthorizeAdmin,
+  userController.updateAdminUserEmailAndPassword
+);
+
 router.get(
   "/userdetails/:userId",
   authController.accessAuthorizeUser,

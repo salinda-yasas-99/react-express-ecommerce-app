@@ -49,11 +49,8 @@ const StaffDataTable = () => {
   };
 
   const handleOpenCredentialsDialog = (staff) => {
-    setCurrentCredentials({
-      email: staff.email,
-      password: "",
-      confirmPassword: "",
-    });
+    setCurrentCredentials(staff);
+    setCurrentStaff(staff);
     setOpenCredentialsDialog(true);
   };
 
@@ -73,6 +70,7 @@ const StaffDataTable = () => {
     if (!validatePassword()) {
       return; // Stop the update if the passwords don't match
     }
+    console.log("this is current staff", currentStaff);
 
     setOpenCredentialsDialog(false);
     const authToken = localStorage.getItem("access_token");
@@ -80,6 +78,9 @@ const StaffDataTable = () => {
       email: currentCredentials.email,
       password: currentCredentials.password,
     };
+
+    console.log("This is updating 1234", updatingCredentials);
+    console.log("This is current staff user id", currentStaff.uid);
 
     try {
       const authAxios = axios.create({
@@ -90,11 +91,18 @@ const StaffDataTable = () => {
       });
 
       const response = await authAxios.put(
-        `http://localhost:7000/api/users/updateCredentials/${currentStaff.uid}`,
+        `http://localhost:7000/api/users/updateAdmin/emailandPassword/${currentStaff.uid}`,
         updatingCredentials
       );
 
       alert("Login credentials updated successfully!");
+      setCurrentStaff({
+        email: "",
+        password: "",
+        username: "",
+        address: "",
+        contact: "",
+      });
       fetchUsers();
     } catch (error) {
       console.error("Error updating credentials:", error);
@@ -126,7 +134,7 @@ const StaffDataTable = () => {
     const id = currentStaff.uid;
     const updatingUser = {
       email: currentStaff.email,
-      password: currentStaff.password,
+      // password: currentStaff.password,
       username: currentStaff.username,
       address: currentStaff.address,
       contactNumber: currentStaff.contact,
@@ -148,6 +156,13 @@ const StaffDataTable = () => {
       //console.log(response.data);
       alert("User updated successfully!");
       fetchUsers();
+      setCurrentStaff({
+        email: "",
+        password: "",
+        username: "",
+        address: "",
+        contact: "",
+      });
     } catch (error) {
       console.error("Error submitting feedback:", error);
       alert("Failed to update user");
@@ -304,7 +319,7 @@ const StaffDataTable = () => {
             value={currentStaff.email}
             onChange={handleInputChange}
           />
-          <TextField
+          {/* <TextField
             margin="dense"
             name="password"
             label="Password"
@@ -312,7 +327,7 @@ const StaffDataTable = () => {
             fullWidth
             value={currentStaff.password}
             onChange={handleInputChange}
-          />
+          /> */}
 
           <Divider style={{ margin: "40px 0" }} />
 

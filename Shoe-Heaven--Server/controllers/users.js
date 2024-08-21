@@ -227,23 +227,22 @@ exports.getAllAdminsAndOrderMangers = async (req, res, next) => {
 
 exports.updateAdminUser = async (req, res) => {
   const userId = req.params.userId;
-  const { email, password, username, address, contactNumber } = req.body;
+  const { email, username, address, contactNumber } = req.body;
 
   // Check if password is provided
-  if (!password) {
-    return res.status(400).json({ message: "Password is required." });
-  }
+  // if (!password) {
+  //   return res.status(400).json({ message: "Password is required." });
+  // }
 
   try {
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    //const hashedPassword = await bcrypt.hash(password, 10);
 
     // Update the user details in the database
     const updatedUser = await prisma.user.update({
       where: { uid: parseInt(userId) },
       data: {
         email,
-        password: hashedPassword,
         username,
         Address: address,
         contactNumber,
@@ -253,6 +252,37 @@ exports.updateAdminUser = async (req, res) => {
     // Respond with the updated user information
     res.status(200).json({
       message: "User updated successfully",
+      // user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({
+      message: "Failed to update user",
+      error: error.message,
+    });
+  }
+};
+
+exports.updateAdminUserEmailAndPassword = async (req, res) => {
+  const userId = req.params.userId;
+  const { email, password } = req.body;
+
+  try {
+    //Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Update the user details in the database
+    const updatedUser = await prisma.user.update({
+      where: { uid: parseInt(userId) },
+      data: {
+        email,
+        password: hashedPassword,
+      },
+    });
+
+    // Respond with the updated user information
+    res.status(200).json({
+      message: "User details updated successfully",
       // user: updatedUser,
     });
   } catch (error) {
