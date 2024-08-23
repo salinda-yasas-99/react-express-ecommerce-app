@@ -82,10 +82,10 @@ const Datatable = (props) => {
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell align="right">Username</TableCell>
-              <TableCell align="right">Address</TableCell>
-              <TableCell align="right">Email</TableCell>
-              <TableCell align="right">Contact No</TableCell>
+              <TableCell align="center">Username</TableCell>
+              <TableCell align="center">Address</TableCell>
+              <TableCell align="center">Email</TableCell>
+              <TableCell align="center">Contact No</TableCell>
               <TableCell align="center">Action</TableCell>
             </TableRow>
           </TableHead>
