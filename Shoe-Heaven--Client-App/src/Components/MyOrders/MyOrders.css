@@ -50,13 +50,12 @@
     border-bottom: 1px solid #ddd;
   }
   
-  .order-footer {
-    padding-top: 10px;
-    border-top: 1px solid #ddd;
-  }
+
   
   .order-id {
-    font-size: 1.2em;
+    font-size: 14px;
+    display: flex;
+    gap: 2px;
   }
   
   .order-id a {
@@ -148,5 +147,14 @@
     font-size: 1.5em;
     font-weight: bold;
     color: #333;
+  }
+
+  .order-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
   }
   

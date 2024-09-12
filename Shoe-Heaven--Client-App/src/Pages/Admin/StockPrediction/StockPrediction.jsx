@@ -3,6 +3,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { getYear, addYears } from "date-fns";
 import axios from "axios";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+
 
 const StockPrediction = () => {
   const shoeNames = [
@@ -64,6 +67,7 @@ const StockPrediction = () => {
   const sizes = [3, 4, 5, 6, 7, 8, 9, 10];
 
   const [predictedValue, setPredictedValue] = useState("");
+  const[ResultProbability,setResultProbability] = useState("");
 
   const [item_name, setItemName] = useState("");
   const [shoe_category, setShoeCategory] = useState("");
@@ -137,10 +141,12 @@ const StockPrediction = () => {
     console.log(payload);
 
     axios
-      .post("https://cf36-34-139-178-147.ngrok-free.app/predict", payload)
+      .post("https://dfa2-35-185-27-112.ngrok-free.app/predict", payload)
       .then((response) => {
         console.log("Prediction successful:", response.data);
         setPredictedValue(response.data.predictions[0]);
+        const parsedProbability = parseFloat(response.data.probability);
+        setResultProbability(parsedProbability);
       })
       .catch((error) => {
         console.error(
@@ -150,104 +156,138 @@ const StockPrediction = () => {
       });
   };
 
+  const handleResetClick = () => {
+    setPredictedValue("");
+    setResultProbability("");
+    setItemName("");
+    setShoeCategory("");
+    setShoeSize("");
+    setStartDate(new Date());
+  };
+  
+
   return (
     <div className="stock-prediction">
-      <h2>Required Inventory Level</h2>
+      <div className="stock-prediction-container">
+        <h2>Required Inventory Level</h2>
 
-      <div className="stock-prediction-inputfileds">
-        <select
-          name="shoe-select"
-          className="shoe-select"
-          onChange={handleShoeChange}
-        >
-          <option value="" disabled selected>
-            Select a shoe
-          </option>
-          {shoeNames.map((shoeName, index) => (
-            <option key={index} value={shoeName}>
-              {shoeName}
-            </option>
-          ))}
-        </select>
-
-        <select
-          name="category-select"
-          className="category-select"
-          onChange={handleCategoryChange}
-        >
-          <option value="" disabled selected>
-            Select a category
-          </option>
-          <option value="men">Men</option>
-          <option value="women">Women</option>
-          <option value="kids">Kids</option>
-        </select>
-
-        <select
-          name="size-select"
-          className="size-select"
-          onChange={handleSizeChange}
-        >
-          <option value="" disabled selected>
-            Select a size
-          </option>
-          {sizes.map((size) => (
-            <option key={size} value={size}>
-              {size}
-            </option>
-          ))}
-        </select>
-
-        <div className="calendar-selector">
-          <button onClick={handleTogglePicker}>
-            {months[startDate.getMonth()]} {startDate.getFullYear()}
-          </button>
-
-          {showMonthYearPicker && (
-            <DatePicker
-              selected={startDate}
-              onChange={handleDateChange}
-              dateFormat="MMMM yyyy"
-              showMonthYearPicker
-              showFullMonthYearPicker
-              inline
-            />
-          )}
-
+        <div className="stock-prediction-inputfileds">
           <select
-            name="year-select"
-            value={startDate.getFullYear()}
-            onChange={handleYearChange}
+            name="shoe-select"
+            className="shoe-select"
+            onChange={handleShoeChange}
+            value={item_name}
           >
-            {years.map((year) => (
-              <option key={year} value={year}>
-                {year}
+            <option value="" disabled selected>
+              Select a shoe
+            </option>
+            {shoeNames.map((shoeName, index) => (
+              <option key={index} value={shoeName}>
+                {shoeName}
               </option>
             ))}
           </select>
 
           <select
-            name="month-select"
-            value={months[startDate.getMonth()]}
-            onChange={handleMonthChange}
+            name="category-select"
+            className="category-select"
+            onChange={handleCategoryChange}
+            value={shoe_category}
           >
-            {months.map((month, index) => (
-              <option key={index} value={month}>
-                {month}
+            <option value="" disabled selected>
+              Select a category
+            </option>
+            <option value="men">Men</option>
+            <option value="women">Women</option>
+            <option value="kid">Kids</option>
+          </select>
+
+          <select
+            name="size-select"
+            className="size-select"
+            onChange={handleSizeChange}
+            value={shoe_size}
+          >
+            <option value="" disabled selected>
+              Select a size
+            </option>
+            {sizes.map((size) => (
+              <option key={size} value={size}>
+                {size}
               </option>
             ))}
           </select>
+
+          <div className="calendar-selector">
+            <button onClick={handleTogglePicker}>
+              {months[startDate.getMonth()]} {startDate.getFullYear()}
+            </button>
+
+            {showMonthYearPicker && (
+              <DatePicker
+                selected={startDate}
+                onChange={handleDateChange}
+                dateFormat="MMMM yyyy"
+                showMonthYearPicker
+                showFullMonthYearPicker
+                inline
+              />
+            )}
+
+            <select
+              name="year-select"
+              value={startDate.getFullYear()}
+              onChange={handleYearChange}
+            >
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+
+            <select
+              name="month-select"
+              value={months[startDate.getMonth()]}
+              onChange={handleMonthChange}
+            >
+              {months.map((month, index) => (
+                <option key={index} value={month}>
+                  {month}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
+        <button onClick={handlePredictClick}>Predict</button>
+        <button onClick={handleResetClick} style={{ marginTop: '10px' }}>Reset</button>
       </div>
-      <button onClick={handlePredictClick}>Predict</button>
+
       {predictedValue !== "" && (
-        <div>
+        <div className="predicted-message">
           <p>
-            Based on the selected {item_name} in the {shoe_category} category,
-            size {shoe_size}, the predicted stock requirement for
-            {months[startDate.getMonth()]}, {startDate.getFullYear()}
-            is estimated to be {predictedValue} units.
+            Based on the selected <span>{item_name}</span> in the <span>{shoe_category}</span> category,
+            size <span>{shoe_size}</span>,<b> the predicted stock requirement for
+            <span>{months[startDate.getMonth()]}, {startDate.getFullYear()}</span>
+            is estimated to be <span>{predictedValue}</span> units </b>.
           </p>
+          {/* <p> Confidence Score :{ResultProbability}</p> */}
+          
+          <div style={{ width: 100, height: 100, margin: "20px auto" }}>
+      <CircularProgressbar
+        value={ResultProbability}
+        text={`${ResultProbability.toFixed(2)}%`}
+        styles={buildStyles({
+          textSize: "16px",
+          pathColor: `rgba(62, 152, 199, ${ResultProbability / 100})`,
+          textColor: "#4caf50",
+          trailColor: "#d6d6d6",
+          backgroundColor: "#3e98c7",
+        })}
+      />
+    </div>
+    <h3 style={{ textAlign: "center" }}>Probability of the prediction being correct.</h3>
+         
         </div>
       )}
     </div>

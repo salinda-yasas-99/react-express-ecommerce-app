@@ -35,6 +35,8 @@ const ProductDataTable = () => {
   const [isViewMoreDialogOpen, setIsViewMoreDialogOpen] = useState(false);
   const [availableSizesAndQuantities, setAvailableSizesAndQuantities] =
     useState({});
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchProducts();
@@ -66,9 +68,20 @@ const ProductDataTable = () => {
         })),
       }));
       setProductData(updatedProductData);
+      setFilteredProducts(updatedProductData);
     } catch (error) {
       console.error("Error fetching products", error);
     }
+  };
+
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearchTerm(value);
+    setFilteredProducts(
+      productData.filter((product) =>
+        product.name.toLowerCase().includes(value)
+      )
+    );
   };
 
   const handleEditOpen = (product) => {
@@ -197,7 +210,25 @@ const ProductDataTable = () => {
   return (
     <div className="datatable">
       <div className="datatableTitle">
-        Add New Product
+         Products
+        <div className="search-product">
+        <input
+        type="text"
+        placeholder="Search  Product"
+        value={searchTerm}
+        onChange={handleSearch}
+        style={{
+            color: "#007bff",
+            fontSize: "12px",
+            border: "1px solid #007bff",
+            padding: "5px",
+            borderRadius: "50px",
+            margin:"5px 0px 20px"
+            
+          
+        }}
+      />
+        </div>
         <Link to="/dashboard/products/new" className="link" onClick={handleAddNewProductClick}>
           Add New
         </Link>
@@ -228,7 +259,7 @@ const ProductDataTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {productData.map((product) => (
+            {filteredProducts.map((product) => (
               <TableRow key={product.prodId}>
                 <TableCell component="th" scope="row">
                   {product.prodId}

@@ -198,7 +198,7 @@ const AdminHome = () => {
           <Chart data={data} />
         </div>
         <div className="listContainer">
-          <div className="listTitle">Recent Orders</div>
+          <div className="listTitle">Current Month Order Report</div>
           <Table orders={currentOrders} />
         </div>
       </div>

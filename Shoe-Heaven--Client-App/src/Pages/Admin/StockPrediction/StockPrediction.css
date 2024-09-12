@@ -11,19 +11,39 @@
 
   
 .stock-prediction {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     align-items: center;
     margin-top: 40px !important;
     justify-content: center;
     margin: 20px 0px;
-    padding: 20px;
+    padding: 20px 20px 40px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    width: 350px;
+    width: 70%;
     margin: auto;
     background-color: #f9f9f9;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    gap: 40px;
+    
+  }
+  
+  .stock-prediction-container{
+    display: flex;
+    flex-direction: column;
+    grid-column:  span 3;
+    
+  }
+
+  .predicted-message{
+    grid-column: span 2;
+    
+  }
+
+  .predicted-message span{
+    font-weight: 500;
+    color: #007bff;
+    margin: 0px 2px;
     
   }
   

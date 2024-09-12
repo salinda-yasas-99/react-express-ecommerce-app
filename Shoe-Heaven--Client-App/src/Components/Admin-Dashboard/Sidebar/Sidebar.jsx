@@ -15,6 +15,7 @@ import ReviewsIcon from "@mui/icons-material/Reviews";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import ShoppingCartCheckoutRoundedIcon from "@mui/icons-material/ShoppingCartCheckoutRounded";
 import HelpCenterRoundedIcon from "@mui/icons-material/HelpCenterRounded";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
@@ -30,6 +31,14 @@ const Sidebar = () => {
       navigate("/dashboard/adminLogin");
     }
   };
+
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
+    
+    const userRole = localStorage.getItem("role");
+    setRole(userRole);
+  }, []);
   return (
     <div className="sidebar">
       <div className="top">
@@ -73,6 +82,7 @@ const Sidebar = () => {
             </li>
           </Link>
           <p className="title">Services</p>
+          {role === "admin" && (
           <Link
             to="/dashboard/stock-prediction"
             style={{ textDecoration: "none" }}
@@ -82,6 +92,7 @@ const Sidebar = () => {
               <span>Stock Prediction</span>
             </li>
           </Link>
+        )}
           {/* <li>
             <CreditCardIcon className="icon" />
             <span>Payments</span>

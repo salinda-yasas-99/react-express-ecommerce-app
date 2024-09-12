@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from "react";
 import "./Datatable.css";
 import { Link } from "react-router-dom";
-import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,7 +9,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { getAllUsers } from "../../../Services/RestApiCalls";
-
 import {
   Dialog,
   DialogActions,
@@ -17,27 +16,45 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import axios from "axios";
 
 const Datatable = (props) => {
   const [usersArray, setUsersArray] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
       const users = await getAllUsers();
       setUsersArray(users);
-      console.log("This is users", usersArray);
-
-      console.log(usersArray);
+      setFilteredUsers(users); // Initialize with all users
     };
 
     fetchUsers();
   }, []);
 
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearchTerm(value);
+    setFilteredUsers(
+      usersArray.filter((user) =>
+        user.username.toLowerCase().includes(value)
+      )
+    );
+  };
+
   const handleClickOpen = (userId) => {
+    const role = localStorage.getItem("role");
+    if (role === "order-manager") {
+      setAlertOpen(true); // Show the alert
+      return;
+    }
     setOpen(true);
     setUserIdToDelete(userId);
   };
@@ -49,6 +66,7 @@ const Datatable = (props) => {
   const handleDelete = async () => {
     if (userIdToDelete) {
       const authToken = localStorage.getItem("access_token");
+
       try {
         const authAxios = axios.create({
           headers: {
@@ -68,14 +86,30 @@ const Datatable = (props) => {
     }
   };
 
-
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+  };
 
   return (
     <div className="datatable">
-      <div className="datatableTitle">
-        Customers
-       
-      </div>
+      <div className="datatableTitle">Customers</div>
+      
+      <input
+        type="text"
+        placeholder="Search by name"
+        value={searchTerm}
+        onChange={handleSearch}
+        style={{
+            color: "#007bff",
+            fontSize: "12px",
+            border: "1px solid #007bff",
+            padding: "5px",
+            borderRadius: "50px",
+            margin:"5px 0px 20px"
+            
+          
+        }}
+      />
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -90,9 +124,9 @@ const Datatable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {usersArray.map((user) => (
+            {filteredUsers.map((user) => (
               <TableRow
-                key={user.uid} // Assuming each user has a unique 'name' property
+                key={user.uid}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
@@ -120,21 +154,6 @@ const Datatable = (props) => {
                     gap: "10px",
                   }}
                 >
-                  {/* <button
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      border: "1px solid blue",
-                      color: "blue",
-                      background: "white",
-                      borderRadius: "5px",
-                      padding: "10px 15px",
-                      fontWeight: "500",
-                    }}
-                  >
-                    Update
-                  </button> */}
                   <button
                     onClick={() => handleClickOpen(user.uid)}
                     style={{
@@ -157,6 +176,18 @@ const Datatable = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleAlertClose} severity="warning">
+          You are not authorized to perform this action.
+        </Alert>
+      </Snackbar>
+
       <Dialog
         open={open}
         onClose={handleClose}
@@ -181,3 +212,7 @@ const Datatable = (props) => {
 };
 
 export default Datatable;
+
+
+
+

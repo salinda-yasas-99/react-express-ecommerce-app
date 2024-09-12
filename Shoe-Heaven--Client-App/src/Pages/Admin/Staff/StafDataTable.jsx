@@ -15,6 +15,8 @@ import {
   TextField,
   Button,
   Typography,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import Divider from "@mui/material/Divider";
 
@@ -40,6 +42,8 @@ const StaffDataTable = () => {
     confirmPassword: "",
   });
 
+  const [alertOpenCredentials, setAlertOpenCredentials] = useState(false);
+
   const handleCredentialsInputChange = (e) => {
     const { name, value } = e.target;
     setCurrentCredentials((prev) => ({
@@ -49,6 +53,11 @@ const StaffDataTable = () => {
   };
 
   const handleOpenCredentialsDialog = (staff) => {
+    const role = localStorage.getItem("role");
+  if (role === "order-manager") {
+    setAlertOpenCredentials(true); // Show the alert
+    return;
+  }
     setCurrentCredentials(staff);
     setCurrentStaff(staff);
     setOpenCredentialsDialog(true);
@@ -56,6 +65,10 @@ const StaffDataTable = () => {
 
   const handleCloseCredentialsDialog = () => {
     setOpenCredentialsDialog(false);
+  };
+
+  const handleAlertClose = () => {
+    setAlertOpenCredentials(false);
   };
 
   const validatePassword = () => {
@@ -119,6 +132,11 @@ const StaffDataTable = () => {
   };
 
   const handleOpenDialog = (staff) => {
+    const role = localStorage.getItem("role");
+  if (role === "order-manager") {
+    alert("You are not authorized to perform this action");
+    return;
+  }
     setCurrentStaff(staff);
     setOpen(true);
   };
@@ -180,6 +198,11 @@ const StaffDataTable = () => {
   }, []);
 
   const handleDelete = async (userIdToDelete) => {
+    const role = localStorage.getItem("role");
+    if (role === "order-manager") {
+      alert("You are not authorized to perform this action");
+      return;
+    }
     if (userIdToDelete) {
       const authToken = localStorage.getItem("access_token");
       try {
@@ -296,6 +319,17 @@ const StaffDataTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Snackbar
+        open={alertOpenCredentials}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleAlertClose} severity="warning">
+          You are not authorized to perform this action.
+        </Alert>
+      </Snackbar>
 
       <Dialog open={open} onClose={handleCloseDialog}>
         <DialogTitle style={{ textAlign: "center" }}>

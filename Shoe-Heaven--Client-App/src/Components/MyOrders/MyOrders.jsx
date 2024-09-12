@@ -47,7 +47,8 @@ const MyOrders = () => {
             <div key={index} className="order-item">
               <div className="order-header">
                 <div className="order-id">
-                  <span>Order</span> <a href="#">{order.orderId}</a>
+                  <span>Order</span> <div>{order.orderId} <span>-Non Refundable</span></div>
+                  
                 </div>
                 <div className="order-date">Order Placed: {formatDate(order.date)}</div>
 
@@ -76,13 +77,13 @@ const MyOrders = () => {
                   ))}
               </div>
               <div className="order-footer">
-                <p>Total Amount</p>
+                <p>Total Amount:</p>
                 <p className="order-total">Rs. {order.Total}</p>
               </div>
             </div>
           ))
         ) : (
-          <p>No orders found. Please check back later or try again.</p>
+          <p>No orders found.</p>
         )}
       </div>
     </div>

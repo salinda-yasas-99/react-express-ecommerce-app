@@ -16,10 +16,10 @@ const Widget = ({ type, count }) => {
   switch (type) {
     case "user":
       data = {
-        title: "USERS",
+        title: "CUSTOMERS",
         count: count,
         isMoney: false,
-        link: "See all users",
+        link: "See all customers",
         icon: (
           <PersonOutlinedIcon
             className="icon"
@@ -50,7 +50,7 @@ const Widget = ({ type, count }) => {
         title: "Products",
         count: count,
         isMoney: true,
-        link: "View net earnings",
+        link: "View all Products",
         icon: (
           <ShoppingCartOutlinedIcon
             className="icon"
@@ -67,7 +67,7 @@ const Widget = ({ type, count }) => {
         title: "Inquiry",
         count: count,
         isMoney: true,
-        link: "See details",
+        link: " see all details",
         icon: (
           <AccountBalanceWalletOutlinedIcon
             className="icon"
@@ -87,7 +87,7 @@ const Widget = ({ type, count }) => {
       <div className="left">
         <span className="title">{data.title}</span>
         <span className="counter">{data.count}</span>
-        <span className="link">See all users</span>
+        <span className="link"> {data.link}</span>
       </div>
       <div className="right">
         <div className="percentage positive">
